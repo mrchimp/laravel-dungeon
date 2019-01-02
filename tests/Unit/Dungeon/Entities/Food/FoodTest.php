@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Dungeon\Entities\Food;
+namespace Tests\Unit\Dungeon\Entities\Food;
 
 use App\User;
 use Tests\TestCase;

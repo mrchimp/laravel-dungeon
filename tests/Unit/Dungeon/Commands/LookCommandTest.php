@@ -1,0 +1,54 @@
+<?php
+
+namespace Tests\Unit\Dungeon\Commands;
+
+use App\Room;
+use App\User;
+use Tests\TestCase;
+use App\Dungeon\Commands\LookCommand;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class LookCommandTest extends TestCase
+{
+    use DatabaseMigrations, DatabaseTransactions;
+
+    protected $user;
+
+    public function setup()
+    {
+        parent::setup();
+
+        $this->user = User::create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'fakepassword',
+        ]);
+    }
+    /** @test */
+    public function returns_null_if_user_not_logged_in()
+    {
+        $command = new LookCommand();
+
+        $response = $command->run('look');
+
+        $this->assertNull($response);
+    }
+
+    /** @test */
+    public function gets_current_room_description_if_logged_in()
+    {
+        $command = new LookCommand($this->user);
+
+        $room = Room::create([
+            'description' => 'This is a room.',
+        ]);
+
+        $response = $command->run('look');
+
+        $this->assertEquals(
+            'This is a room.',
+            $response
+        );
+    }
+}
