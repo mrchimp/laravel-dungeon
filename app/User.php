@@ -2,14 +2,31 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
+use App\Dungeon\Traits\HasHealth;
+use App\Dungeon\Traits\HasSerializableAttributes;
+use App\Observers\EntityObserver;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Dungeon\Traits\HasHealth;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasHealth;
+    use Notifiable, HasHealth, HasSerializableAttributes;
+
+    protected $serializable = [
+        'health',
+    ];
+
+    protected $casts = [
+        'data' => 'array',
+    ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::observe(new EntityObserver);
+    }
 
     /**
      * The attributes that are mass assignable.

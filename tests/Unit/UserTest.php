@@ -4,14 +4,22 @@ namespace Tests\Feature;
 
 use App\User;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends TestCase
 {
+    use DatabaseMigrations, DatabaseTransactions;
+
     public function setup()
     {
         parent::setup();
 
-        $this->user = new User();
+        $this->user = new User([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'sercretmagicword',
+        ]);
     }
 
     /** @test */

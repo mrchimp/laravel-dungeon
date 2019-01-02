@@ -2,15 +2,20 @@
 
 namespace App\Observers;
 
-use App\Entity;
+use Illuminate\Database\Eloquent\Model;
 
 class EntityObserver
 {
     /**
      * Manipulate the model before saving
      */
-    public function saving(Entity $entity)
+    public function saving(Model $entity)
     {
-        // Before save
+        $entity->serialiseAttributes();
+    }
+
+    public function retrieved(Model $entity)
+    {
+        $entity->deserialiseAttributes();
     }
 }
