@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Room;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -70,5 +71,20 @@ class UserTest extends TestCase
         $user = User::first();
 
         $this->assertEquals(50, $user->getHealth());
+    }
+
+    /** @test */
+    public function can_be_in_a_room()
+    {
+        $room = Room::create([
+            'description' => 'This is a room.',
+        ]);
+
+        $this->user->moveToRoom($room);
+        $this->user->save();
+
+        $user = User::with('room')->first();
+
+        $this->assertEquals('This is a room.', $user->room->getDescription());
     }
 }

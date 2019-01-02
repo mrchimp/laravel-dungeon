@@ -45,4 +45,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function moveToRoom(Room $room)
+    {
+        return $this->room()->associate($room);
+    }
 }
