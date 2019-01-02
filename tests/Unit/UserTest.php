@@ -44,4 +44,23 @@ class UserTest extends TestCase
 
         $this->assertTrue($this->user->isDead());
     }
+
+    /** @test */
+    public function health_can_be_set()
+    {
+        $this->user->setHealth(66);
+
+        $this->assertEquals(66, $this->user->getHealth());
+    }
+
+    /** @test */
+    public function health_is_stored_and_retrieved()
+    {
+        $this->user->setHealth(50);
+        $this->user->save();
+
+        $user = User::first();
+
+        $this->assertEquals(50, $user->getHealth());
+    }
 }

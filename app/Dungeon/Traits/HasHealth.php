@@ -16,6 +16,11 @@ trait HasHealth
         $this->health += $amount;
     }
 
+    public function setHealth($amount)
+    {
+        $this->health = $amount;
+    }   
+
     public function getHealth()
     {
         return $this->health;

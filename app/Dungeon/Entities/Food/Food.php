@@ -16,4 +16,9 @@ class Food extends Entity
     {
         $consumer->heal($this->healing);
     }
+
+    public function setHealing($amount)
+    {
+        $this->healing = $amount;
+    }
 }
