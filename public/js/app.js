@@ -35955,10 +35955,13 @@ $('#cmdform').on('submit', function (e) {
     axios.post('cmd', {
         input: in_str
     }).then(function (response) {
-        console.log(response);
+        if (response.data.success = false) {
+            throw response.data.message;
+        }
+        output.append(response.data.message + '<br>');
         input.val('');
     }).catch(function (error) {
-        console.error(error);
+        output.append(error + '<br>');
     });
 });
 

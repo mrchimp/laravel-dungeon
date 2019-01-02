@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Dungeon\Traits\HasHealth;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasHealth;
 
     /**
      * The attributes that are mass assignable.

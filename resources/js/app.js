@@ -20,14 +20,17 @@ $('#cmdform')
 
         axios
             .post('cmd', {
-                    input: in_str,
+                input: in_str,
             })
             .then((response) => {
-                console.log(response);
+                if (response.data.success = false) {
+                    throw response.data.message;
+                }
+                output.append(response.data.message + '<br>');
                 input.val('');
             })
             .catch((error) => {
-                console.error(error);
+                output.append(error + '<br>');
             });
     })
 

@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::post('cmd', 'CmdController@run');
+
+Auth::routes();
