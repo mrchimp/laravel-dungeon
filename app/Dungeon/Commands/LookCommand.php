@@ -25,8 +25,10 @@ class LookCommand extends Command
             return null;
         }
 
-        
+        if (is_null($this->user->room)) {
+            return 'You float in an endless void.';
+        }
 
-        return 'This is a room.';
+        return $this->user->room->getDescription();
     }
 }

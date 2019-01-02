@@ -36,13 +36,28 @@ class LookCommandTest extends TestCase
     }
 
     /** @test */
-    public function gets_current_room_description_if_logged_in()
+    public function gets_a_response_if_not_in_a_room()
     {
         $command = new LookCommand($this->user);
 
+        $response = $command->run('look');
+
+        $this->assertEquals(
+            'You float in an endless void.',
+            $response
+        );
+    }
+
+    /** @test */
+    public function gets_current_room_description_if_logged_in()
+    {
         $room = Room::create([
             'description' => 'This is a room.',
         ]);
+
+        $this->user->moveToRoom($room);
+
+        $command = new LookCommand($this->user);
 
         $response = $command->run('look');
 
