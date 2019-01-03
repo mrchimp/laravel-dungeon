@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('cmd', 'CmdController@run');
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('cmd', 'CmdController@run');
+});
 
 Auth::routes();

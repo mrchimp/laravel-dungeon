@@ -16,6 +16,8 @@ class Entity extends Model
         'data' => 'array',
     ];
 
+    protected $serializable = [];
+
     public static function boot()
     {
         parent::boot();

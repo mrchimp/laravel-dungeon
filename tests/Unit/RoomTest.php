@@ -40,7 +40,7 @@ class RoomTest extends TestCase
         $user = User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'password' => 'sercretmagicword',
+            'password' => 'secretmagicword',
         ]);
         
         $this->room->save();

@@ -12,6 +12,9 @@
             <input id="cmdin" name="cmdin">
             <button>Run</button>
         </form>
+        <p>
+            {{ Auth::user()->name }}
+        </p>
         <script src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>
