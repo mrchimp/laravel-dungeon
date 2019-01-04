@@ -22,7 +22,7 @@ class LookCommandTest extends TestCase
         $this->user = User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'password' => 'fakepassword',
+            'password' => bcrypt('fakepassword'),
         ]);
     }
     /** @test */
@@ -32,7 +32,7 @@ class LookCommandTest extends TestCase
 
         $response = $command->run('look');
 
-        $this->assertNull($response);
+        $this->assertNull($response['description']);
     }
 
     /** @test */
@@ -44,7 +44,7 @@ class LookCommandTest extends TestCase
 
         $this->assertEquals(
             'You float in an endless void.',
-            $response
+            $response['description']
         );
     }
 
@@ -63,7 +63,7 @@ class LookCommandTest extends TestCase
 
         $this->assertEquals(
             'This is a room.',
-            $response
+            $response['description']
         );
     }
 }

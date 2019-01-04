@@ -9,6 +9,13 @@ class LookCommand extends Command
 {
     public function run(string $input)
     {
+        return [
+            'description' => $this->getDescription(),
+        ];
+    }
+
+    protected function getDescription()
+    {
         if (is_null($this->user)) {
             return null;
         }

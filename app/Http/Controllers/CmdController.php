@@ -12,6 +12,7 @@ class CmdController extends Controller
     public function run(Request $request)
     {
         // look
+        // look at
         // get X
         // use X
         // use X on X

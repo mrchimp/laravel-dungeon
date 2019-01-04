@@ -13,22 +13,33 @@ class LookTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    /** @test */
-    public function look_command_returns_description()
+    protected $room;
+    
+    protected $user;
+
+    protected $banana;
+
+    public function setup()
     {
-        $room = Room::create([
+        parent::setup();
+
+        $this->room = Room::create([
             'description' => 'This is a room.',
         ]);
 
-        $user = User::create([
+        $this->user = User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'secretmagicword',
         ]);
-        
-        $user->moveToRoom($room);
 
-        $response = $this->actingAs($user)
+        $this->user->moveToRoom($this->room);
+        $this->user->save();
+    }
+    /** @test */
+    public function look_command_returns_room_description()
+    {
+        $response = $this->actingAs($this->user)
             ->post('/cmd', [
                 'input' => 'look'
             ]);
@@ -36,8 +47,8 @@ class LookTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJson([
-             'message' => 'This is a room.',
-             'response' => true,
+            'message' => 'This is a room.',
+            'response' => true,
         ]);
     }
 }
