@@ -19,11 +19,17 @@ class LookCommand extends Command
         $exits = $this->getExits();
 
         if ($exits) {
-            $output .= "\nExits: \n";
-            
+            $output .= "<br>Exits: <br>";
+
             foreach ($exits as $direction => $exit) {
                 $output .= $direction . ': ' . $exit;
             }
+        }
+
+        $contents = $this->getContents();
+
+        if ($contents) {
+            $output .= '<br>There is:<br>' . $contents;
         }
 
         return $output;
@@ -57,5 +63,14 @@ class LookCommand extends Command
             ->toArray();
 
         return $output;
+    }
+
+    protected function getContents()
+    {
+        return $this->user->room->contents
+            ->map(function ($entity) {
+                return $entity->getName() . ' - ' . $entity->getDescription();
+            })
+            ->implode('<br>');
     }
 }

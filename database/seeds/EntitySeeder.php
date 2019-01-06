@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Entity;
+use App\Room;
+use Illuminate\Database\Seeder;
 
 class EntitySeeder extends Seeder
 {
@@ -12,30 +13,38 @@ class EntitySeeder extends Seeder
      */
     public function run()
     {
-        factory(Entity::class)->create([
+        $room = Room::find(1);
+
+        $rock = factory(Entity::class)->create([
             'name' => 'Rock',
-            'description' => 'It\'s a rock. You could probably hit things with it.',
+            'description' => 'You could probably hit things with it.',
             'class' => App\Weapon::class,
             'data' => [
                 'damage_amount' => 10,
                 'damage_type' => 'blunt',
             ],
         ]);
+        $rock->moveToRoom($room);
+        $rock->save();
 
-        factory(Entity::class)->create([
+        $hat = factory(Entity::class)->create([
             'name' => 'Hat',
-            'description' => 'It\'s a hat that you can wear.',
+            'description' => 'Basic headwear.',
             'class' => App\Weapon::class,
             'data' => [
                 'cold_protection' => 10,
                 'blunt_protection' => 10,
             ],
         ]);
+        $hat->moveToRoom($room);
+        $hat->save();
 
-        factory(Entity::class)->create([
+        $potato = factory(Entity::class)->create([
             'name' => 'Potato',
             'description' => 'A potato.',
             'class' => App\Food::class,
         ]);
+        $potato->moveToRoom($room);
+        $potato->save();
     }
 }

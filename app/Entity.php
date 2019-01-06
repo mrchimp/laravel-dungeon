@@ -72,4 +72,9 @@ class Entity extends Model
     {
         return $this->description;
     }
+
+    public function getName()
+    {
+        return $this->name;
+    }
 }
