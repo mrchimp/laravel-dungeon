@@ -26,6 +26,13 @@ $('#cmdform')
                 if (response.data.success = false) {
                     throw response.data.message;
                 }
+
+                if (response.data.message) {
+                    response.data.message.replace(/\n/g, '<br>');
+                } else {
+                    response.data.message = 'No response.';
+                }
+
                 output.append(response.data.message + '<br>');
                 input.val('');
             })
