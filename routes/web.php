@@ -12,7 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::guest()) {
+        return redirect('login');
+    } else {
+        return view('welcome');
+    }
 });
 
 Route::group(['middleware' => 'auth'], function () {

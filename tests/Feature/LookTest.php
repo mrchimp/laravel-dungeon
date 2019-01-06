@@ -14,7 +14,7 @@ class LookTest extends TestCase
     use DatabaseMigrations, DatabaseTransactions;
 
     protected $room;
-    
+
     protected $user;
 
     protected $banana;
@@ -36,6 +36,7 @@ class LookTest extends TestCase
         $this->user->moveToRoom($this->room);
         $this->user->save();
     }
+
     /** @test */
     public function look_command_returns_room_description()
     {
@@ -46,9 +47,6 @@ class LookTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertJson([
-            'message' => 'This is a room.',
-            'response' => true,
-        ]);
+        $response->assertSee('This is a room.');
     }
 }
