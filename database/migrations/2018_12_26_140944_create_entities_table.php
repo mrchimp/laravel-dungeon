@@ -22,6 +22,7 @@ class CreateEntitiesTable extends Migration
             $table->json('data');
             $table->integer('owner_id')->nullable();
             $table->integer('container_id')->nullable();
+            $table->integer('room_id')->nullable();
             $table->timestamps();
         });
     }

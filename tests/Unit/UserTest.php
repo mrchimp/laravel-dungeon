@@ -80,7 +80,7 @@ class UserTest extends TestCase
             'description' => 'This is a room.',
         ]);
 
-        $this->user->moveToRoom($room);
+        $this->user->moveTo($room);
         $this->user->save();
 
         $user = User::with('room')->first();

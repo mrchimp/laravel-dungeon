@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
 
         $room = Room::first();
 
-        $user->moveToRoom($room);
+        $user->moveTo($room);
         $user->save();
     }
 }

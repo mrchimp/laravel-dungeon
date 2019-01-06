@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EntityObserver
+class SerializableObserver
 {
     /**
      * Manipulate the model before saving

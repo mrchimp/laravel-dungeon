@@ -2,13 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Dungeon\Entities\Food\Food;
 use App\Room;
 use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class RoomTest extends TestCase
 {
@@ -42,7 +43,7 @@ class RoomTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'secretmagicword',
         ]);
-        
+
         $this->room->save();
         $this->room->people()->save($user);
 
@@ -51,5 +52,27 @@ class RoomTest extends TestCase
         $person = $room->people->first();
 
         $this->assertEquals('Test User', $person->name);
+    }
+
+    /** @test */
+    public function can_have_entities_in_it()
+    {
+        $room = Room::create([
+            'description' => 'This room has something in it.',
+        ]);
+
+        $potato = Food::create([
+            'name' => 'Potato',
+            'description' => 'A potato.',
+        ]);
+
+        $potato->moveToRoom($room);
+
+        $potato->save();
+        $room->save();
+
+        $room = Room::first();
+
+        $this->assertEquals('A potato.', $room->contents->first()->getDescription());
     }
 }

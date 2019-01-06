@@ -60,7 +60,7 @@ class LookCommandTest extends TestCase
     /** @test */
     public function gets_current_room_description_if_logged_in()
     {
-        $this->user->moveToRoom($this->north_room);
+        $this->user->moveTo($this->north_room);
 
         $command = new LookCommand($this->user);
 
@@ -75,11 +75,11 @@ class LookCommandTest extends TestCase
     /** @test */
     public function gets_exits()
     {
-        $this->user->moveToRoom($this->north_room);
+        $this->user->moveTo($this->north_room);
         $this->north_room->setSouthExit($this->south_room, [
             'description' => 'A wooden door.',
         ]);
-        
+
         $command = new LookCommand($this->user);
 
         $response = $command->run('look');

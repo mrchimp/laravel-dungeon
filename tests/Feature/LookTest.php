@@ -33,7 +33,7 @@ class LookTest extends TestCase
             'password' => 'secretmagicword',
         ]);
 
-        $this->user->moveToRoom($this->room);
+        $this->user->moveTo($this->room);
         $this->user->save();
     }
 

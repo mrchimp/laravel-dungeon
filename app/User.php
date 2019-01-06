@@ -4,7 +4,7 @@ namespace App;
 
 use App\Dungeon\Traits\HasHealth;
 use App\Dungeon\Traits\HasSerializableAttributes;
-use App\Observers\EntityObserver;
+use App\Observers\SerializableObserver;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,7 +25,7 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        self::observe(new EntityObserver);
+        self::observe(new SerializableObserver);
     }
 
     /**
