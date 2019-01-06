@@ -11,16 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    if (Auth::guest()) {
-        return redirect('login');
-    } else {
-        return view('welcome');
-    }
-});
+Auth::routes();
+
+Route::get('/', 'HomeController@index');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::post('cmd', 'CmdController@run');
 });
-
-Auth::routes();
