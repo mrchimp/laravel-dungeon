@@ -33,7 +33,7 @@ $('#cmdform')
                     response.data.message = 'No response.';
                 }
 
-                output.append(response.data.message + '<br>');
+                output.append('<p>' + response.data.message + '</p>');
                 input.val('');
             })
             .catch((error) => {
