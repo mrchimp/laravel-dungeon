@@ -12,8 +12,16 @@ class RoomSeeder extends Seeder
      */
     public function run()
     {
-        Room::create([
+        $north_room = Room::create([
             'description' => 'You are in the start room. There is not a lot here.',
+        ]);
+
+        $south_room = Room::create([
+            'description' => 'You are in the second room. You feel a profound sense of achievement for having made it here.',
+        ]);
+
+        $north_room->setSouthExit($south_room, [
+            'description' => 'A wooden door.',
         ]);
     }
 }
