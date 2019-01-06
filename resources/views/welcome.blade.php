@@ -8,7 +8,7 @@
     </head>
     <body>
         <div id="cmdout"></div>
-        <form id="cmdform">
+        <form id="cmdform" autocomplete="off">
             <input id="cmdin" name="cmdin">
             <button>Run</button>
         </form>
