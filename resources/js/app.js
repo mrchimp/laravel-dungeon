@@ -18,6 +18,11 @@ $('#cmdform')
 
         let in_str = input.val();
 
+        if (in_str === 'clear') {
+            output.empty();
+            return;
+        }
+
         axios
             .post('cmd', {
                 input: in_str,
