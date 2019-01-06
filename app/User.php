@@ -51,7 +51,7 @@ class User extends Authenticatable
         return $this->belongsTo(Room::class);
     }
 
-    public function moveToRoom(Room $room)
+    public function moveTo(Room $room)
     {
         return $this->room()->associate($room);
     }
