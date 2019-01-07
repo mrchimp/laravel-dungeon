@@ -89,4 +89,11 @@ class TakeCommandTest extends TestCase
 
         $this->assertEquals($this->user->id, $potato->owner_id);
     }
+
+    public function you_cant_take_things_that_dont_exist()
+    {
+        $response = $this->command->run('take avocado');
+
+        $this->assertEquals('Take what?', $response);
+    }
 }

@@ -13,6 +13,10 @@ class TakeCommand extends Command
         $finder = new Finder;
         $entity = $finder->find($query, $this->user);
 
+        if (!$entity) {
+            return 'Take what?';
+        }
+
         if ($entity->ownedBy($this->user)) {
             return 'You already have that.';
         }
