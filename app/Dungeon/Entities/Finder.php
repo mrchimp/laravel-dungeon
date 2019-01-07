@@ -18,6 +18,10 @@ class Finder
         $entity = $this->findInInventory($query);
 
         if (!$entity) {
+            $entity = $this->findInRoom($query);
+        }
+
+        if (!$entity) {
             return null;
         }
 
@@ -27,6 +31,13 @@ class Finder
     protected function findInInventory($query)
     {
         return $this->user->inventory->first(function ($entity) use ($query) {
+            return $entity->nameMatchesQuery($query);
+        });
+    }
+
+    protected function findInRoom($query)
+    {
+        return $this->user->room->contents->first(function ($entity) use ($query) {
             return $entity->nameMatchesQuery($query);
         });
     }

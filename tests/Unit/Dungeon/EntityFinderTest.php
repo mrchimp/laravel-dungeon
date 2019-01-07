@@ -39,6 +39,9 @@ class EntityFinderClass extends TestCase
             'description' => 'A potato.',
         ]);
 
+        $this->user->moveTo($this->room);
+        $this->user->save();
+
         $this->finder = new Finder($this->user);
     }
 
@@ -46,6 +49,17 @@ class EntityFinderClass extends TestCase
     public function it_finds_entities_in_the_users_inventory()
     {
         $this->potato->giveToUser($this->user);
+        $this->potato->save();
+
+        $entity = $this->finder->find('potato');
+
+        $this->assertEquals($this->potato->id, $entity->id);
+    }
+
+    /** @test */
+    public function it_finds_entities_in_the_current_room()
+    {
+        $this->potato->moveToRoom($this->room);
         $this->potato->save();
 
         $entity = $this->finder->find('potato');
