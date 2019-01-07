@@ -6,7 +6,7 @@ use Auth;
 use App\User;
 
 abstract class Command
-{    
+{
     protected $user;
 
     public function __construct(User $user = null)
@@ -16,7 +16,11 @@ abstract class Command
         } else {
             $this->user = $user;
         }
+
+        if (!$this->user) {
+            throw new \Exception('No user available for command.');
+        }
     }
-    
+
     abstract function run(string $input);
 }

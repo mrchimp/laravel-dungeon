@@ -6,23 +6,16 @@ use App\User;
 
 class Finder
 {
-    protected $user;
-
-    public function __construct(User $user)
+    public function find($query, $user)
     {
-        $this->user = $user;
-    }
-
-    public function find($query)
-    {
-        $entity = $this->findInInventory($query, $this->user);
+        $entity = $this->findInInventory($query, $user);
 
         if (!$entity) {
-            $entity = $this->findInRoom($query, $this->user->room);
+            $entity = $this->findInRoom($query, $user->room);
         }
 
         if (!$entity) {
-            $entity = $this->findInContainersInRoom($query, $this->user->room);
+            $entity = $this->findInContainersInRoom($query, $user->room);
         }
 
         if (!$entity) {

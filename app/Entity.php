@@ -118,4 +118,9 @@ class Entity extends Model
             return $entity->nameMatchesQuery($query);
         });
     }
+
+    public function ownedBy(User $user)
+    {
+        return (int)$this->owner_id === (int)$user->id;
+    }
 }

@@ -9,10 +9,6 @@ class LookCommand extends Command
 {
     public function run(string $input)
     {
-        if (is_null($this->user)) {
-            return null;
-        }
-
         $output = '';
         $output .= $this->getDescription();
 

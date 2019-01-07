@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Dungeon\Commands\LookCommand;
-use App\Dungeon\Commands\GoCommand;
-use App\Dungeon\Commands\GetCommand;
 use App\Dungeon\Commands\AttackCommand;
+use App\Dungeon\Commands\GoCommand;
+use App\Dungeon\Commands\LookCommand;
+use App\Dungeon\Commands\TakeCommand;
+use App\Dungeon\Commands\UseCommand;
 use Illuminate\Http\Request;
 
 class CmdController extends Controller
@@ -24,11 +25,11 @@ class CmdController extends Controller
         $chunks = explode(' ', $input);
 
         $commands = [
-            'look' => LookCommand::class,
-            'go' => GoCommand::class,
-            'get' => GetCommand::class,
-            'use' => UseCommand::class,
             'attack' => AttackCommand::class,
+            'go' => GoCommand::class,
+            'look' => LookCommand::class,
+            'take' => TakeCommand::class,
+            'use' => UseCommand::class,
         ];
 
         if (!in_array($chunks[0], array_keys($commands))) {
