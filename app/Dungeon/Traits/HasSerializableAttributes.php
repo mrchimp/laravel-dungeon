@@ -14,8 +14,8 @@ trait HasSerializableAttributes
      */
     public function serialiseAttributes()
     {
-        // If we try modifying $this->data directly, we get an 
-        // error "ErrorException: Indirect modification of 
+        // If we try modifying $this->data directly, we get an
+        // error "ErrorException: Indirect modification of
         // overloaded property App\User::$data has no effect"
         // I'm not sure why, but we can just do this instead...
         $data = $this->data;

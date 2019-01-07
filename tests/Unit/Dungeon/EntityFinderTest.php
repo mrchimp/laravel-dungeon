@@ -4,6 +4,7 @@ namespace Tests\Unit\Dungeon;
 
 use App\Dungeon\Entities\Finder;
 use App\Dungeon\Entities\Food\Food;
+use App\Entity;
 use App\Room;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -37,6 +38,14 @@ class EntityFinderClass extends TestCase
         $this->potato = Food::create([
             'name' => 'Potato',
             'description' => 'A potato.',
+            'data' => [],
+        ]);
+
+        $this->box = Entity::create([
+            'name' => 'Box',
+            'description' => 'You can put things in it.',
+            'class' => Entity::class,
+            'data' => [],
         ]);
 
         $this->user->moveTo($this->room);
@@ -61,6 +70,23 @@ class EntityFinderClass extends TestCase
     {
         $this->potato->moveToRoom($this->room);
         $this->potato->save();
+
+        $entity = $this->finder->find('potato');
+
+        $this->assertEquals($this->potato->id, $entity->id);
+    }
+
+    /** @test */
+    public function it_find_entities_in_containers_that_are_in_the_current_room()
+    {
+        $this->box->moveToRoom($this->room);
+        $this->box->save();
+
+        $this->potato->moveToContainer($this->box);
+        $this->potato->save();
+
+        $this->user->moveTo($this->room);
+        $this->user->save();
 
         $entity = $this->finder->find('potato');
 

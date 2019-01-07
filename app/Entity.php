@@ -26,6 +26,11 @@ class Entity extends Model
         'name',
     ];
 
+    protected $attributes = [
+        'can_have_contents' => false,
+        'data' => '[]',
+    ];
+
     public static function boot()
     {
         parent::boot();
@@ -55,6 +60,11 @@ class Entity extends Model
         return $this->belongsTo(Entity::class);
     }
 
+    public function contents()
+    {
+        return $this->hasMany(Entity::class, 'container_id');
+    }
+
     public function room()
     {
         return $this->belongsTo(Room::class);
@@ -76,7 +86,7 @@ class Entity extends Model
         $this->owner()->associate($user);
     }
 
-    public function moreToContainer(Entity $container)
+    public function moveToContainer(Entity $container)
     {
         $this->owner()->dissociate();
         $this->room()->dissociate();
@@ -100,5 +110,12 @@ class Entity extends Model
             strtolower($this->name),
             strtolower($query)
         );
+    }
+
+    public function findContents($query)
+    {
+        return $this->contents->first(function ($entity) use ($query) {
+            return $entity->nameMatchesQuery($query);
+        });
     }
 }

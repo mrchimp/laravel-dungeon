@@ -15,10 +15,14 @@ class Finder
 
     public function find($query)
     {
-        $entity = $this->findInInventory($query);
+        $entity = $this->findInInventory($query, $this->user);
 
         if (!$entity) {
-            $entity = $this->findInRoom($query);
+            $entity = $this->findInRoom($query, $this->user->room);
+        }
+
+        if (!$entity) {
+            $entity = $this->findInContainersInRoom($query, $this->user->room);
         }
 
         if (!$entity) {
@@ -28,17 +32,28 @@ class Finder
         return $entity;
     }
 
-    protected function findInInventory($query)
+    public function findInInventory($query, $user)
     {
-        return $this->user->inventory->first(function ($entity) use ($query) {
+        return $user->inventory->first(function ($entity) use ($query) {
             return $entity->nameMatchesQuery($query);
         });
     }
 
-    protected function findInRoom($query)
+    public function findInRoom($query, $room)
     {
-        return $this->user->room->contents->first(function ($entity) use ($query) {
+        return $room->contents->first(function ($entity) use ($query) {
             return $entity->nameMatchesQuery($query);
         });
+    }
+
+    public function findInContainersInRoom($query, $room)
+    {
+        foreach ($room->contents as $container) {
+            $entity = $container->findContents($query);
+
+            if ($entity) {
+                return $entity;
+            }
+        }
     }
 }

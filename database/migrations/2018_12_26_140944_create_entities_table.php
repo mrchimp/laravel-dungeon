@@ -19,7 +19,8 @@ class CreateEntitiesTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->string('class');
-            $table->json('data');
+            $table->boolean('can_have_contents');
+            $table->json('data')->nullable();
             $table->integer('owner_id')->nullable();
             $table->integer('container_id')->nullable();
             $table->integer('room_id')->nullable();
