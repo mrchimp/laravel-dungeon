@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dungeon\Commands\AttackCommand;
+use App\Dungeon\Commands\DropCommand;
 use App\Dungeon\Commands\GoCommand;
 use App\Dungeon\Commands\LookCommand;
 use App\Dungeon\Commands\TakeCommand;
@@ -27,6 +28,7 @@ class CmdController extends Controller
 
         $commands = [
             'attack' => AttackCommand::class,
+            'drop' => DropCommand::class,
             'go' => GoCommand::class,
             'look' => LookCommand::class,
             'take' => TakeCommand::class,

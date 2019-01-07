@@ -4,6 +4,7 @@ namespace Tests\Unit\Dungeon\Commands;
 
 use App\Dungeon\Commands\DropCommand;
 use App\Dungeon\Entities\Food\Food;
+use App\Entity;
 use App\Room;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -46,5 +47,22 @@ class DropCommandTest extends TestCase
         $this->assertNull($this->potato->owner_id);
         $this->assertNull($this->potato->room_id);
         $this->assertNull($this->potato->container_id);
+    }
+
+    /** @test */
+    public function you_can_drop_items()
+    {
+        $this->potato->giveToUser($this->user);
+        $this->potato->save();
+
+        $this->user->moveTo($this->room);
+        $this->user->save();
+
+        $response = $this->command->execute('drop potato');
+
+        $potato = Entity::find($this->potato->id);
+
+        $this->assertEquals('You drop the Potato.', $response);
+        $this->assertEquals($this->room->id, $potato->room_id);
     }
 }

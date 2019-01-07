@@ -16,6 +16,9 @@ class DropCommand extends Command
             return 'You don\'t have a ' . $query;
         }
 
+        $entity->moveToRoom($this->user->room);
+        $entity->save();
 
+        return 'You drop the ' . $entity->getName() . '.';
     }
 }
