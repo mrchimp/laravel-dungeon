@@ -7,8 +7,12 @@ use App\Room;
 
 class LookCommand extends Command
 {
-    public function run(string $input)
+    public function run()
     {
+        if (is_null($this->user->room)) {
+            return 'You float in an endless void.';
+        }
+
         $output = '';
         $output .= $this->getDescription();
 
@@ -33,10 +37,6 @@ class LookCommand extends Command
 
     protected function getDescription()
     {
-        if (is_null($this->user->room)) {
-            return 'You float in an endless void.';
-        }
-
         return $this->user->room->getDescription();
     }
 

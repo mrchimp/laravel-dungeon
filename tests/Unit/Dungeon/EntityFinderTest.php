@@ -60,7 +60,7 @@ class EntityFinderClass extends TestCase
         $this->potato->giveToUser($this->user);
         $this->potato->save();
 
-        $entity = $this->finder->find('potato');
+        $entity = $this->finder->find('potato', $this->user);
 
         $this->assertEquals($this->potato->id, $entity->id);
     }
@@ -71,7 +71,7 @@ class EntityFinderClass extends TestCase
         $this->potato->moveToRoom($this->room);
         $this->potato->save();
 
-        $entity = $this->finder->find('potato');
+        $entity = $this->finder->find('potato', $this->user);
 
         $this->assertEquals($this->potato->id, $entity->id);
     }
@@ -88,7 +88,7 @@ class EntityFinderClass extends TestCase
         $this->user->moveTo($this->room);
         $this->user->save();
 
-        $entity = $this->finder->find('potato');
+        $entity = $this->finder->find('potato', $this->user);
 
         $this->assertEquals($this->potato->id, $entity->id);
     }

@@ -11,15 +11,13 @@ class GoCommand extends Command
         'east',
     ];
 
-    public function run(string $input)
+    public function run()
     {
-        $chunks = explode(' ', $input);
-
-        if (count($chunks) < 2) {
+        if (count($this->input_array) < 2) {
             return 'Go where?';
         }
 
-        $direction = $chunks[1];
+        $direction = $this->input_array[1];
 
         if (!in_array($direction, $this->directions)) {
             return 'I don\'t know which way that is.';

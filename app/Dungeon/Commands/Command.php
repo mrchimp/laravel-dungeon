@@ -9,6 +9,10 @@ abstract class Command
 {
     protected $user;
 
+    protected $input = '';
+
+    protected $input_array = [];
+
     public function __construct(User $user = null)
     {
         if (is_null($user)) {
@@ -22,5 +26,13 @@ abstract class Command
         }
     }
 
-    abstract function run(string $input);
+    abstract function run();
+
+    public function execute(string $input)
+    {
+        $this->input = $input;
+        $this->input_array = explode(' ', $input);
+
+        return $this->run();
+    }
 }

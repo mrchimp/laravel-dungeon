@@ -47,7 +47,7 @@ class GoCommandTest extends TestCase
     /** @test */
     public function if_no_direction_is_given_give_error()
     {
-        $response = $this->command->run('go');
+        $response = $this->command->execute('go');
 
         $this->assertEquals('Go where?', $response);
     }
@@ -55,7 +55,7 @@ class GoCommandTest extends TestCase
     /** @test */
     public function if_unknown_direction_is_given_give_an_error()
     {
-        $response = $this->command->run('go fake_direction_that_doesnt_exists');
+        $response = $this->command->execute('go fake_direction_that_doesnt_exists');
 
         $this->assertEquals('I don\'t know which way that is.', $response);
     }
@@ -63,7 +63,7 @@ class GoCommandTest extends TestCase
     /** @test */
     public function if_no_exit_in_chosen_direction_give_error()
     {
-        $response = $this->command->run('go east');
+        $response = $this->command->execute('go east');
 
         $this->assertEquals('I can\'t go that way.', $response);
     }
@@ -73,7 +73,7 @@ class GoCommandTest extends TestCase
     {
         $this->assertEquals($this->north_room->id, $this->user->room_id);
 
-        $response = $this->command->run('go south');
+        $response = $this->command->execute('go south');
 
         $this->assertStringContainsString('You go', $response);
         $this->assertStringContainsString('This is the south room.', $response);

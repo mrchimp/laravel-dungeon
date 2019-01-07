@@ -16,7 +16,8 @@ class CmdController extends Controller
         // look
         // look at
         // go X
-        // get X
+        // take X
+        // drop X
         // use X
         // use X on X
         // attack X with X
@@ -40,7 +41,7 @@ class CmdController extends Controller
         }
 
         $command = new $commands[$chunks[0]];
-        $response = $command->run($input);
+        $response = $command->execute($input);
 
         return response()->json([
             'message' => $response,

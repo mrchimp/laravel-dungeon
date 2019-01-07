@@ -35,21 +35,11 @@ class LookCommandTest extends TestCase
     }
 
     /** @test */
-    public function returns_null_if_user_not_logged_in()
-    {
-        $command = new LookCommand();
-
-        $response = $command->run('look');
-
-        $this->assertNull($response);
-    }
-
-    /** @test */
     public function gets_a_response_if_not_in_a_room()
     {
         $command = new LookCommand($this->user);
 
-        $response = $command->run('look');
+        $response = $command->execute('look');
 
         $this->assertEquals(
             'You float in an endless void.',
@@ -64,7 +54,7 @@ class LookCommandTest extends TestCase
 
         $command = new LookCommand($this->user);
 
-        $response = $command->run('look');
+        $response = $command->execute('look');
 
         $this->assertEquals(
             'This is the north room.',
@@ -82,7 +72,7 @@ class LookCommandTest extends TestCase
 
         $command = new LookCommand($this->user);
 
-        $response = $command->run('look');
+        $response = $command->execute('look');
 
         $this->assertStringContainsString('Exits:', $response);
         $this->assertStringContainsString('This is the north room.', $response);
