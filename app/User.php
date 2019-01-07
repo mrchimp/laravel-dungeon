@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->room()->associate($room);
     }
+
+    public function inventory()
+    {
+        return $this->hasMany(Entity::class, 'owner_id');
+    }
 }

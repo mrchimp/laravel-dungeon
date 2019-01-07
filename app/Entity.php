@@ -68,6 +68,22 @@ class Entity extends Model
         $this->room()->associate($room);
     }
 
+    public function givetoUser(User $user)
+    {
+        $this->container()->dissociate();
+        $this->room()->dissociate();
+
+        $this->owner()->associate($user);
+    }
+
+    public function moreToContainer(Entity $container)
+    {
+        $this->owner()->dissociate();
+        $this->room()->dissociate();
+
+        $this->container()->associate($container);
+    }
+
     public function getDescription()
     {
         return $this->description;
@@ -76,5 +92,13 @@ class Entity extends Model
     public function getName()
     {
         return $this->name;
+    }
+
+    public function nameMatchesQuery($query)
+    {
+        return str_contains(
+            strtolower($this->name),
+            strtolower($query)
+        );
     }
 }
