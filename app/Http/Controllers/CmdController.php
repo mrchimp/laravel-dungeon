@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dungeon\Commands\AttackCommand;
 use App\Dungeon\Commands\DropCommand;
 use App\Dungeon\Commands\GoCommand;
+use App\Dungeon\Commands\InventoryCommand;
 use App\Dungeon\Commands\LookCommand;
 use App\Dungeon\Commands\TakeCommand;
 use App\Dungeon\Commands\UseCommand;
@@ -22,6 +23,7 @@ class CmdController extends Controller
         // use X
         // use X on X
         // attack X with X
+        // inventory
 
         $input = $request->get('input');
         $chunks = explode(' ', $input);
@@ -30,6 +32,7 @@ class CmdController extends Controller
             'attack' => AttackCommand::class,
             'drop' => DropCommand::class,
             'go' => GoCommand::class,
+            'inventory' => InventoryCommand::class,
             'look' => LookCommand::class,
             'take' => TakeCommand::class,
             'use' => UseCommand::class,
