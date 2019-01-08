@@ -1,5 +1,8 @@
 <?php
 
+use App\Dungeon\Apparel\Apparel;
+use App\Dungeon\Entities\Food\Food;
+use App\Dungeon\Entities\Weapon;
 use App\Entity;
 use App\Room;
 use Illuminate\Database\Seeder;
@@ -15,7 +18,7 @@ class EntitySeeder extends Seeder
     {
         $room = Room::find(1);
 
-        $rock = factory(Entity::class)->create([
+        $rock = Weapon::create([
             'name' => 'Rock',
             'description' => 'You could probably hit things with it.',
             'class' => App\Weapon::class,
@@ -27,7 +30,7 @@ class EntitySeeder extends Seeder
         $rock->moveToRoom($room);
         $rock->save();
 
-        $hat = factory(Entity::class)->create([
+        $hat = Apparel::create([
             'name' => 'Hat',
             'description' => 'Basic headwear.',
             'class' => App\Weapon::class,
@@ -39,11 +42,12 @@ class EntitySeeder extends Seeder
         $hat->moveToRoom($room);
         $hat->save();
 
-        $potato = factory(Entity::class)->create([
+        $potato = Food::create([
             'name' => 'Potato',
             'description' => 'A potato.',
             'class' => App\Food::class,
         ]);
+        $potato->setHealing(10);
         $potato->moveToRoom($room);
         $potato->save();
     }

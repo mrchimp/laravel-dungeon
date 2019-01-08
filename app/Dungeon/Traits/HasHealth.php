@@ -9,17 +9,23 @@ trait HasHealth
     public function hurt($amount)
     {
         $this->health -= $amount;
+
+        return $this;
     }
 
     public function heal($amount)
     {
         $this->health += $amount;
+
+        return $this;
     }
 
     public function setHealth($amount)
     {
         $this->health = $amount;
-    }   
+
+        return $this;
+    }
 
     public function getHealth()
     {

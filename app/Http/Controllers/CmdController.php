@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dungeon\Commands\AttackCommand;
 use App\Dungeon\Commands\DropCommand;
+use App\Dungeon\Commands\EatCommand;
 use App\Dungeon\Commands\GoCommand;
 use App\Dungeon\Commands\InspectCommand;
 use App\Dungeon\Commands\InventoryCommand;
@@ -16,16 +17,17 @@ class CmdController extends Controller
 {
     public function run(Request $request)
     {
-        // look
-        // look at
-        // go X
-        // take X
-        // drop X
-        // use X
-        // use X on X
-        // attack X with X
-        // inventory
-        // inspect X
+        // ✓ look
+        //   look at => inspect
+        // ✓ go X
+        // ✓ take X
+        // ✓ drop X
+        // ✓ eat X
+        //   use X
+        //   use X on X
+        //   attack X with X
+        // ✓ inventory
+        // ✓ inspect X
 
         $input = $request->get('input');
         $chunks = explode(' ', $input);
@@ -33,6 +35,7 @@ class CmdController extends Controller
         $commands = [
             'attack' => AttackCommand::class,
             'drop' => DropCommand::class,
+            'eat' => EatCommand::class,
             'go' => GoCommand::class,
             'inspect' => InspectCommand::class,
             'inventory' => InventoryCommand::class,

@@ -11,11 +11,11 @@ class SerializableObserver
      */
     public function saving(Model $entity)
     {
-        $entity->serialiseAttributes();
+        $entity->serializeAttributes();
     }
 
     public function retrieved(Model $entity)
     {
-        $entity->deserialiseAttributes();
+        $entity->deserializeAttributes();
     }
 }

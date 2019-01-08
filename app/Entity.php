@@ -24,11 +24,7 @@ class Entity extends Model
     protected $fillable = [
         'description',
         'name',
-    ];
-
-    protected $attributes = [
-        'can_have_contents' => false,
-        'data' => '[]',
+        'can_have_contents',
     ];
 
     public static function boot()
@@ -40,6 +36,36 @@ class Entity extends Model
     }
 
     /**
+     * Take a given Entity and return a new instance of whatever
+     * class is stored in the `class` attribute with the model's
+     * attributes applied to it
+     *
+     * @return mixed
+     */
+    public static function replaceClass($model)
+    {
+        $attributes = $model->getAttributes();
+        $data = $model->data;
+        $exists = $model->exists;
+
+        $model = new $model->class;
+
+        foreach ($attributes as $name => $value) {
+            $model->$name = $value;
+        }
+
+        // @todo Not sure why this is being set as a string
+        // and not being cast to an array. Just gonna do it
+        // manually for now.
+        $model->data = $data;
+        $model->exists = $exists;
+
+        $model->deserializeAttributes();
+
+        return $model;
+    }
+
+    /**
      * Create a new Eloquent Collection instance
      *
      * @param array $models
@@ -48,6 +74,11 @@ class Entity extends Model
     public function newCollection(array $models = [])
     {
         return new EntityCollection($models);
+    }
+
+    public function getType()
+    {
+        return 'generic';
     }
 
     public function owner()
@@ -92,6 +123,13 @@ class Entity extends Model
         $this->room()->dissociate();
 
         $this->container()->associate($container);
+    }
+
+    public function moveToVoid()
+    {
+        $this->owner()->dissociate();
+        $this->room()->dissociate();
+        $this->container()->dissociate();
     }
 
     public function getDescription()

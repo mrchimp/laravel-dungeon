@@ -2,8 +2,8 @@
 
 namespace App\Dungeon\Commands;
 
-use Auth;
 use App\Room;
+use Auth;
 
 class LookCommand extends Command
 {
@@ -29,7 +29,7 @@ class LookCommand extends Command
         $contents = $this->getContents();
 
         if ($contents) {
-            $output .= '<br>There is:<br>' . e($contents);
+            $output .= '<br>There is:<br>' . $contents;
         }
 
         return $output;

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateEntitiesTable extends Migration
 {
@@ -19,7 +19,7 @@ class CreateEntitiesTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->string('class');
-            $table->boolean('can_have_contents');
+            $table->boolean('can_have_contents')->default(false);
             $table->json('data')->nullable();
             $table->integer('owner_id')->nullable();
             $table->integer('container_id')->nullable();

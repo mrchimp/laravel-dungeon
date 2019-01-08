@@ -3,16 +3,31 @@
 namespace App\Dungeon\Entities\Food;
 
 use App\Entity;
+use App\User;
 
 class Food extends Entity
 {
-    protected $serializable = [
+    public $healing = 0;
+
+    protected $fillable = [
+        'name',
+        'description',
         'healing',
     ];
 
-    public $healing = 0;
+    public function getSerializable()
+    {
+        return [
+            'healing',
+        ];
+    }
 
-    public function eat($consumer)
+    public function getType()
+    {
+        return 'food';
+    }
+
+    public function eat(User $consumer)
     {
         $consumer->heal($this->healing);
     }
@@ -20,5 +35,10 @@ class Food extends Entity
     public function setHealing($amount)
     {
         $this->healing = $amount;
+    }
+
+    public function getHealing()
+    {
+        return $this->healing;
     }
 }

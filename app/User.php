@@ -13,20 +13,9 @@ class User extends Authenticatable
 {
     use Notifiable, HasHealth, HasSerializableAttributes;
 
-    protected $serializable = [
-        'health',
-    ];
-
     protected $casts = [
         'data' => 'array',
     ];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        self::observe(new SerializableObserver);
-    }
 
     /**
      * The attributes that are mass assignable.
@@ -34,7 +23,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'health',
     ];
 
     /**
@@ -45,6 +37,20 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::observe(new SerializableObserver);
+    }
+
+    public function getSerializable()
+    {
+        return [
+            'health',
+        ];
+    }
 
     public function room()
     {

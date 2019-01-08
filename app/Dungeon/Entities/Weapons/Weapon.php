@@ -6,5 +6,8 @@ use App\Entity;
 
 class Weapon extends Entity
 {
-    
+    public function getType()
+    {
+        return 'weapon';
+    }
 }

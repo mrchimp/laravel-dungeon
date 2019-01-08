@@ -2,6 +2,7 @@
 
 namespace App\Dungeon\Entities;
 
+use App\Entity;
 use App\User;
 
 class Finder
@@ -22,7 +23,7 @@ class Finder
             return null;
         }
 
-        return $entity;
+        return Entity::replaceClass($entity);
     }
 
     public function findInInventory($query, $user)
