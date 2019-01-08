@@ -32,6 +32,12 @@ class LookCommand extends Command
             $output .= '<br>There is:<br>' . $contents;
         }
 
+        $players = $this->getPlayers();
+
+        if ($players) {
+            $output .= '<br>There are other people here:<br>' . $players;
+        }
+
         return $output;
     }
 
@@ -66,6 +72,18 @@ class LookCommand extends Command
         return $this->user->room->contents
             ->map(function ($entity) {
                 return e($entity->getName()) . ' - ' . e($entity->getDescription());
+            })
+            ->implode('<br>');
+    }
+
+    protected function getPlayers()
+    {
+        return $this->user->room->people
+            ->filter(function ($user) {
+                return $user->id !== $this->user->id;
+            })
+            ->map(function ($player) {
+                return e($player->name);
             })
             ->implode('<br>');
     }

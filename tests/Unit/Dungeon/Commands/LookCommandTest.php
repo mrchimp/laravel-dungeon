@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
+use App\Dungeon\Commands\LookCommand;
 use App\Room;
 use App\User;
-use Tests\TestCase;
-use App\Dungeon\Commands\LookCommand;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class LookCommandTest extends TestCase
 {
@@ -22,6 +22,12 @@ class LookCommandTest extends TestCase
         $this->user = User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'password' => bcrypt('fakepassword'),
+        ]);
+
+        $this->player_2 = User::create([
+            'name' => 'Player 2',
+            'email' => 'player2@example.com',
             'password' => bcrypt('fakepassword'),
         ]);
 
@@ -77,5 +83,21 @@ class LookCommandTest extends TestCase
         $this->assertStringContainsString('Exits:', $response);
         $this->assertStringContainsString('This is the north room.', $response);
         $this->assertStringContainsString('A wooden door.', $response);
+    }
+
+    /** @test */
+    public function you_can_see_other_people_if_they_are_in_the_same_room()
+    {
+        $this->user->moveTo($this->north_room);
+        $this->user->save();
+
+        $this->player_2->moveTo($this->north_room);
+        $this->player_2->save();
+
+        $command = new LookCommand($this->user);
+
+        $response = $command->execute('look');
+
+        $this->assertStringContainsString('Player 2', $response);
     }
 }

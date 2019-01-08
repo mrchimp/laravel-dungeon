@@ -13,15 +13,24 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create([
+        $room = Room::first();
+
+        $player_1 = User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('secretpassword'),
         ]);
 
-        $room = Room::first();
+        $player_1->moveTo($room);
+        $player_1->save();
 
-        $user->moveTo($room);
-        $user->save();
+        $player_2 = User::create([
+            'name' => 'Player 2',
+            'email' => 'test2@example.com',
+            'password' => bcrypt('secretpassword'),
+        ]);
+
+        $player_2->moveTo($room);
+        $player_2->save();
     }
 }
