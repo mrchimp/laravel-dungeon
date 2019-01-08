@@ -12,23 +12,12 @@ use App\Dungeon\Commands\LookCommand;
 use App\Dungeon\Commands\TakeCommand;
 use App\Dungeon\Commands\UseCommand;
 use Illuminate\Http\Request;
+use Log;
 
 class CmdController extends Controller
 {
     public function run(Request $request)
     {
-        // ✓ look
-        //   look at => inspect
-        // ✓ go X
-        // ✓ take X
-        // ✓ drop X
-        // ✓ eat X
-        //   use X
-        //   use X on X
-        //   attack X with X
-        // ✓ inventory
-        // ✓ inspect X
-
         $input = $request->get('input');
         $chunks = explode(' ', $input);
 
@@ -45,6 +34,7 @@ class CmdController extends Controller
         ];
 
         if (!in_array($chunks[0], array_keys($commands))) {
+            Log::warning('Unknown command: ' . $input);
             return response()->json([
                 'message' => 'I don\'t know how to ' . $chunks[0],
                 'success' => false,
