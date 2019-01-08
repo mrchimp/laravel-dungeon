@@ -35,6 +35,6 @@ class GoCommand extends Command
 
         $look_command = new LookCommand($this->user);
 
-        return 'You go ' . $direction . '. ' . $look_command->run('look');
+        return 'You go ' . $direction . '.<br>' . $look_command->run('look');
     }
 }

@@ -22,14 +22,14 @@ class LookCommand extends Command
             $output .= "<br>Exits: <br>";
 
             foreach ($exits as $direction => $exit) {
-                $output .= $direction . ': ' . $exit;
+                $output .= e($direction) . ': ' . e($exit);
             }
         }
 
         $contents = $this->getContents();
 
         if ($contents) {
-            $output .= '<br>There is:<br>' . $contents;
+            $output .= '<br>There is:<br>' . e($contents);
         }
 
         return $output;
@@ -54,7 +54,7 @@ class LookCommand extends Command
         ])
             ->filter()
             ->map(function ($room) {
-                return $room->portal->getDescription();
+                return e($room->portal->getDescription());
             })
             ->toArray();
 
@@ -65,7 +65,7 @@ class LookCommand extends Command
     {
         return $this->user->room->contents
             ->map(function ($entity) {
-                return $entity->getName() . ' - ' . $entity->getDescription();
+                return e($entity->getName()) . ' - ' . e($entity->getDescription());
             })
             ->implode('<br>');
     }

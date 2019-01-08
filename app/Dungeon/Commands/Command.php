@@ -13,6 +13,8 @@ abstract class Command
 
     protected $input_array = [];
 
+    protected $query;
+
     public function __construct(User $user = null)
     {
         if (is_null($user)) {
@@ -31,7 +33,8 @@ abstract class Command
     public function execute(string $input)
     {
         $this->input = $input;
-        $this->input_array = explode(' ', $input);
+        $this->input_array = explode(' ', $this->input);
+        $this->query = implode(' ', array_slice($this->input_array, 1));
 
         return $this->run();
     }

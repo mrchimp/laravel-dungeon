@@ -8,17 +8,16 @@ class DropCommand extends Command
 {
     public function run()
     {
-        $query = implode(' ', array_slice($this->input_array, 1));
         $finder = new Finder;
-        $entity = $finder->findInInventory($query, $this->user);
+        $entity = $finder->findInInventory($this->query, $this->user);
 
         if (!$entity) {
-            return 'You don\'t have a ' . $query;
+            return 'You don\'t have a ' . e($this->query);
         }
 
         $entity->moveToRoom($this->user->room);
         $entity->save();
 
-        return 'You drop the ' . $entity->getName() . '.';
+        return 'You drop the ' . e($entity->getName()) . '.';
     }
 }

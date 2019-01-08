@@ -15,7 +15,7 @@ class InventoryCommand extends Command
         return 'You have: <br>' .
             $entities
             ->map(function($entity) {
-                return $entity->getName();
+                return e($entity->getName());
             })
             ->implode('<br>');
     }

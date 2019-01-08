@@ -23,6 +23,6 @@ class TakeCommand extends Command
         $entity->giveToUser($this->user);
         $entity->save();
 
-        return 'You take the ' . $entity->getName() . '.';
+        return 'You take the ' . e($entity->getName()) . '.';
     }
 }
