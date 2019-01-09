@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Dungeon\Traits\HasApparel;
 use App\Dungeon\Traits\HasHealth;
 use App\Dungeon\Traits\HasInventory;
 use App\Dungeon\Traits\HasSerializableAttributes;
@@ -12,7 +13,11 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasHealth, HasSerializableAttributes, HasInventory;
+    use Notifiable,
+        HasHealth,
+        HasSerializableAttributes,
+        HasInventory,
+        HasApparel;
 
     protected $casts = [
         'data' => 'array',

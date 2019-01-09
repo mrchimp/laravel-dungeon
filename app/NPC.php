@@ -2,14 +2,19 @@
 
 namespace App;
 
+use App\Dungeon\Traits\HasApparel;
 use App\Dungeon\Traits\HasHealth;
+use App\Dungeon\Traits\HasInventory;
 use App\Dungeon\Traits\HasSerializableAttributes;
 use App\Observers\SerializableObserver;
 use Illuminate\Database\Eloquent\Model;
 
 class NPC extends Model
 {
-    use HasHealth, HasSerializableAttributes;
+    use HasHealth,
+        HasSerializableAttributes,
+        HasInventory,
+        HasApparel;
 
     protected $table = 'npcs';
 
