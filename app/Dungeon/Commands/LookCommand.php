@@ -38,6 +38,12 @@ class LookCommand extends Command
             $output .= '<br>There are other people here:<br>' . $players;
         }
 
+        $npcs = $this->getNPCs();
+
+        if ($npcs) {
+            $output .= '<br>There are some NPCs here: <br>' . $npcs;
+        }
+
         return $output;
     }
 
@@ -84,6 +90,15 @@ class LookCommand extends Command
             })
             ->map(function ($player) {
                 return e($player->name);
+            })
+            ->implode('<br>');
+    }
+
+    protected function getNPCs()
+    {
+        return $this->user->room->npcs
+            ->map(function ($npc) {
+                return $npc->getName();
             })
             ->implode('<br>');
     }

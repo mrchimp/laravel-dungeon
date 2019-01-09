@@ -17,6 +17,11 @@ class Room extends Model
         return $this->hasMany(User::class, 'room_id');
     }
 
+    public function npcs()
+    {
+        return $this->hasMany(NPC::class, 'room_id');
+    }
+
     public function contents()
     {
         return $this->hasMany(Entity::class, 'room_id');

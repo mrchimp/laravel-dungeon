@@ -3,6 +3,7 @@
 namespace Tests\Unit\Dungeon\Commands;
 
 use App\Dungeon\Commands\LookCommand;
+use App\NPC;
 use App\Room;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -29,6 +30,11 @@ class LookCommandTest extends TestCase
             'name' => 'Player 2',
             'email' => 'player2@example.com',
             'password' => bcrypt('fakepassword'),
+        ]);
+
+        $this->npc = NPC::create([
+            'name' => 'Test NPC',
+            'description' => 'An NPC for testing',
         ]);
 
         $this->north_room = Room::create([
@@ -99,5 +105,21 @@ class LookCommandTest extends TestCase
         $response = $command->execute('look');
 
         $this->assertStringContainsString('Player 2', $response);
+    }
+
+    /** @test */
+    public function you_can_see_npcs_if_they_are_in_the_same_room()
+    {
+        $this->user->moveTo($this->north_room);
+        $this->user->save();
+
+        $this->npc->moveTo($this->north_room);
+        $this->npc->save();
+
+        $command = new LookCommand($this->user);
+
+        $response = $command->execute('look');
+
+        $this->assertStringContainsString('Test NPC', $response);
     }
 }
