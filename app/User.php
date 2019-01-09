@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Dungeon\Traits\HasHealth;
+use App\Dungeon\Traits\HasInventory;
 use App\Dungeon\Traits\HasSerializableAttributes;
 use App\Observers\SerializableObserver;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -11,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasHealth, HasSerializableAttributes;
+    use Notifiable, HasHealth, HasSerializableAttributes, HasInventory;
 
     protected $casts = [
         'data' => 'array',
@@ -60,10 +61,5 @@ class User extends Authenticatable
     public function moveTo(Room $room)
     {
         return $this->room()->associate($room);
-    }
-
-    public function inventory()
-    {
-        return $this->hasMany(Entity::class, 'owner_id');
     }
 }

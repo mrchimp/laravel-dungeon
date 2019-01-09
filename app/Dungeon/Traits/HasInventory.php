@@ -2,18 +2,13 @@
 
 namespace App\Dungeon\Traits;
 
-use App\Entity;
 use App\Dungeon\Traits\Pickupable;
+use App\Entity;
 
 trait HasInventory
 {
-    public function items()
+    public function inventory()
     {
-        return $this->hasMany(Entity::class);
-    }
-
-    public function hold(Pickupable $item)
-    {
-        $this->inventory();
+        return $this->hasMany(Entity::class, 'owner_id');
     }
 }

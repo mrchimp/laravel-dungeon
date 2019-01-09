@@ -101,28 +101,37 @@ class Entity extends Model
         return $this->belongsTo(Room::class);
     }
 
+    public function npc()
+    {
+        return $this->belongsTo(NPC::class);
+    }
+
     public function moveToRoom(Room $room)
     {
-        $this->owner()->dissociate();
-        $this->container()->dissociate();
+        $this->moveToVoid();
 
         $this->room()->associate($room);
     }
 
     public function givetoUser(User $user)
     {
-        $this->container()->dissociate();
-        $this->room()->dissociate();
+        $this->moveToVoid();
 
         $this->owner()->associate($user);
     }
 
     public function moveToContainer(Entity $container)
     {
-        $this->owner()->dissociate();
-        $this->room()->dissociate();
+        $this->moveToVoid();
 
         $this->container()->associate($container);
+    }
+
+    public function giveToNPC(NPC $npc)
+    {
+        $this->moveToVoid();
+
+        $this->npc()->associate($npc);
     }
 
     public function moveToVoid()
@@ -130,6 +139,7 @@ class Entity extends Model
         $this->owner()->dissociate();
         $this->room()->dissociate();
         $this->container()->dissociate();
+        $this->npc()->dissociate();
     }
 
     public function getDescription()

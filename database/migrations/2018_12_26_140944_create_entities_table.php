@@ -24,7 +24,14 @@ class CreateEntitiesTable extends Migration
             $table->integer('owner_id')->nullable();
             $table->integer('container_id')->nullable();
             $table->integer('room_id')->nullable();
+            $table->integer('npc_id')->nullable();
             $table->timestamps();
+
+            $table->index('uuid');
+            $table->index('owner_id');
+            $table->index('container_id');
+            $table->index('room_id');
+            $table->index('nc_id');
         });
     }
 
