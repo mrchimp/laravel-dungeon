@@ -2,8 +2,8 @@
 
 namespace App\Dungeon\Commands;
 
-use Auth;
 use App\User;
+use Auth;
 
 abstract class Command
 {
@@ -14,6 +14,10 @@ abstract class Command
     protected $input_array = [];
 
     protected $query;
+
+    protected $output = [];
+
+    protected $message = '';
 
     public function __construct(User $user = null)
     {
@@ -36,6 +40,37 @@ abstract class Command
         $this->input_array = explode(' ', $this->input);
         $this->query = implode(' ', array_slice($this->input_array, 1));
 
-        return $this->run();
+        $this->run();
+    }
+
+    protected function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    protected function setOutputItem($key, $value)
+    {
+        $this->output_array[$key] = $value;
+
+        return $this;
+    }
+
+    protected function setOutputArray($output)
+    {
+        $this->output = $output;
+
+        return $this;
+    }
+
+    public function toArray()
+    {
+        return $this->output;
     }
 }

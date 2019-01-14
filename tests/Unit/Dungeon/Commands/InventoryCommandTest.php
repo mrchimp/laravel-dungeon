@@ -65,7 +65,8 @@ class InventoryCommandTest extends TestCase
         $this->banana->moveToRoom($this->room);
         $this->banana->save();
 
-        $response = $this->command->execute('inventory');
+        $this->command->execute('inventory');
+        $response = $this->command->getMessage();
 
         $this->assertStringContainsString('Potato', $response);
         $this->assertStringNotContainsString('Banana', $response);

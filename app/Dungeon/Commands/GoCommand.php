@@ -14,27 +14,28 @@ class GoCommand extends Command
     public function run()
     {
         if (count($this->input_array) < 2) {
-            return 'Go where?';
+            $this->setMessage('Go where?');
+            return;
         }
 
         $direction = $this->input_array[1];
 
         if (!in_array($direction, $this->directions)) {
-            return 'I don\'t know which way that is.';
+            $this->setMessage('I don\'t know which way that is.');
+            return;
         }
 
         $exit = $direction . 'Exit';
         $destination = $this->user->room->$exit;
 
         if (!$destination) {
-            return 'I can\'t go that way.';
+            $this->setMessage('I can\'t go that way.');
+            return;
         }
 
         $this->user->moveTo($destination);
         $this->user->save();
 
-        $look_command = new LookCommand($this->user);
-
-        return 'You go ' . $direction . '.<br>' . $look_command->run('look');
+        $this->setMessage('You go ' . $direction . '.');
     }
 }

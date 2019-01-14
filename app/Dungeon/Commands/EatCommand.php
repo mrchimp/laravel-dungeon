@@ -19,11 +19,13 @@ class EatCommand extends Command
         $entity = $finder->find($this->query, $this->user);
 
         if (!$entity) {
-            return 'Could not find ' . e($this->query) . '.';
+            $this->setMessage('Could not find ' . e($this->query) . '.');
+            return;
         }
 
         if ($entity->getType() !== 'food') {
-            return 'You can\'t eat that.';
+            $this->setMessage('You can\'t eat that.');
+            return;
         }
 
         $entity->eat($this->user);
@@ -35,6 +37,6 @@ class EatCommand extends Command
 
         $entity->delete();
 
-        return $message;
+        $this->setMessage($message);
     }
 }

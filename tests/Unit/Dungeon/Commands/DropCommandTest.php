@@ -41,7 +41,8 @@ class DropCommandTest extends TestCase
     /** @test */
     public function you_cant_drop_things_that_arent_in_your_inventory()
     {
-        $response = $this->command->execute('drop potato');
+        $this->command->execute('drop potato');
+        $response = $this->command->getMessage();
 
         $this->assertEquals('You don\'t have a potato', $response);
         $this->assertNull($this->potato->owner_id);
@@ -58,7 +59,8 @@ class DropCommandTest extends TestCase
         $this->user->moveTo($this->room);
         $this->user->save();
 
-        $response = $this->command->execute('drop potato');
+        $this->command->execute('drop potato');
+        $response = $this->command->getMessage();
 
         $potato = Entity::find($this->potato->id);
 

@@ -49,7 +49,8 @@ class EatCommandTest extends TestCase
     /** @test */
     public function you_cant_eat_things_you_cant_find()
     {
-        $response = $this->command->execute('eat dodo');
+        $this->command->execute('eat dodo');
+        $response = $this->command->getMessage();
 
         $this->assertStringContainsString('Could not find dodo.', $response);
     }
@@ -57,7 +58,8 @@ class EatCommandTest extends TestCase
     /** @test */
     public function eating_things_will_affect_your_health()
     {
-        $response = $this->command->execute('eat potato');
+        $this->command->execute('eat potato');
+        $response = $this->command->getMessage();
 
         $this->assertEquals(64, $this->user->getHealth());
     }
@@ -74,7 +76,8 @@ class EatCommandTest extends TestCase
         $rock->giveToUser($this->user);
         $rock->save();
 
-        $response = $this->command->execute('eat rock');
+        $this->command->execute('eat rock');
+        $response = $this->command->getMessage();
 
         $this->assertEquals('You can\'t eat that.', $response);
     }
@@ -82,7 +85,8 @@ class EatCommandTest extends TestCase
     /** @test */
     public function you_cant_have_your_cake_and_eat_it()
     {
-        $response = $this->command->execute('eat potato');
+        $this->command->execute('eat potato');
+        $response = $this->command->getMessage();
 
         $this->user->load('inventory');
 

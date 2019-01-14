@@ -37,15 +37,17 @@ class CmdController extends Controller
             Log::warning('Unknown command: ' . $input);
             return response()->json([
                 'message' => 'I don\'t know how to ' . $chunks[0],
+                'data' => null,
                 'success' => false,
             ]);
         }
 
         $command = new $commands[$chunks[0]];
-        $response = $command->execute($input);
+        $command->execute($input);
 
         return response()->json([
-            'message' => $response,
+            'message' => $command->getMessage(),
+            'data' => $command->toArray(),
             'response' => true
         ]);
     }

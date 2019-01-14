@@ -7,58 +7,74 @@ use Auth;
 
 class LookCommand extends Command
 {
+    protected $exits = [];
+
+    protected $items = [];
+
+    protected $players = [];
+
+    protected $npcs = [];
+
+    protected $description = '';
+
     public function run()
     {
         if (is_null($this->user->room)) {
-            return 'You float in an endless void.';
+            $this->setMessage('You float in an endless void.');
+            return;
         }
 
+        $this->getExits();
+        $this->getDescription();
+        $this->getItems();
+        $this->getPlayers();
+        $this->getNpcs();
+
+        $this->setOutputItem('exits', $this->exits);
+        $this->setOutputItem('items', $this->items);
+        $this->setOutputItem('players', $this->players);
+        $this->setOutputItem('npcs', $this->npcs);
+        $this->setOutputItem('description', $this->description);
+
         $output = '';
-        $output .= $this->getDescription();
+        $output .= $this->description;
 
-        $exits = $this->getExits();
-
-        if ($exits) {
+        if ($this->exits) {
             $output .= "<br>Exits: <br>";
 
-            foreach ($exits as $direction => $exit) {
+            foreach ($this->exits as $direction => $exit) {
                 $output .= e($direction) . ': ' . e($exit);
             }
         }
 
-        $contents = $this->getContents();
-
-        if ($contents) {
-            $output .= '<br>There is:<br>' . $contents;
+        if ($this->items) {
+            $output .= '<br>There is:<br>' . $this->items;
         }
 
-        $players = $this->getPlayers();
-
-        if ($players) {
-            $output .= '<br>There are other people here:<br>' . $players;
+        if ($this->players) {
+            $output .= '<br>There are other people here:<br>' . $this->players;
         }
 
-        $npcs = $this->getNPCs();
-
-        if ($npcs) {
-            $output .= '<br>There are some NPCs here: <br>' . $npcs;
+        if ($this->npcs) {
+            $output .= '<br>There are some NPCs here: <br>' . $this->npcs;
         }
 
-        return $output;
+        $this->setMessage($output);
     }
 
     protected function getDescription()
     {
-        return $this->user->room->getDescription();
+        $this->description = $this->user->room->getDescription();
     }
 
     protected function getExits()
     {
         if (is_null($this->user->room)) {
-            return [];
+            $this->exits = [];
+            return;
         }
 
-        $output = collect([
+        $this->exits = collect([
             'north' => $this->user->room->northExit,
             'south' => $this->user->room->southExit,
             'west' => $this->user->room->westExit,
@@ -69,13 +85,11 @@ class LookCommand extends Command
                 return e($room->portal->getDescription());
             })
             ->toArray();
-
-        return $output;
     }
 
-    protected function getContents()
+    protected function getitems()
     {
-        return $this->user->room->contents
+        $this->items = $this->user->room->contents
             ->map(function ($entity) {
                 return e($entity->getName()) . ' - ' . e($entity->getDescription());
             })
@@ -84,7 +98,7 @@ class LookCommand extends Command
 
     protected function getPlayers()
     {
-        return $this->user->room->people
+        $this->players = $this->user->room->people
             ->filter(function ($user) {
                 return $user->id !== $this->user->id;
             })
@@ -96,7 +110,7 @@ class LookCommand extends Command
 
     protected function getNPCs()
     {
-        return $this->user->room->npcs
+        $this->npcs = $this->user->room->npcs
             ->map(function ($npc) {
                 return $npc->getName();
             })

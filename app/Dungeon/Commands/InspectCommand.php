@@ -13,7 +13,8 @@ class InspectCommand extends Command
         $entity = $finder->find($this->query, $this->user);
 
         if (!$entity) {
-            return 'Could not find ' . e($this->query) . '.';
+            $this->setMessage('Could not find ' . e($this->query) . '.');
+            return;
         }
 
         $output = e($entity->getDescription());
@@ -29,6 +30,7 @@ class InspectCommand extends Command
                 ->implode('<br>');
         }
 
-        return $output;
+        $this->setOutputItem('contents', $entity->contents);
+        $this->setMessage($output);
     }
 }

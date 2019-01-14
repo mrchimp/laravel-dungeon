@@ -51,7 +51,8 @@ class LookCommandTest extends TestCase
     {
         $command = new LookCommand($this->user);
 
-        $response = $command->execute('look');
+        $command->execute('look');
+        $response = $command->getMessage();
 
         $this->assertEquals(
             'You float in an endless void.',
@@ -66,7 +67,8 @@ class LookCommandTest extends TestCase
 
         $command = new LookCommand($this->user);
 
-        $response = $command->execute('look');
+        $command->execute('look');
+        $response = $command->getMessage();
 
         $this->assertEquals(
             'This is the north room.',
@@ -84,7 +86,8 @@ class LookCommandTest extends TestCase
 
         $command = new LookCommand($this->user);
 
-        $response = $command->execute('look');
+        $command->execute('look');
+        $response = $command->getMessage();
 
         $this->assertStringContainsString('Exits:', $response);
         $this->assertStringContainsString('This is the north room.', $response);
@@ -102,7 +105,8 @@ class LookCommandTest extends TestCase
 
         $command = new LookCommand($this->user);
 
-        $response = $command->execute('look');
+        $command->execute('look');
+        $response = $command->getMessage();
 
         $this->assertStringContainsString('Player 2', $response);
     }
@@ -118,7 +122,8 @@ class LookCommandTest extends TestCase
 
         $command = new LookCommand($this->user);
 
-        $response = $command->execute('look');
+        $command->execute('look');
+        $response = $command->getMessage();
 
         $this->assertStringContainsString('Test NPC', $response);
     }

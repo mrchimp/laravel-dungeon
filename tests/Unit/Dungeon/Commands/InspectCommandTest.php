@@ -51,7 +51,8 @@ class InspectCommandTest extends TestCase
     /** @test */
     public function you_cant_inspect_things_that_you_cant_find()
     {
-        $response = $this->command->execute('inspect atlantis');
+        $this->command->execute('inspect atlantis');
+        $response = $this->command->getMessage();
 
         $this->assertStringContainsString('Could not find atlantis.', $response);
     }
@@ -62,7 +63,8 @@ class InspectCommandTest extends TestCase
         $this->potato->giveToUser($this->user);
         $this->potato->save();
 
-        $response = $this->command->execute('inspect potato');
+        $this->command->execute('inspect potato');
+        $response = $this->command->getMessage();
 
         $this->assertStringContainsString('A potato.', $response);
     }
@@ -73,7 +75,8 @@ class InspectCommandTest extends TestCase
         $this->potato->moveToRoom($this->room);
         $this->potato->save();
 
-        $response = $this->command->execute('inspect potato');
+        $this->command->execute('inspect potato');
+        $response = $this->command->getMessage();
 
         $this->assertStringContainsString('A potato.', $response);
     }
@@ -87,7 +90,8 @@ class InspectCommandTest extends TestCase
         $this->box->moveToRoom($this->room);
         $this->box->save();
 
-        $response = $this->command->execute('inspect potato');
+        $this->command->execute('inspect potato');
+        $response = $this->command->getMessage();
 
         $this->assertStringContainsString('A potato.', $response);
     }
@@ -101,7 +105,8 @@ class InspectCommandTest extends TestCase
         $this->box->moveToRoom($this->room);
         $this->box->save();
 
-        $response = $this->command->execute('inspect box');
+        $this->command->execute('inspect box');
+        $response = $this->command->getMessage();
 
         $this->assertStringContainsString('Potato', $response);
     }

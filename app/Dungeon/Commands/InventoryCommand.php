@@ -9,14 +9,15 @@ class InventoryCommand extends Command
         $entities = $this->user->inventory;
 
         if (count($entities) === 0) {
-            return 'You don\'t have anything.';
+            $this->setMessage('You don\'t have anything.');
+            return;
         }
 
-        return 'You have: <br>' .
+        $this->setMessage('You have: <br>' .
             $entities
             ->map(function($entity) {
                 return e($entity->getName());
             })
-            ->implode('<br>');
+            ->implode('<br>'));
     }
 }
