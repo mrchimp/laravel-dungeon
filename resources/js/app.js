@@ -7,7 +7,7 @@
 
 require('./bootstrap');
 
-// window.Vue = require('vue');
+window.Vue = require('vue');
 
 const output = $('#cmdout');
 const input = $('#cmdin');
@@ -54,10 +54,10 @@ $('#cmdform')
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// Vue.component('example-component', require('./components/ExampleComponent.vue'));
+// Vue.component('dungeon-interface', require('./components/DungeonInterface.vue'));
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
+const files = require.context('./', true, /\.vue$/i)
+files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -65,6 +65,6 @@ $('#cmdform')
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-// const app = new Vue({
-//     el: '#app'
-// });
+const app = new Vue({
+    el: '#app'
+});

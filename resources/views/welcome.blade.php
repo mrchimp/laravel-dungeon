@@ -7,13 +7,16 @@
         <title>Dungeon</title>
     </head>
     <body>
-        <div id="cmdout"></div>
+        <div id="app">
+            <dungeon-interface></dungeon-interface>
+        </div>
+        <!-- <div id="cmdout"></div>
         <form id="cmdform" autocomplete="off">
             <input id="cmdin" name="cmdin">
             <button>Run</button>
-        </form>
+        </form> -->
         <p>
-            {{ Auth::user()->name }}
+            Logged in as: {{ Auth::user()->name }}
         </p>
         <script src="{{ mix('js/app.js') }}"></script>
     </body>
