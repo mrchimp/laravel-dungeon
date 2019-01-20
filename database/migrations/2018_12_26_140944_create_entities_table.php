@@ -34,7 +34,7 @@ class CreateEntitiesTable extends Migration
             $table->index('wearer_id');
             $table->index('container_id');
             $table->index('room_id');
-            $table->index('nc_id');
+            $table->index('npc_id');
         });
     }
 

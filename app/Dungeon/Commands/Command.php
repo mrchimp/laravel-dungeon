@@ -2,6 +2,7 @@
 
 namespace App\Dungeon\Commands;
 
+use App\Dungeon\CurrentLocation;
 use App\User;
 use Auth;
 
@@ -19,6 +20,8 @@ abstract class Command
 
     protected $message = '';
 
+    protected $current_location;
+
     public function __construct(User $user = null)
     {
         if (is_null($user)) {
@@ -30,6 +33,8 @@ abstract class Command
         if (!$this->user) {
             throw new \Exception('No user available for command.');
         }
+
+        $this->current_location = new CurrentLocation($this->user);
     }
 
     abstract function run();
@@ -57,9 +62,19 @@ abstract class Command
 
     protected function setOutputItem($key, $value)
     {
-        $this->output_array[$key] = $value;
+        $this->output[$key] = $value;
 
         return $this;
+    }
+
+    public function getOutputItem($key)
+    {
+        return array_get($this->output, $key);
+    }
+
+    public function getOutputArray()
+    {
+        return $this->output;
     }
 
     protected function setOutputArray($output)

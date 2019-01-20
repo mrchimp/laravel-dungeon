@@ -19,6 +19,7 @@ Just getting started making the engine. You can move around different rooms and 
 * ✗ use \_____ on \_____
 * ✗ wear \_____
 * ✗ attack \_____ with \_____
+* ✗ verb _subject_ with _object_ (extendable)
 
 ## In-Game Features
 

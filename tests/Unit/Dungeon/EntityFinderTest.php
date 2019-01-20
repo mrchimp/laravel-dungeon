@@ -36,13 +36,13 @@ class EntityFinderClass extends TestCase
         ]);
 
         $this->potato = Food::create([
-            'name' => 'Potato',
+            'name' => 'A Potato',
             'description' => 'A potato.',
             'data' => [],
         ]);
 
         $this->box = Entity::create([
-            'name' => 'Box',
+            'name' => 'Box of frogs',
             'description' => 'You can put things in it.',
             'class' => Entity::class,
             'data' => [],

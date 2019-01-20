@@ -77,21 +77,29 @@ class Room extends Model
     public function setNorthExit($room, $data = [])
     {
         $this->northExits()->attach($room, $data);
+
+        return $this;
     }
 
     public function setSouthExit($room, $data = [])
     {
         $this->southExits()->attach($room, $data);
+
+        return $this;
     }
 
     public function setWestExit($room, $data = [])
     {
         $this->westExits()->attach($room, $data);
+
+        return $this;
     }
 
     public function setEastExit($room, $data = [])
     {
         $this->eastExits()->attach($room, $data);
+
+        return $this;
     }
 
     public function getNorthExitAttribute()

@@ -20,5 +20,8 @@ class DropCommand extends Command
         $entity->save();
 
         $this->setMessage('You drop the ' . e($entity->getName()) . '.');
+
+        $this->setOutputItem('items', $this->current_location->getItems(true));
+        $this->setOutputItem('inventory', $this->user->getInventory(true));
     }
 }

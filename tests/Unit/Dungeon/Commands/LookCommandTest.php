@@ -3,6 +3,7 @@
 namespace Tests\Unit\Dungeon\Commands;
 
 use App\Dungeon\Commands\LookCommand;
+use App\Dungeon\Entities\Food\Food;
 use App\NPC;
 use App\Room;
 use App\User;
@@ -43,6 +44,11 @@ class LookCommandTest extends TestCase
 
         $this->south_room = Room::create([
             'description' => 'This is the south room.',
+        ]);
+
+        $this->potato = new Food([
+            'name' => 'Potato',
+            'description' => 'You can eat it',
         ]);
     }
 
@@ -87,44 +93,58 @@ class LookCommandTest extends TestCase
         $command = new LookCommand($this->user);
 
         $command->execute('look');
-        $response = $command->getMessage();
+        $exits = $command->getOutputItem('exits');
 
-        $this->assertStringContainsString('Exits:', $response);
-        $this->assertStringContainsString('This is the north room.', $response);
-        $this->assertStringContainsString('A wooden door.', $response);
+        $this->assertIsCollection($exits);
+        $this->assertCount(1, $exits);
     }
 
     /** @test */
     public function you_can_see_other_people_if_they_are_in_the_same_room()
     {
-        $this->user->moveTo($this->north_room);
-        $this->user->save();
-
-        $this->player_2->moveTo($this->north_room);
-        $this->player_2->save();
+        $this->user->moveTo($this->north_room)->save();
+        $this->player_2->moveTo($this->north_room)->save();
 
         $command = new LookCommand($this->user);
 
         $command->execute('look');
-        $response = $command->getMessage();
+        $players = $command->getOutputItem('players');
 
-        $this->assertStringContainsString('Player 2', $response);
+        $this->assertIsCollection($players);
+        $this->assertCount(1, $players);
+        $this->assertEquals('Player 2', $players->first()->getName());
     }
 
     /** @test */
     public function you_can_see_npcs_if_they_are_in_the_same_room()
     {
-        $this->user->moveTo($this->north_room);
-        $this->user->save();
-
-        $this->npc->moveTo($this->north_room);
-        $this->npc->save();
+        $this->user->moveTo($this->north_room)->save();
+        $this->npc->moveTo($this->north_room)->save();
 
         $command = new LookCommand($this->user);
 
         $command->execute('look');
-        $response = $command->getMessage();
+        $npcs = $command->getOutputItem('npcs');
 
-        $this->assertStringContainsString('Test NPC', $response);
+        $this->assertIsCollection($npcs);
+        $this->assertCount(1, $npcs);
+        $this->assertEquals('Test NPC', $npcs->first()->getName());
+    }
+
+    /** @test */
+    public function you_can_see_items_that_are_in_the_room()
+    {
+        $this->user->moveTo($this->north_room)->save();
+        $this->potato->moveToRoom($this->north_room)->save();
+
+        $command = new LookCommand($this->user);
+
+        $command->execute('look');
+
+        $items = $command->getOutputItem('items');
+
+        $this->assertIsEntityCollection($items);
+        $this->assertCount(1, $items);
+        $this->assertEquals('Potato', $items->first()->getName());
     }
 }

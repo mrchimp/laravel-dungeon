@@ -35,6 +35,7 @@ class CmdController extends Controller
 
         if (!in_array($chunks[0], array_keys($commands))) {
             Log::warning('Unknown command: ' . $input);
+
             return response()->json([
                 'message' => 'I don\'t know how to ' . $chunks[0],
                 'data' => null,
@@ -47,7 +48,7 @@ class CmdController extends Controller
 
         return response()->json([
             'message' => $command->getMessage(),
-            'data' => $command->toArray(),
+            'data' => $command->getOutputArray(),
             'response' => true
         ]);
     }

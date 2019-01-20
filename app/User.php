@@ -67,4 +67,18 @@ class User extends Authenticatable
     {
         return $this->room()->associate($room);
     }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getInventory($refresh = false)
+    {
+        if ($refresh) {
+            $this->load('inventory');
+        }
+
+        return $this->inventory;
+    }
 }

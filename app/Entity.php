@@ -111,6 +111,8 @@ class Entity extends Model
         $this->moveToVoid();
 
         $this->room()->associate($room);
+
+        return $this;
     }
 
     public function givetoUser(User $user)
@@ -118,6 +120,8 @@ class Entity extends Model
         $this->moveToVoid();
 
         $this->owner()->associate($user);
+
+        return $this;
     }
 
     public function moveToContainer(Entity $container)
@@ -125,6 +129,8 @@ class Entity extends Model
         $this->moveToVoid();
 
         $this->container()->associate($container);
+
+        return $this;
     }
 
     public function giveToNPC(NPC $npc)
@@ -132,6 +138,8 @@ class Entity extends Model
         $this->moveToVoid();
 
         $this->npc()->associate($npc);
+
+        return $this;
     }
 
     public function moveToVoid()
@@ -140,6 +148,8 @@ class Entity extends Model
         $this->room()->dissociate();
         $this->container()->dissociate();
         $this->npc()->dissociate();
+
+        return $this;
     }
 
     public function getDescription()
@@ -170,5 +180,16 @@ class Entity extends Model
     public function ownedBy(User $user)
     {
         return (int)$this->owner_id === (int)$user->id;
+    }
+
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        foreach ($this->getSerializable() as $serializable) {
+            $array[$serializable] = $this->$serializable;
+        }
+
+        return $array;
     }
 }
