@@ -40,4 +40,13 @@ class Apparel extends Entity
 
         return $this;
     }
+
+    public function getVerbs()
+    {
+        $verbs = parent::getVerbs();
+
+        $verbs[] = 'wear';
+
+        return $verbs;
+    }
 }

@@ -35,6 +35,21 @@ class Entity extends Model
         self::observe(new HasOwnClassObserver);
     }
 
+    public function getVerbs()
+    {
+        return [
+            'take',
+            'drop',
+            'inspect',
+            'use',
+        ];
+    }
+
+    public function supportsVerb($verb)
+    {
+        return in_array($verb, $this->getVerbs());
+    }
+
     /**
      * Take a given Entity and return a new instance of whatever
      * class is stored in the `class` attribute with the model's

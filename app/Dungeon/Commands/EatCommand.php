@@ -23,7 +23,7 @@ class EatCommand extends Command
             return;
         }
 
-        if ($entity->getType() !== 'food') {
+        if (!$entity->supportsVerb('eat')) {
             $this->setMessage('You can\'t eat that.');
             return;
         }

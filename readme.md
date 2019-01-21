@@ -9,17 +9,20 @@ Just getting started making the engine. You can move around different rooms and 
 ## Commands
 
 * ✓ look
-* ✓ go \_____
-* ✓ take \_____
-* ✓ drop \_____
-* ✓ eat \_____
+* ✓ go _direction_
 * ✓ inventory
-* ✓ inspect \_____
-* ✗ use \_____
-* ✗ use \_____ on \_____
-* ✗ wear \_____
-* ✗ attack \_____ with \_____
+
+* ✓ take _object_
+* ✓ drop _object_
+* ✓ eat _object_
+* ✓ inspect _object_
+* ✗ use _object_
+* ✗ use _object_ on _subject_
+* ✗ wear _object_
+* ✗ verb _object_ (extendable)
 * ✗ verb _subject_ with _object_ (extendable)
+* ✗ attack _subject_ with _object_
+* ✗ put _object_ in _subject_
 
 ## In-Game Features
 

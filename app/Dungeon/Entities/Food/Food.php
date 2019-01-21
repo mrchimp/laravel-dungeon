@@ -41,4 +41,13 @@ class Food extends Entity
     {
         return $this->healing;
     }
+
+    public function getVerbs()
+    {
+        $verbs = parent::getVerbs();
+
+        $verbs[] = 'eat';
+
+        return $verbs;
+    }
 }

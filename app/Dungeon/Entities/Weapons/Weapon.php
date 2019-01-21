@@ -10,4 +10,13 @@ class Weapon extends Entity
     {
         return 'weapon';
     }
+
+    public function getVerbs()
+    {
+        $verbs = parent::getVerbs();
+
+        $verbs[] = 'attack';
+
+        return $verbs;
+    }
 }
