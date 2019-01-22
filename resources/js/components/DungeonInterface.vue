@@ -1,7 +1,7 @@
 <template>
     <div class="tile is-ancestor dungeon">
         <div class="tile is-parent is-3">
-            <div class="tile is-child dungeon-inventory">
+            <div class="tile is-child notification is-grey-light dungeon-inventory">
                 <h3 class="title is-5">Inventory</h3>
                 <ul>
                     <li
@@ -17,13 +17,13 @@
         </div>
         <div class="tile is-vertical">
             <div class="tile is-parent">
-                <div class="tile is-child dungeon-people">
+                <div class="tile is-child notification is-grey-light dungeon-people">
                     <h3 class="title is-5">Players</h3>
                     <ul>
                         <li v-for="player in players" :key="player.uuid">{{ player.name }}</li>
                     </ul>
                 </div>
-                <div class="tile is-child dungeon-items">
+                <div class="tile is-child notification is-grey-light dungeon-items">
                     <h3 class="title is-5">Items</h3>
                     <ul>
                         <li
@@ -39,7 +39,7 @@
             </div>
             <div class="tile">
                 <div class="tile is-parent">
-                    <div class="tile is-child dungeon-output">
+                    <div class="tile is-child notification is-grey-light dungeon-output">
                         <h3 class="title is-5">Output</h3>
                         <p v-for="(message, index) in output" :key="index">{{message}}</p>
                         <form @submit.prevent="submitInput">
