@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dungeon\Commands\AttackCommand;
 use App\Dungeon\Commands\DropCommand;
 use App\Dungeon\Commands\EatCommand;
+use App\Dungeon\Commands\EquipCommand;
 use App\Dungeon\Commands\GoCommand;
 use App\Dungeon\Commands\InspectCommand;
 use App\Dungeon\Commands\InventoryCommand;
@@ -25,12 +26,13 @@ class CmdController extends Controller
             'attack' => AttackCommand::class,
             'drop' => DropCommand::class,
             'eat' => EatCommand::class,
+            'equip' => EquipCommand::class,
             'go' => GoCommand::class,
             'inspect' => InspectCommand::class,
             'inventory' => InventoryCommand::class,
             'look' => LookCommand::class,
             'take' => TakeCommand::class,
-            'use' => UseCommand::class,
+            // 'use' => UseCommand::class,
         ];
 
         if (!in_array($chunks[0], array_keys($commands))) {

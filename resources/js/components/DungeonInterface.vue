@@ -10,7 +10,20 @@
                         :title="item.description"
                     >
                         {{ item.name }}
-                        <button @click.prevent="run('drop ' + item.name)">Drop</button>
+                        <button
+                            class="button is-default is-small"
+                            @click.prevent="run('drop ' + item.name)"
+                        >
+                            Drop
+                        </button>
+                        <template v-if="item.type === 'apparel'">
+                            <button
+                                class="button is-default is-small"
+                                @click.prevent="run('equip ' + item.name)"
+                            >
+                                {{ item.equiped ? 'Unequip' : 'Equip' }}
+                            </button>
+                        </template>
                     </li>
                 </ul>
             </div>
@@ -32,7 +45,7 @@
                             :title="item.description"
                         >
                             {{ item.name }}
-                            <button @click.prevent="run('take ' + item.name)">Take</button>
+                            <button class="button is-default is-small" @click.prevent="run('take ' + item.name)">Take</button>
                         </li>
                     </ul>
                 </div>
@@ -79,7 +92,7 @@ export default {
         submitInput() {
             this.runCommand(this.input)
                 .then(this.handleResponse)
-                .then(resetInput)
+                .then(this.resetInput)
                 .catch(this.handleError)
                 .then(() => {
                     this.sending_input = false;

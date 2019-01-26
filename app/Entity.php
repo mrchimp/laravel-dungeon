@@ -205,6 +205,8 @@ class Entity extends Model
             $array[$serializable] = $this->$serializable;
         }
 
+        $array['type'] = $this->getType();
+
         return $array;
     }
 }

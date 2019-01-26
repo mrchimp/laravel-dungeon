@@ -9,17 +9,6 @@ class Apparel extends Entity
 {
     use IsEquipable;
 
-    // protected $worn;
-
-    // public function getSerializable()
-    // {
-    //     $serializable = parent::getSerializable();
-
-    //     $serializable[] = 'equiped';
-
-    //     return $serializable;
-    // }
-
     public function getType()
     {
         return 'apparel';
