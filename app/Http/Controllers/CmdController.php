@@ -11,6 +11,7 @@ use App\Dungeon\Commands\HelpCommand;
 use App\Dungeon\Commands\HiCommand;
 use App\Dungeon\Commands\InspectCommand;
 use App\Dungeon\Commands\InventoryCommand;
+use App\Dungeon\Commands\KillCommand;
 use App\Dungeon\Commands\LookCommand;
 use App\Dungeon\Commands\TakeCommand;
 use App\Dungeon\Commands\UseCommand;
@@ -34,6 +35,7 @@ class CmdController extends Controller
             'hi' => HiCommand::class,
             'inspect' => InspectCommand::class,
             'inventory' => InventoryCommand::class,
+            'kill' => KillCommand::class,
             'look' => LookCommand::class,
             'take' => TakeCommand::class,
             // 'use' => UseCommand::class,

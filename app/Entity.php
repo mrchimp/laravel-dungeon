@@ -4,6 +4,7 @@ namespace App;
 
 use App\Dungeon\Collections\EntityCollection;
 use App\Dungeon\Contracts\Interactable;
+use App\Dungeon\Traits\Findable;
 use App\Dungeon\Traits\HasSerializableAttributes;
 use App\Observers\HasOwnClassObserver;
 use App\Observers\SerializableObserver;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Entity extends Model implements Interactable
 {
-    use HasUuid, HasSerializableAttributes;
+    use HasUuid, HasSerializableAttributes, Findable;
 
     protected $table = 'entities';
 
@@ -181,14 +182,6 @@ class Entity extends Model implements Interactable
     public function getName()
     {
         return $this->name;
-    }
-
-    public function nameMatchesQuery($query)
-    {
-        return str_contains(
-            strtolower($this->name),
-            strtolower($query)
-        );
     }
 
     public function findContents($query)

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Dungeon\Contracts\Interactable;
+use App\Dungeon\Traits\Findable;
 use App\Dungeon\Traits\HasApparel;
 use App\Dungeon\Traits\HasHealth;
 use App\Dungeon\Traits\HasInventory;
@@ -18,7 +19,8 @@ class User extends Authenticatable implements Interactable
         HasHealth,
         HasSerializableAttributes,
         HasInventory,
-        HasApparel;
+        HasApparel,
+        Findable;
 
     protected $casts = [
         'data' => 'array',
@@ -92,5 +94,22 @@ class User extends Authenticatable implements Interactable
         }
 
         return $this->inventory;
+    }
+
+    /**
+     * @todo
+     * This is needed because the entity finder
+     * tries to replace the class. Need to find a
+     * better way to handle this.
+     */
+    public static function replaceClass($model)
+    {
+        return $model;
+    }
+
+    public function kill()
+    {
+        $this->room_id = null;
+        $this->save();
     }
 }

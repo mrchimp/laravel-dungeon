@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class EntityFinderClass extends TestCase
+class EntityFinderTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
@@ -48,8 +48,7 @@ class EntityFinderClass extends TestCase
             'data' => [],
         ]);
 
-        $this->user->moveTo($this->room);
-        $this->user->save();
+        $this->user->moveTo($this->room)->save();
 
         $this->finder = new Finder($this->user);
     }
@@ -57,8 +56,7 @@ class EntityFinderClass extends TestCase
     /** @test */
     public function it_finds_entities_in_the_users_inventory()
     {
-        $this->potato->giveToUser($this->user);
-        $this->potato->save();
+        $this->potato->giveToUser($this->user)->save();
 
         $entity = $this->finder->find('potato', $this->user);
 
@@ -68,8 +66,7 @@ class EntityFinderClass extends TestCase
     /** @test */
     public function it_finds_entities_in_the_current_room()
     {
-        $this->potato->moveToRoom($this->room);
-        $this->potato->save();
+        $this->potato->moveToRoom($this->room)->save();
 
         $entity = $this->finder->find('potato', $this->user);
 
@@ -79,17 +76,33 @@ class EntityFinderClass extends TestCase
     /** @test */
     public function it_find_entities_in_containers_that_are_in_the_current_room()
     {
-        $this->box->moveToRoom($this->room);
-        $this->box->save();
-
-        $this->potato->moveToContainer($this->box);
-        $this->potato->save();
-
-        $this->user->moveTo($this->room);
-        $this->user->save();
+        $this->box->moveToRoom($this->room)->save();
+        $this->potato->moveToContainer($this->box)->save();
+        $this->user->moveTo($this->room)->save();
 
         $entity = $this->finder->find('potato', $this->user);
 
         $this->assertEquals($this->potato->id, $entity->id);
+    }
+
+    /** @test */
+    public function it_finds_users_in_the_same_room()
+    {
+        $other_player = User::create([
+            'name' => 'Other Player',
+            'email' => 'test2@example.com',
+            'password' => 'whatever',
+        ]);
+
+        $this->user->moveTo($this->room)->save();
+        $other_player->moveTo($this->room)->save();
+
+        $entity = $this->finder->find('other player', $this->user);
+
+        $this->assertEquals($other_player->id, $entity->id);
+
+        $entity = $this->finder->find('other', $this->user);
+
+        $this->assertEquals($other_player->id, $entity->id);
     }
 }

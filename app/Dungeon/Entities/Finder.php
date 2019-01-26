@@ -20,10 +20,14 @@ class Finder
         }
 
         if (!$entity) {
+            $entity = $this->findUsers($query, $user->room);
+        }
+
+        if (!$entity) {
             return null;
         }
 
-        return Entity::replaceClass($entity);
+        return $entity::replaceClass($entity);
     }
 
     public function findInInventory($query, $user)
@@ -57,5 +61,16 @@ class Finder
                 return $entity;
             }
         }
+    }
+
+    public function findUsers($query, $room)
+    {
+        if (!$room) {
+            return null;
+        }
+
+        return $room->people->first(function ($person) use ($query) {
+            return $person->nameMatchesQuery($query);
+        });
     }
 }

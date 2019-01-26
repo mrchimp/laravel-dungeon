@@ -10,6 +10,10 @@ trait HasHealth
     {
         $this->health -= $amount;
 
+        if ($this->health <= 0) {
+            $this->kill();
+        }
+
         return $this;
     }
 
@@ -17,12 +21,20 @@ trait HasHealth
     {
         $this->health += $amount;
 
+        if ($this->health <= 0) {
+            $this->kill();
+        }
+
         return $this;
     }
 
     public function setHealth($amount)
     {
         $this->health = $amount;
+
+        if ($this->health <= 0) {
+            $this->kill();
+        }
 
         return $this;
     }
