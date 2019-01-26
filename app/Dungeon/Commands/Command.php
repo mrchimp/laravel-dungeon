@@ -22,7 +22,7 @@ abstract class Command
 
     protected $current_location;
 
-    protected $success = true;
+    public $success = true;
 
     public function __construct(User $user = null)
     {

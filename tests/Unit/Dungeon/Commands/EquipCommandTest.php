@@ -55,6 +55,7 @@ class EquipCommandTest extends TestCase
         $hat = Entity::find($this->hat->id);
 
         $this->assertEquals(1, $hat->equiped);
+        $this->assertTrue($this->command->success);
     }
 
     /** @test */
@@ -67,6 +68,7 @@ class EquipCommandTest extends TestCase
         $potato = Entity::find($this->potato->id);
 
         $this->assertEquals(0, $potato->equiped);
+        $this->assertFalse($this->command->success);
     }
 
     /** @test */
@@ -80,5 +82,14 @@ class EquipCommandTest extends TestCase
         $hat = Entity::find($this->hat->id);
 
         $this->assertEquals(0, $hat->equiped);
+        $this->assertFalse($this->command->success);
+    }
+
+    /** @test */
+    public function you_cant_equip_something_if_you_dont_know_what_it_is()
+    {
+        $this->command->execute('equip the ineffable');
+
+        $this->assertFalse($this->command->success);
     }
 }

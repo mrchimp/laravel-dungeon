@@ -35,6 +35,10 @@ class Finder
 
     public function findInRoom($query, $room)
     {
+        if (!$room) {
+            return null;
+        }
+
         return $room->contents->first(function ($entity) use ($query) {
             return $entity->nameMatchesQuery($query);
         });
@@ -42,6 +46,10 @@ class Finder
 
     public function findInContainersInRoom($query, $room)
     {
+        if (!$room) {
+            return null;
+        }
+
         foreach ($room->contents as $container) {
             $entity = $container->findContents($query);
 
