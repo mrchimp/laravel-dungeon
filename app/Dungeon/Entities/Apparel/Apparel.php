@@ -14,6 +14,11 @@ class Apparel extends Entity
         return 'apparel';
     }
 
+    public function isEquipable()
+    {
+        return true;
+    }
+
     public function isWorn()
     {
         return $this->isEquiped();

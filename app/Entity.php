@@ -3,13 +3,14 @@
 namespace App;
 
 use App\Dungeon\Collections\EntityCollection;
+use App\Dungeon\Contracts\Interactable;
 use App\Dungeon\Traits\HasSerializableAttributes;
 use App\Observers\HasOwnClassObserver;
 use App\Observers\SerializableObserver;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 
-class Entity extends Model
+class Entity extends Model implements Interactable
 {
     use HasUuid, HasSerializableAttributes;
 
@@ -33,6 +34,11 @@ class Entity extends Model
 
         self::observe(new SerializableObserver);
         self::observe(new HasOwnClassObserver);
+    }
+
+    public function isEquipable()
+    {
+        return false;
     }
 
     public function getVerbs()

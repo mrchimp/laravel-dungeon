@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Dungeon\Contracts\Interactable;
 use App\Dungeon\Traits\HasApparel;
 use App\Dungeon\Traits\HasHealth;
 use App\Dungeon\Traits\HasInventory;
@@ -11,7 +12,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Interactable
 {
     use Notifiable,
         HasHealth,
@@ -50,6 +51,16 @@ class User extends Authenticatable
         parent::boot();
 
         self::observe(new SerializableObserver);
+    }
+
+    public function getType()
+    {
+        return 'user';
+    }
+
+    public function isEquipable()
+    {
+        return false;
     }
 
     public function getSerializable()
