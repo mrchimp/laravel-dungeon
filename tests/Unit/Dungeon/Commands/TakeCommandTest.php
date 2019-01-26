@@ -42,8 +42,7 @@ class TakeCommandTest extends TestCase
             'data' => [],
         ]);
 
-        $this->user->moveTo($this->room);
-        $this->user->save();
+        $this->user->moveTo($this->room)->save();
 
         $this->command = new TakeCommand($this->user);
     }
@@ -51,8 +50,7 @@ class TakeCommandTest extends TestCase
     /** @test */
     public function cant_take_things_you_already_have()
     {
-        $this->potato->giveToUser($this->user);
-        $this->potato->save();
+        $this->potato->giveToUser($this->user)->save();
 
         $this->command->execute('take potato');
 

@@ -6,6 +6,10 @@ use App\Dungeon\Entities\Finder;
 
 class EquipCommand extends Command
 {
+    const EQUIPABLE_TYPES = [
+        'apparel',
+    ];
+
     public function run()
     {
         $query = implode(' ', array_slice($this->input_array, 1));;
@@ -19,6 +23,11 @@ class EquipCommand extends Command
 
         if (!$entity->ownedBy($this->user)) {
             $this->setMessage('You don\'t have that.');
+            return;
+        }
+
+        if (!in_array($entity->getType(), self::EQUIPABLE_TYPES)) {
+            $this->setMessage('You can\'t equip that.');
             return;
         }
 
