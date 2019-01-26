@@ -7,6 +7,7 @@ use App\Dungeon\Commands\DropCommand;
 use App\Dungeon\Commands\EatCommand;
 use App\Dungeon\Commands\EquipCommand;
 use App\Dungeon\Commands\GoCommand;
+use App\Dungeon\Commands\HelpCommand;
 use App\Dungeon\Commands\InspectCommand;
 use App\Dungeon\Commands\InventoryCommand;
 use App\Dungeon\Commands\LookCommand;
@@ -28,6 +29,7 @@ class CmdController extends Controller
             'eat' => EatCommand::class,
             'equip' => EquipCommand::class,
             'go' => GoCommand::class,
+            'help' => HelpCommand::class,
             'inspect' => InspectCommand::class,
             'inventory' => InventoryCommand::class,
             'look' => LookCommand::class,

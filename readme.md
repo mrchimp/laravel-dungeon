@@ -35,6 +35,7 @@ Just getting started making the engine. You can move around different rooms and 
 * ✓ inspect _object_
 * ✗ use _object_
 * ✗ use _object_ on _subject_
+* ✓ equip _object_
 * ✗ wear _object_
 * ✗ verb _object_ (extendable)
 * ✗ verb _subject_ with _object_ (extendable)
