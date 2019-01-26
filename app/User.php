@@ -33,6 +33,7 @@ class User extends Authenticatable
         'email',
         'password',
         'health',
+        'room_id',
     ];
 
     /**
