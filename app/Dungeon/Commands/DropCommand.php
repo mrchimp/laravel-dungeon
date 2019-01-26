@@ -12,8 +12,7 @@ class DropCommand extends Command
         $entity = $finder->findInInventory($this->query, $this->user);
 
         if (!$entity) {
-            $this->setMessage('You don\'t have a ' . e($this->query));
-            return;
+            return $this->fail('You don\'t have a ' . e($this->query));
         }
 
         $entity->moveToRoom($this->user->room);

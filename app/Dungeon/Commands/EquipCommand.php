@@ -17,18 +17,15 @@ class EquipCommand extends Command
         $entity = $finder->find($query, $this->user);
 
         if (!$entity) {
-            $this->setMessage('Equip what?');
-            return;
+            return $this->fail('Equip what?');
         }
 
         if (!$entity->ownedBy($this->user)) {
-            $this->setMessage('You don\'t have that.');
-            return;
+            return $this->fail('You don\'t have that.');
         }
 
         if (!in_array($entity->getType(), self::EQUIPABLE_TYPES)) {
-            $this->setMessage('You can\'t equip that.');
-            return;
+            return $this->fail('You can\'t equip that.');
         }
 
         if ($entity->isEquiped()) {

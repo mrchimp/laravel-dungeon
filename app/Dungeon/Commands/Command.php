@@ -22,6 +22,8 @@ abstract class Command
 
     protected $current_location;
 
+    protected $success = true;
+
     public function __construct(User $user = null)
     {
         if (is_null($user)) {
@@ -87,5 +89,14 @@ abstract class Command
     public function toArray()
     {
         return $this->output;
+    }
+
+    public function fail($message)
+    {
+        $this->setMessage($message);
+
+        $this->success = false;
+
+        return $this;
     }
 }

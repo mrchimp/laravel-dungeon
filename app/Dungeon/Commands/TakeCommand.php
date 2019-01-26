@@ -13,13 +13,11 @@ class TakeCommand extends Command
         $entity = $finder->find($query, $this->user);
 
         if (!$entity) {
-            $this->setMessage('Take what?');
-            return;
+            return $this->fail('Take what?');
         }
 
         if ($entity->ownedBy($this->user)) {
-            $this->setMessage('You already have that.');
-            return;
+            return $this->fail('You already have that.');
         }
 
         $entity->giveToUser($this->user);

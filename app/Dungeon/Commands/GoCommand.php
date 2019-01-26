@@ -14,23 +14,20 @@ class GoCommand extends Command
     public function run()
     {
         if (count($this->input_array) < 2) {
-            $this->setMessage('Go where?');
-            return;
+            return $this->fail('Go where?');
         }
 
         $direction = $this->input_array[1];
 
         if (!in_array($direction, $this->directions)) {
-            $this->setMessage('I don\'t know which way that is.');
-            return;
+            return $this->fail('I don\'t know which way that is.');
         }
 
         $exit = $direction . 'Exit';
         $destination = $this->user->room->$exit;
 
         if (!$destination) {
-            $this->setMessage('I can\'t go that way.');
-            return;
+            return $this->fail('I can\'t go that way.');
         }
 
         $this->user->moveTo($destination);

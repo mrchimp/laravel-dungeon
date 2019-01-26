@@ -19,13 +19,11 @@ class EatCommand extends Command
         $entity = $finder->find($this->query, $this->user);
 
         if (!$entity) {
-            $this->setMessage('Could not find ' . e($this->query) . '.');
-            return;
+            return $this->fail('Could not find ' . e($this->query) . '.');
         }
 
         if (!$entity->supportsVerb('eat')) {
-            $this->setMessage('You can\'t eat that.');
-            return;
+            return $this->fail('You can\'t eat that.');
         }
 
         $entity->eat($this->user);

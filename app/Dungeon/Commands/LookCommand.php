@@ -20,8 +20,7 @@ class LookCommand extends Command
     public function run()
     {
         if (is_null($this->user->room)) {
-            $this->setMessage($this->current_location->getDescription());
-            return;
+            return $this->fail($this->current_location->getDescription());
         }
 
         $this->setOutputItem('exits', $this->current_location->getExits());

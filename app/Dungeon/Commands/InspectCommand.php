@@ -13,8 +13,7 @@ class InspectCommand extends Command
         $entity = $finder->find($this->query, $this->user);
 
         if (!$entity) {
-            $this->setMessage('Could not find ' . e($this->query) . '.');
-            return;
+            return $this->fail('Could not find ' . e($this->query) . '.');
         }
 
         $output = e($entity->getDescription());
