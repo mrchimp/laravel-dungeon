@@ -48,6 +48,12 @@ abstract class Command
         $this->query = implode(' ', array_slice($this->input_array, 1));
 
         $this->run();
+
+        $this->setOutputItem('exits', $this->current_location->getExits(true));
+        $this->setOutputItem('items', $this->current_location->getItems(true));
+        $this->setOutputItem('players', $this->current_location->getPlayers(true));
+        $this->setOutputItem('npcs', $this->current_location->getNpcs(true));
+        $this->setOutputItem('inventory', $this->user->getInventory(true));
     }
 
     protected function setMessage($message)

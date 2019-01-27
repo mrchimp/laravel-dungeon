@@ -24,6 +24,10 @@ class CurrentLocation
 
     public function getPlayers($refresh = false, $exclude_self = true)
     {
+        if ($refresh) {
+            $this->user->room->load('people');
+        }
+
         return $this->user->room->people
             ->filter(function ($user) use ($exclude_self) {
                 if (!$exclude_self) {
@@ -59,7 +63,7 @@ class CurrentLocation
         }
 
         if ($refresh) {
-            $this->user->room->load('northExit', 'southExit', 'westExit', 'eastExit');
+            $this->user->room->load('northExits', 'southExits', 'westExits', 'eastExits');
         }
 
         return (new Collection([

@@ -27,7 +27,7 @@ class RespawnCommand extends Command
             return $this->fail('Player isn\'t dead.');
         }
 
-        $user->respawn();
+        $user->respawn()->save();
 
         $this->setMessage('User has respawned.');
     }

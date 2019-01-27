@@ -36,8 +36,6 @@ class EquipCommand extends Command
             $this->setMessage('Unequipped.');
         }
 
-        $this->setOutputItem('inventory', $this->user->getInventory(true));
-
         $entity->save();
     }
 }

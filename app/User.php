@@ -120,7 +120,7 @@ class User extends Authenticatable implements Interactable
         $room = Room::first();
 
         $this->setHealth(self::DEFAULT_HEALTH);
-        $this->moveTo($room)->save();
+        $this->moveTo($room);
 
         return $this;
     }
