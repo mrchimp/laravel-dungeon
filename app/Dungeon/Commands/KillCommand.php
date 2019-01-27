@@ -22,7 +22,8 @@ class KillCommand extends Command
             $item->moveToRoom($user->room)->save();
         }
 
-        $user->kill();
+
+        $user->setHealth(0)->save();
 
         $this->setMessage('Deaded.');
     }

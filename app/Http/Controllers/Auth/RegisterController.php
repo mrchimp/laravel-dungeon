@@ -64,14 +64,13 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $room = Room::first();
-
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'room_id' => $room ? $room->id : null,
         ]);
+
+        $user->respawn();
 
         return $user;
     }

@@ -112,4 +112,13 @@ class User extends Authenticatable implements Interactable
         $this->room_id = null;
         $this->save();
     }
+
+    public function respawn()
+    {
+        $room = Room::first();
+
+        $this->moveTo($room)->save();
+
+        return $this;
+    }
 }

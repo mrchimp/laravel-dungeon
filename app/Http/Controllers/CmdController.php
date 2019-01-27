@@ -13,6 +13,7 @@ use App\Dungeon\Commands\InspectCommand;
 use App\Dungeon\Commands\InventoryCommand;
 use App\Dungeon\Commands\KillCommand;
 use App\Dungeon\Commands\LookCommand;
+use App\Dungeon\Commands\RespawnCommand;
 use App\Dungeon\Commands\TakeCommand;
 use App\Dungeon\Commands\UseCommand;
 use Illuminate\Http\Request;
@@ -38,6 +39,7 @@ class CmdController extends Controller
             'kill' => KillCommand::class,
             'look' => LookCommand::class,
             'take' => TakeCommand::class,
+            'respawn' => RespawnCommand::class,
             // 'use' => UseCommand::class,
         ];
 
