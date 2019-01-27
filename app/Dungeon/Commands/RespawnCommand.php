@@ -24,7 +24,6 @@ class RespawnCommand extends Command
         }
 
         if (!$user->isDead()) {
-            dd($user->health);
             return $this->fail('Player isn\'t dead.');
         }
 

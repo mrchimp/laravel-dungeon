@@ -22,6 +22,8 @@ class User extends Authenticatable implements Interactable
         HasApparel,
         Findable;
 
+    const DEFAULT_HEALTH = 100;
+
     protected $casts = [
         'data' => 'array',
     ];
@@ -117,6 +119,7 @@ class User extends Authenticatable implements Interactable
     {
         $room = Room::first();
 
+        $this->setHealth(self::DEFAULT_HEALTH);
         $this->moveTo($room)->save();
 
         return $this;
