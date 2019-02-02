@@ -57,11 +57,27 @@ Just getting started making the engine. You can move around different rooms and 
 * ✗ Levelling
 * ✗ Player Stats
 
-## Engine Features
+## Features
 
 * ✗ Command aliases
     * ✗ look at -> inspect
 * ✗ Extendable interface
+* ✗ Skill Tree
+    * ✗ Speed
+    * ✗ Strength
+    * ✗ Stamina
+    * ✗ Healing
+    * ✗ Courage
+    * ✗ Willpower
+    * ✗ Perception
+    * ✗ Reason
+    * ✗ Intellect
+    * ✗ Stealth
+    * ✗ Memory
+    * ✗ Lockpicking
+    * ✗ Traps
+    * ✗ Followers
+* ✗ Character Creation Screen
 
 ## Ideas
 
