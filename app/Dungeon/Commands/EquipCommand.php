@@ -10,9 +10,10 @@ class EquipCommand extends Command
         'apparel',
     ];
 
-    public function run()
+    protected function run()
     {
-        $query = implode(' ', array_slice($this->input_array, 1));;
+        $query = implode(' ', array_slice($this->input_array, 1));
+        ;
         $finder = new Finder;
         $entity = $finder->find($query, $this->user);
 

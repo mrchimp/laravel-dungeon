@@ -6,7 +6,7 @@ use App\Dungeon\Entities\Finder;
 
 class TakeCommand extends Command
 {
-    public function run()
+    protected function run()
     {
         $query = implode(' ', array_slice($this->input_array, 1));
         $finder = new Finder;

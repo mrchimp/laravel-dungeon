@@ -24,6 +24,10 @@ class CurrentLocation
 
     public function getPlayers($refresh = false, $exclude_self = true)
     {
+        if (!$this->user->room) {
+            return new Collection([]);
+        }
+
         if ($refresh) {
             $this->user->room->load('people');
         }
@@ -40,6 +44,10 @@ class CurrentLocation
 
     public function getNPCs($refresh = false)
     {
+        if (!$this->user->room) {
+            return new Collection([]);
+        }
+
         if ($refresh) {
             $this->user->room->load('npcs');
         }
@@ -49,6 +57,10 @@ class CurrentLocation
 
     public function getItems($refresh = false)
     {
+        if (!$this->user->room) {
+            return new Collection([]);
+        }
+
         if ($refresh) {
             $this->user->room->load('contents');
         }

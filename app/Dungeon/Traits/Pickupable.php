@@ -6,7 +6,8 @@ use App\User;
 
 trait Pickupable
 {
-    public function owner() {
+    public function owner()
+    {
         return $this->belongsTo(User::class);
     }
 

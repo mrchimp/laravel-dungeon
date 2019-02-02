@@ -4,10 +4,9 @@ namespace App\Dungeon\Commands;
 
 use App\Dungeon\Entities\Finder;
 
-
 class KillCommand extends Command
 {
-    public function run()
+    protected function run()
     {
         $finder = new Finder;
         $query = implode(' ', array_slice($this->input_array, 1));

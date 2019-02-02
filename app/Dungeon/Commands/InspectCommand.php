@@ -4,10 +4,9 @@ namespace App\Dungeon\Commands;
 
 use App\Dungeon\Entities\Finder;
 
-
 class InspectCommand extends Command
 {
-    public function run()
+    protected function run()
     {
         $finder = new Finder;
         $entity = $finder->find($this->query, $this->user);
@@ -23,7 +22,7 @@ class InspectCommand extends Command
 
             $output .= $entity
                 ->contents
-                ->map(function($item) {
+                ->map(function ($item) {
                     return $item->getName();
                 })
                 ->implode('<br>');

@@ -4,7 +4,7 @@ namespace App\Dungeon\Commands;
 
 class InventoryCommand extends Command
 {
-    public function run()
+    protected function run()
     {
         $entities = $this->user->inventory;
 
@@ -15,7 +15,7 @@ class InventoryCommand extends Command
 
         $this->setMessage('You have: <br>' .
             $entities
-            ->map(function($entity) {
+            ->map(function ($entity) {
                 return e($entity->getName());
             })
             ->implode('<br>'));

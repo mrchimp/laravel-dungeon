@@ -10,7 +10,7 @@ trait HasApparel
     {
         return $this
             ->inventory
-            ->filter(function($apparel) {
+            ->filter(function ($apparel) {
                 return $apparel->isEquiped() && $apparel->getType() === 'apparel';
             });
     }

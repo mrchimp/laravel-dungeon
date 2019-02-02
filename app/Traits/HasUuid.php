@@ -10,7 +10,7 @@ trait HasUuid
     {
         parent::boot();
 
-        self::creating(function($model) {
+        self::creating(function ($model) {
             $model->uuid = Uuid::uuid1()->toString();
         });
     }

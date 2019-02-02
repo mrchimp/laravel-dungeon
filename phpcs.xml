@@ -8,6 +8,7 @@
     <exclude-pattern>./vendor/**/*</exclude-pattern>
     <exclude-pattern>./node-modules/**/*</exclude-pattern>
     <exclude-pattern>./resources/**/*</exclude-pattern>
+    <exclude-pattern>./tests/**/*</exclude-pattern>
 
     <rule ref="PSR1"></rule>
     <rule ref="PSR2"></rule>

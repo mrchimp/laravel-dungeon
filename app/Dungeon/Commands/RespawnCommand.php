@@ -7,7 +7,7 @@ use App\User;
 
 class RespawnCommand extends Command
 {
-    public function run()
+    protected function run()
     {
         $finder = new Finder;
         $query = implode(' ', array_slice($this->input_array, 1));

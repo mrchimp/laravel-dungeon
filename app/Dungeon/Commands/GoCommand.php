@@ -11,7 +11,7 @@ class GoCommand extends Command
         'east',
     ];
 
-    public function run()
+    protected function run()
     {
         if (count($this->input_array) < 2) {
             return $this->fail('Go where?');

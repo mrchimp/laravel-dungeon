@@ -4,7 +4,6 @@ namespace App\Dungeon\Traits;
 
 use App\Entity;
 
-
 trait ContainsItems
 {
     public function items()

@@ -13,7 +13,7 @@ class EatCommand extends Command
      * will need to reload the relationship in
      * order for it to be removed.
      */
-    public function run()
+    protected function run()
     {
         $finder = new Finder();
         $entity = $finder->find($this->query, $this->user);

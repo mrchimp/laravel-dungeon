@@ -6,7 +6,7 @@ use App\Dungeon\Entities\Finder;
 
 class DropCommand extends Command
 {
-    public function run()
+    protected function run()
     {
         $finder = new Finder;
         $entity = $finder->findInInventory($this->query, $this->user);

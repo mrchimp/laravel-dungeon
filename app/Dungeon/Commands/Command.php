@@ -39,7 +39,12 @@ abstract class Command
         $this->current_location = new CurrentLocation($this->user);
     }
 
-    abstract function run();
+    public function patterns()
+    {
+        return [];
+    }
+
+    abstract protected function run();
 
     public function execute(string $input)
     {
