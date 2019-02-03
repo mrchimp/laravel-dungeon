@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Dungeon\Entities\Food;
 
-use App\Dungeon\Entities\Finder;
+use App\Dungeon\EntityFinder;
 use App\Dungeon\Entities\Food\Food;
 use App\Entity;
 use App\Room;
@@ -66,7 +66,7 @@ class FoodTest extends TestCase
         $this->food->giveToUser($this->user);
         $this->food->save();
 
-        $finder = new Finder;
+        $finder = new EntityFinder;
 
         $food = $finder->find('potato', $this->user);
 

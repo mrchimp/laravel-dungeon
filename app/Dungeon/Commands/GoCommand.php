@@ -4,6 +4,11 @@ namespace App\Dungeon\Commands;
 
 class GoCommand extends Command
 {
+    /**
+     * Allowed directions
+     *
+     * @var array
+     */
     protected $directions = [
         'north',
         'south',
@@ -11,13 +16,30 @@ class GoCommand extends Command
         'east',
     ];
 
+    /**
+     * Patterns that this command handles
+     *
+     * @return array
+     */
+    public function patterns()
+    {
+        return [
+            '/^go (?<direction>.*)$/',
+        ];
+    }
+
+    /**
+     * Run the command
+     *
+     * @return null
+     */
     protected function run()
     {
-        if (count($this->input_array) < 2) {
+        $direction = $this->inputPart('direction');
+
+        if (!$direction) {
             return $this->fail('Go where?');
         }
-
-        $direction = $this->input_array[1];
 
         if (!in_array($direction, $this->directions)) {
             return $this->fail('I don\'t know which way that is.');

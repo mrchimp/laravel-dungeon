@@ -1,12 +1,22 @@
 <?php
 
-namespace App\Dungeon\Entities;
+namespace App\Dungeon;
 
 use App\Entity;
 use App\User;
 
-class Finder
+class EntityFinder
 {
+    /**
+     * Find an entity in the user's current location
+     *
+     * Includes the user's inventory, the room, in
+     * containers in the room, other users...
+     *
+     * @param string $query name to search for
+     * @param User $user
+     * @return Collection
+     */
     public function find($query, $user)
     {
         $entity = $this->findInInventory($query, $user);
@@ -30,6 +40,13 @@ class Finder
         return $entity::replaceClass($entity);
     }
 
+    /**
+     * Find an item in the user's inventory
+     *
+     * @param string $query
+     * @param User $user
+     * @return Collection
+     */
     public function findInInventory($query, $user)
     {
         return $user->inventory->first(function ($entity) use ($query) {
@@ -37,6 +54,13 @@ class Finder
         });
     }
 
+    /**
+     * Find an Entity in the current room by name
+     *
+     * @param string $query
+     * @param Room $room
+     * @return Collection
+     */
     public function findInRoom($query, $room)
     {
         if (!$room) {
@@ -48,6 +72,13 @@ class Finder
         });
     }
 
+    /**
+     * Find an entity in containers in the current room
+     *
+     * @param string $query
+     * @param Room $room
+     * @return Collection
+     */
     public function findInContainersInRoom($query, $room)
     {
         if (!$room) {
@@ -63,6 +94,13 @@ class Finder
         }
     }
 
+    /**
+     * Find users in the current room
+     *
+     * @param string $query
+     * @param Room $room
+     * @return User
+     */
     public function findUsers($query, $room)
     {
         if (!$room) {

@@ -2,9 +2,10 @@
 
 namespace App\Dungeon\Commands;
 
-use App\Dungeon\CurrentLocation;
-use App\User;
 use Auth;
+use App\User;
+use App\Dungeon\CurrentLocation;
+use App\Dungeon\EntityFinder;
 
 abstract class Command
 {
@@ -30,13 +31,21 @@ abstract class Command
     protected $input_array = [];
 
     /**
-     * The part of the query after command name
+     * The matched parts of the query.
      *
-     * @todo remove this in favour of objects/subjects
+     * E.g. with the pattern '/look at (?<target>.*)/' and the input
+     * 'look at thing', this array would include 'target' => 'thing'
      *
-     * @var string
+     * @var array
      */
-    protected $query = '';
+    protected $matches = [];
+
+    /**
+     * Whether this command matched the given input
+     *
+     * @var boolean
+     */
+    public $matched = false;
 
     /**
      * The output data to be sent in the response to the user
@@ -71,12 +80,22 @@ abstract class Command
     public $success = true;
 
     /**
+     * EntityFinder for finding entities in the vicinity
+     *
+     * @var EntityFinder
+     */
+    public $entityFinder;
+
+    /**
      * Create a new Command
      *
      * @param User $user the user running this command
      */
-    public function __construct(User $user = null)
+    public function __construct($input, User $user = null)
     {
+        $this->input = $input;
+        $this->matched = $this->matches($input);
+
         if (is_null($user)) {
             $this->user = Auth::user();
         } else {
@@ -88,6 +107,7 @@ abstract class Command
         }
 
         $this->current_location = new CurrentLocation($this->user);
+        $this->entityFinder = new EntityFinder;
     }
 
     /**
@@ -115,15 +135,10 @@ abstract class Command
      * This sets up the command and then calls the 'run' method
      * which does the interesting bits.
      *
-     * @param string $input
      * @return void
      */
-    public function execute(string $input)
+    public function execute()
     {
-        $this->input = $input;
-        $this->input_array = explode(' ', $this->input);
-        $this->query = implode(' ', array_slice($this->input_array, 1));
-
         $this->run();
 
         $this->setOutputItem('exits', $this->current_location->getExits(true));
@@ -131,6 +146,48 @@ abstract class Command
         $this->setOutputItem('players', $this->current_location->getPlayers(true));
         $this->setOutputItem('npcs', $this->current_location->getNpcs(true));
         $this->setOutputItem('inventory', $this->user->getInventory(true));
+    }
+
+    /**
+     * Test the given input agains this command's patterns and
+     * populate the matches array
+     *
+     * @param string $input
+     * @return boolean
+     */
+    public function matches($input = null)
+    {
+        if (is_null($input)) {
+            $input = $this->input;
+        }
+
+        foreach ($this->patterns() as $pattern) {
+            if (preg_match($pattern, $input, $this->matches)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get the array of input matches
+     *
+     * @return array
+     */
+    public function matchesArray()
+    {
+        return $this->matches;
+    }
+
+    /**
+     * Get a input match by name
+     *
+     * @return string
+     */
+    public function inputPart($key)
+    {
+        return array_get($this->matches, $key);
     }
 
     /**

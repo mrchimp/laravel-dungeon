@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Dungeon;
 
-use App\Dungeon\Entities\Finder;
+use App\Dungeon\EntityFinder;
 use App\Dungeon\Entities\Food\Food;
 use App\Entity;
 use App\Room;
@@ -50,7 +50,7 @@ class EntityFinderTest extends TestCase
 
         $this->user->moveTo($this->room)->save();
 
-        $this->finder = new Finder($this->user);
+        $this->finder = new EntityFinder($this->user);
     }
 
     /** @test */

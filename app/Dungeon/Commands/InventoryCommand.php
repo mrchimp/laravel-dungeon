@@ -4,6 +4,23 @@ namespace App\Dungeon\Commands;
 
 class InventoryCommand extends Command
 {
+    /**
+     * Patterns that this command handles
+     *
+     * @return array
+     */
+    public function patterns()
+    {
+        return [
+            '/^inventory$/',
+        ];
+    }
+
+    /**
+     * Run the command
+     *
+     * @return null
+     */
     protected function run()
     {
         $entities = $this->user->inventory;

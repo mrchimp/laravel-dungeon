@@ -2,17 +2,32 @@
 
 namespace App\Dungeon\Commands;
 
-use App\Dungeon\Entities\Finder;
-
 class InspectCommand extends Command
 {
+    /**
+     * Patterns that this command handles
+     *
+     * @return array
+     */
+    public function patterns()
+    {
+        return [
+            '/^inspect (?<target>.*)$/',
+        ];
+    }
+
+    /**
+     * Run the command
+     *
+     * @return null
+     */
     protected function run()
     {
-        $finder = new Finder;
-        $entity = $finder->find($this->query, $this->user);
+        $query = $this->inputPart('target');
+        $entity = $this->entityFinder->find($query, $this->user);
 
         if (!$entity) {
-            return $this->fail('Could not find ' . e($this->query) . '.');
+            return $this->fail('Could not find ' . e($query) . '.');
         }
 
         $output = e($entity->getDescription());

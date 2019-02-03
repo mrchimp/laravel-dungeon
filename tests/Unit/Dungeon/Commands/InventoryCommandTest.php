@@ -49,8 +49,6 @@ class InventoryCommandTest extends TestCase
             'description' => 'A banana.',
             'data' => [],
         ]);
-
-        $this->command = new InventoryCommand($this->user);
     }
 
     /** @test */
@@ -65,8 +63,9 @@ class InventoryCommandTest extends TestCase
         $this->banana->moveToRoom($this->room);
         $this->banana->save();
 
-        $this->command->execute('inventory');
-        $response = $this->command->getMessage();
+        $command = new InventoryCommand('inventory', $this->user);
+        $command->execute();
+        $response = $command->getMessage();
 
         $this->assertStringContainsString('Potato', $response);
         $this->assertStringNotContainsString('Banana', $response);

@@ -21,29 +21,39 @@ use Log;
 
 class CmdController extends Controller
 {
+    protected $commands = [
+        AttackCommand::class,
+        DropCommand::class,
+        EatCommand::class,
+        EquipCommand::class,
+        GoCommand::class,
+        HelpCommand::class,
+        HiCommand::class,
+        InspectCommand::class,
+        InventoryCommand::class,
+        KillCommand::class,
+        LookCommand::class,
+        TakeCommand::class,
+        RespawnCommand::class,
+        // UseCommand::class,
+    ];
+
     public function run(Request $request)
     {
         $input = $request->get('input');
         $chunks = explode(' ', $input);
 
-        $commands = [
-            'attack' => AttackCommand::class,
-            'drop' => DropCommand::class,
-            'eat' => EatCommand::class,
-            'equip' => EquipCommand::class,
-            'go' => GoCommand::class,
-            'help' => HelpCommand::class,
-            'hi' => HiCommand::class,
-            'inspect' => InspectCommand::class,
-            'inventory' => InventoryCommand::class,
-            'kill' => KillCommand::class,
-            'look' => LookCommand::class,
-            'take' => TakeCommand::class,
-            'respawn' => RespawnCommand::class,
-            // 'use' => UseCommand::class,
-        ];
+        foreach ($this->commands as $command) {
+            $command = new $command($input);
 
-        if (!in_array($chunks[0], array_keys($commands))) {
+            if ($command->matched) {
+                break;
+            }
+
+            $command = null;
+        }
+
+        if (!$command) {
             Log::warning('Unknown command: ' . $input);
 
             return response()->json([
@@ -53,8 +63,7 @@ class CmdController extends Controller
             ]);
         }
 
-        $command = new $commands[$chunks[0]];
-        $command->execute($input);
+        $command->execute();
 
         return response()->json([
             'message' => $command->getMessage(),

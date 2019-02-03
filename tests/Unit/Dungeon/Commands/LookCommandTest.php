@@ -53,11 +53,47 @@ class LookCommandTest extends TestCase
     }
 
     /** @test */
+    public function matches_look_syntax()
+    {
+        $command = new LookCommand('look', $this->user);
+
+        $matches = $command->matches();
+
+        $this->assertTrue($matches);
+
+        // 1, not 0 as matches[0] is the whole input
+        $this->assertCount(1, $command->matchesArray());
+    }
+
+    /** @test */
+    public function matches_look_at_object_syntax()
+    {
+        $command = new LookCommand('look at potato', $this->user);
+
+        $matches = $command->matches();
+
+        $this->assertTrue($matches);
+        $this->assertEquals('potato', $command->inputPart('target'));
+    }
+
+    /** @test */
+    public function matches_look_at_object_syntax_with_spaces()
+    {
+        $command = new LookCommand('look at hot potato', $this->user);
+
+        $matches = $command->matches();
+
+        $this->assertTrue($matches);
+        $this->assertEquals('hot potato', $command->inputPart('target'));
+    }
+
+    /** @test */
     public function gets_a_response_if_not_in_a_room()
     {
-        $command = new LookCommand($this->user);
+        $command = new LookCommand('look', $this->user);
 
-        $command->execute('look');
+        $command->execute();
+
         $response = $command->getMessage();
 
         $this->assertEquals(
@@ -71,9 +107,9 @@ class LookCommandTest extends TestCase
     {
         $this->user->moveTo($this->north_room);
 
-        $command = new LookCommand($this->user);
+        $command = new LookCommand('look', $this->user);
 
-        $command->execute('look');
+        $command->execute();
         $response = $command->getMessage();
 
         $this->assertEquals(
@@ -90,9 +126,9 @@ class LookCommandTest extends TestCase
             'description' => 'A wooden door.',
         ]);
 
-        $command = new LookCommand($this->user);
+        $command = new LookCommand('look', $this->user);
 
-        $command->execute('look');
+        $command->execute();
         $exits = $command->getOutputItem('exits');
 
         $this->assertIsCollection($exits);
@@ -105,9 +141,9 @@ class LookCommandTest extends TestCase
         $this->user->moveTo($this->north_room)->save();
         $this->player_2->moveTo($this->north_room)->save();
 
-        $command = new LookCommand($this->user);
+        $command = new LookCommand('look', $this->user);
 
-        $command->execute('look');
+        $command->execute();
         $players = $command->getOutputItem('players');
 
         $this->assertIsCollection($players);
@@ -121,9 +157,9 @@ class LookCommandTest extends TestCase
         $this->user->moveTo($this->north_room)->save();
         $this->npc->moveTo($this->north_room)->save();
 
-        $command = new LookCommand($this->user);
+        $command = new LookCommand('look', $this->user);
 
-        $command->execute('look');
+        $command->execute();
         $npcs = $command->getOutputItem('npcs');
 
         $this->assertIsCollection($npcs);
@@ -137,14 +173,27 @@ class LookCommandTest extends TestCase
         $this->user->moveTo($this->north_room)->save();
         $this->potato->moveToRoom($this->north_room)->save();
 
-        $command = new LookCommand($this->user);
+        $command = new LookCommand('look', $this->user);
 
-        $command->execute('look');
+        $command->execute();
 
         $items = $command->getOutputItem('items');
 
         $this->assertIsEntityCollection($items);
         $this->assertCount(1, $items);
         $this->assertEquals('Potato', $items->first()->getName());
+    }
+
+    /** @test */
+    public function you_can_see_the_description_of_a_specific_entity()
+    {
+        $this->user->moveTo($this->north_room)->save();
+        $this->potato->moveToRoom($this->north_room)->save();
+
+        $command = new LookCommand('look at potato', $this->user);
+        $command->matches();
+        $command->execute();
+
+        $this->assertEquals('You can eat it', $command->getMessage());
     }
 }

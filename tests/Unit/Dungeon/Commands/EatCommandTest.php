@@ -42,15 +42,15 @@ class EatCommandTest extends TestCase
 
         $this->user->moveTo($this->room);
         $this->user->save();
-
-        $this->command = new EatCommand($this->user);
     }
 
     /** @test */
     public function you_cant_eat_things_you_cant_find()
     {
-        $this->command->execute('eat dodo');
-        $response = $this->command->getMessage();
+        $command = new EatCommand('eat dodo', $this->user);
+        $command->execute();
+
+        $response = $command->getMessage();
 
         $this->assertStringContainsString('Could not find dodo.', $response);
     }
@@ -58,8 +58,10 @@ class EatCommandTest extends TestCase
     /** @test */
     public function eating_things_will_affect_your_health()
     {
-        $this->command->execute('eat potato');
-        $response = $this->command->getMessage();
+        $command = new EatCommand('eat potato', $this->user);
+        $command->execute();
+
+        $response = $command->getMessage();
 
         $this->assertEquals(64, $this->user->getHealth());
     }
@@ -76,8 +78,10 @@ class EatCommandTest extends TestCase
         $rock->giveToUser($this->user);
         $rock->save();
 
-        $this->command->execute('eat rock');
-        $response = $this->command->getMessage();
+        $command = new EatCommand('eat rock', $this->user);
+        $command->execute();
+
+        $response = $command->getMessage();
 
         $this->assertEquals('You can\'t eat that.', $response);
     }
@@ -85,8 +89,10 @@ class EatCommandTest extends TestCase
     /** @test */
     public function you_cant_have_your_cake_and_eat_it()
     {
-        $this->command->execute('eat potato');
-        $response = $this->command->getMessage();
+        $command = new EatCommand('eat potato', $this->user);
+        $command->execute();
+
+        $response = $command->getMessage();
 
         $this->user->load('inventory');
 

@@ -41,8 +41,6 @@ class EquipCommandTest extends TestCase
             'description' => 'A potato.',
             'data' => [],
         ]);
-
-        $this->command = new EquipCommand($this->user);
     }
 
     /** @test */
@@ -50,12 +48,13 @@ class EquipCommandTest extends TestCase
     {
         $this->hat->giveToUser($this->user)->save();
 
-        $this->command->execute('equip hat');
+        $command = new EquipCommand('equip hat', $this->user);
+        $command->execute();
 
         $hat = Entity::find($this->hat->id);
 
         $this->assertEquals(1, $hat->equiped);
-        $this->assertTrue($this->command->success);
+        $this->assertTrue($command->success);
     }
 
     /** @test */
@@ -63,12 +62,13 @@ class EquipCommandTest extends TestCase
     {
         $this->potato->giveToUser($this->user)->save();
 
-        $this->command->execute('equip potato');
+        $command = new EquipCommand('equip potato', $this->user);
+        $command->execute();
 
         $potato = Entity::find($this->potato->id);
 
         $this->assertEquals(0, $potato->equiped);
-        $this->assertFalse($this->command->success);
+        $this->assertFalse($command->success);
     }
 
     /** @test */
@@ -77,19 +77,21 @@ class EquipCommandTest extends TestCase
         $this->user->moveTo($this->room)->save();
         $this->hat->moveToRoom($this->room)->save();
 
-        $this->command->execute('equip hat');
+        $command = new EquipCommand('equip hat', $this->user);
+        $command->execute();
 
         $hat = Entity::find($this->hat->id);
 
         $this->assertEquals(0, $hat->equiped);
-        $this->assertFalse($this->command->success);
+        $this->assertFalse($command->success);
     }
 
     /** @test */
     public function you_cant_equip_something_if_you_dont_know_what_it_is()
     {
-        $this->command->execute('equip the ineffable');
+        $command = new EquipCommand('equip the ineffable', $this->user);
+        $command->execute();
 
-        $this->assertFalse($this->command->success);
+        $this->assertFalse($command->success);
     }
 }

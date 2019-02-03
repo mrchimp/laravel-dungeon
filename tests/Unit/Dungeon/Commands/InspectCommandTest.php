@@ -44,14 +44,13 @@ class InspectCommandTest extends TestCase
 
         $this->user->moveTo($this->room);
         $this->user->save();
-
-        $this->command = new InspectCommand($this->user);
     }
 
     /** @test */
     public function you_cant_inspect_things_that_you_cant_find()
     {
-        $this->command->execute('inspect atlantis');
+        $this->command = new InspectCommand('inspect atlantis', $this->user);
+        $this->command->execute();
         $response = $this->command->getMessage();
 
         $this->assertStringContainsString('Could not find atlantis.', $response);
@@ -63,7 +62,8 @@ class InspectCommandTest extends TestCase
         $this->potato->giveToUser($this->user);
         $this->potato->save();
 
-        $this->command->execute('inspect potato');
+        $this->command = new InspectCommand('inspect potato', $this->user);
+        $this->command->execute();
         $response = $this->command->getMessage();
 
         $this->assertStringContainsString('A potato.', $response);
@@ -75,7 +75,8 @@ class InspectCommandTest extends TestCase
         $this->potato->moveToRoom($this->room);
         $this->potato->save();
 
-        $this->command->execute('inspect potato');
+        $this->command = new InspectCommand('inspect potato', $this->user);
+        $this->command->execute();
         $response = $this->command->getMessage();
 
         $this->assertStringContainsString('A potato.', $response);
@@ -90,7 +91,8 @@ class InspectCommandTest extends TestCase
         $this->box->moveToRoom($this->room);
         $this->box->save();
 
-        $this->command->execute('inspect potato');
+        $this->command = new InspectCommand('inspect potato', $this->user);
+        $this->command->execute();
         $response = $this->command->getMessage();
 
         $this->assertStringContainsString('A potato.', $response);
@@ -105,7 +107,8 @@ class InspectCommandTest extends TestCase
         $this->box->moveToRoom($this->room);
         $this->box->save();
 
-        $this->command->execute('inspect box');
+        $this->command = new InspectCommand('inspect box', $this->user);
+        $this->command->execute();
         $response = $this->command->getMessage();
 
         $this->assertStringContainsString('Potato', $response);

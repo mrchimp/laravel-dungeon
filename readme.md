@@ -29,18 +29,20 @@ Just getting started making the engine. You can move around different rooms and 
 * ✓ go _direction_
 * ✓ inventory
 
-* ✓ take _object_
-* ✓ drop _object_
-* ✓ eat _object_
-* ✓ inspect _object_
-* ✗ use _object_
-* ✗ use _object_ on _subject_
-* ✓ equip _object_
-* ✗ wear _object_
-* ✗ verb _object_ (extendable)
-* ✗ verb _subject_ with _object_ (extendable)
-* ✗ attack _subject_ with _object_
-* ✗ put _object_ in _subject_
+* ✓ take _entity_
+* ✓ drop _entity_
+* ✓ eat _entity_
+* ✓ inspect _item_
+* ✗ use _entity_
+* ✗ use _entity_ on _item_
+* ✓ equip _entity_
+* ✗ wear _entity_
+* ✗ attack _item_ with _weapon_
+* ✗ put _entity_ in _container_
+* ✗ combine _entity_ with _entity_
+
+* ✗ verb _item_ (extendable)
+* ✗ verb _item_ with _item_ (extendable)
 
 ## In-Game Features
 
@@ -56,6 +58,7 @@ Just getting started making the engine. You can move around different rooms and 
     * ✗ Breakable doors
 * ✗ Levelling
 * ✗ Player Stats
+* ✗ Unpickupable Items
 
 ## Features
 

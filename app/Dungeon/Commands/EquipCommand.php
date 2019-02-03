@@ -2,20 +2,39 @@
 
 namespace App\Dungeon\Commands;
 
-use App\Dungeon\Entities\Finder;
-
 class EquipCommand extends Command
 {
+    /**
+     * Types of items that can be equipped
+     *
+     * @var array
+     */
     const EQUIPABLE_TYPES = [
         'apparel',
     ];
 
+    /**
+     * Patterns that this command handles
+     *
+     * @return array
+     */
+    public function patterns()
+    {
+        return [
+            '/^equip$/',
+            '/^equip (?<target>.*)$/',
+        ];
+    }
+
+    /**
+     * Run the command
+     *
+     * @return null
+     */
     protected function run()
     {
-        $query = implode(' ', array_slice($this->input_array, 1));
-        ;
-        $finder = new Finder;
-        $entity = $finder->find($query, $this->user);
+        $query = $this->inputPart('target');
+        $entity = $this->entityFinder->find($query, $this->user);
 
         if (!$entity) {
             return $this->fail('Equip what?');

@@ -43,8 +43,6 @@ class TakeCommandTest extends TestCase
         ]);
 
         $this->user->moveTo($this->room)->save();
-
-        $this->command = new TakeCommand($this->user);
     }
 
     /** @test */
@@ -52,7 +50,8 @@ class TakeCommandTest extends TestCase
     {
         $this->potato->giveToUser($this->user)->save();
 
-        $this->command->execute('take potato');
+        $command = new TakeCommand('take potato', $this->user);
+        $command->execute();
 
         $potato = Entity::find($this->potato->id);
 
@@ -65,7 +64,8 @@ class TakeCommandTest extends TestCase
         $this->potato->moveToRoom($this->room);
         $this->potato->save();
 
-        $this->command->execute('take potato');
+        $command = new TakeCommand('take potato', $this->user);
+        $command->execute();
 
         $potato = Entity::find($this->potato->id);
 
@@ -81,7 +81,8 @@ class TakeCommandTest extends TestCase
         $this->box->moveToRoom($this->room);
         $this->box->save();
 
-        $this->command->execute('take potato');
+        $command = new TakeCommand('take potato', $this->user);
+        $command->execute();
 
         $potato = Entity::find($this->potato->id);
 
@@ -90,7 +91,8 @@ class TakeCommandTest extends TestCase
 
     public function you_cant_take_things_that_dont_exist()
     {
-        $response = $this->command->execute('take avocado');
+        $command = new TakeCommand('take avocado', $this->user);
+        $response = $command->execute();
 
         $this->assertEquals('Take what?', $response);
     }
