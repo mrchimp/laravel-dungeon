@@ -46,6 +46,7 @@ class EquipCommandTest extends TestCase
     /** @test */
     public function apparel_can_be_equipped()
     {
+        $this->user->moveTo($this->room)->save();
         $this->hat->giveToUser($this->user)->save();
 
         $command = new EquipCommand('equip hat', $this->user);

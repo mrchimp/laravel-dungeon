@@ -29,6 +29,13 @@ class User extends Authenticatable implements Interactable
     ];
 
     /**
+     * Default serializable attributes
+     *
+     * @var array
+     */
+    public $serializable = [];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

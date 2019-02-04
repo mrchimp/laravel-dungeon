@@ -4,6 +4,11 @@ namespace App\Dungeon\Traits;
 
 trait HasSerializableAttributes
 {
+    /**
+     * Get the names of attributes to be serialized
+     *
+     * @return array
+     */
     public function getSerializable()
     {
         return [];
@@ -11,6 +16,8 @@ trait HasSerializableAttributes
 
     /**
      * Take attributes and put them in the data array
+     *
+     * @return void
      */
     public function serializeAttributes()
     {
@@ -22,6 +29,7 @@ trait HasSerializableAttributes
 
         foreach ($this->getSerializable() as $field) {
             $data[$field] = $this->$field;
+            unset($this->$field);
         }
 
         $this->data = $data;
@@ -29,11 +37,34 @@ trait HasSerializableAttributes
 
     /**
      * Take the attributes from the data array and make them attributes
+     *
+     * @return void
      */
     public function deserializeAttributes()
     {
         foreach ($this->getSerializable() as $field) {
-            $this->$field = $this->data[$field];
+            if (isset($this->data[$field])) {
+                $this->$field = $this->data[$field];
+            } elseif (isset($this->serializable[$field])) {
+                $this->$field = $this->serializable[$field];
+            }
+        }
+    }
+
+    /**
+     * Take attributes from the defaults array and apply
+     * them as attributes
+     *
+     * @return void
+     */
+    public function applyDefaultSerializableAttributes()
+    {
+        foreach ($this->getSerializable() as $field) {
+            if (array_key_exists($field, $this->serializable)
+                && !isset($this->$field)
+            ) {
+                $this->$field = $this->serializable[$field];
+            }
         }
     }
 }

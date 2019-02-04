@@ -11,7 +11,13 @@ class SerializableObserver
      */
     public function saving(Model $entity)
     {
+        $entity->applyDefaultSerializableAttributes();
         $entity->serializeAttributes();
+    }
+
+    public function saved(Model $entity)
+    {
+        $entity->deserializeAttributes();
     }
 
     public function retrieved(Model $entity)

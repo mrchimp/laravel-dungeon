@@ -33,6 +33,10 @@ class EquipCommand extends Command
      */
     protected function run()
     {
+        if (!$this->user->room) {
+            return $this->fail('You float in an endless void.');
+        }
+
         $query = $this->inputPart('target');
         $entity = $this->entityFinder->find($query, $this->user);
 

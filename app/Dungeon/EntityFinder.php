@@ -2,8 +2,9 @@
 
 namespace App\Dungeon;
 
-use App\Entity;
+use App\Room;
 use App\User;
+use App\Entity;
 
 class EntityFinder
 {
@@ -47,7 +48,7 @@ class EntityFinder
      * @param User $user
      * @return Collection
      */
-    public function findInInventory($query, $user)
+    public function findInInventory($query, User $user)
     {
         return $user->inventory->first(function ($entity) use ($query) {
             return $entity->nameMatchesQuery($query);
@@ -101,7 +102,7 @@ class EntityFinder
      * @param Room $room
      * @return User
      */
-    public function findUsers($query, $room)
+    public function findUsers($query, Room $room)
     {
         if (!$room) {
             return null;

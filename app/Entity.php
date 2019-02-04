@@ -21,13 +21,22 @@ class Entity extends Model implements Interactable
         'data' => 'array',
     ];
 
-    protected $serializable = [];
+    /**
+     * Default serializable attributes
+     *
+     * @var array
+     */
+    public $serializable = [];
 
-    protected $fillable = [
-        'description',
-        'name',
-        'can_have_contents',
-    ];
+    /**
+     * Which fields are prevented from mass assignment
+     *
+     * We set only ID here so that we can extend the
+     * attributes with serializable attributes
+     *
+     * @var array
+     */
+    protected $guarded = ['id'];
 
     public static function boot()
     {
