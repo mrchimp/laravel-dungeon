@@ -54,10 +54,10 @@ class EquipCommand extends Command
 
         if ($entity->isEquiped()) {
             $entity->unequip();
-            $this->setMessage('Equipped.');
+            $this->setMessage('Unequipped.');
         } else {
             $entity->equip();
-            $this->setMessage('Unequipped.');
+            $this->setMessage('Equipped.');
         }
 
         $entity->save();
