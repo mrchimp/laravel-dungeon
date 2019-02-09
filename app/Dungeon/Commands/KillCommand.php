@@ -4,13 +4,36 @@ namespace App\Dungeon\Commands;
 
 class KillCommand extends Command
 {
+    /**
+     * Patterns that this command handles
+     *
+     * @return array
+     */
+    public function patterns()
+    {
+        return [
+            '/^kill$/',
+            '/^kill (?<target>.*)$/',
+        ];
+    }
+
+    /**
+     * Run the command
+     *
+     * @return void
+     */
     protected function run()
     {
-        $query = implode(' ', array_slice($this->input_array, 1));
-        $user = $this->entityFinder->find($query, $this->user);
+        $target_name = $this->inputPart('target');
+
+        if (!$target_name) {
+            return $this->fail('Just in general?');
+        }
+
+        $user = $this->entityFinder->find($target_name, $this->user);
 
         if (!$user) {
-            return $this->fail('Kill who?');
+            return $this->fail('Who?');
         }
 
         // @todo inefficient
