@@ -18,6 +18,7 @@ use App\Dungeon\Commands\TakeCommand;
 use App\Dungeon\Commands\UseCommand;
 use Illuminate\Http\Request;
 use Log;
+use App\Dungeon\Commands\GiveCommand;
 
 class CmdController extends Controller
 {
@@ -35,6 +36,7 @@ class CmdController extends Controller
         LookCommand::class,
         TakeCommand::class,
         RespawnCommand::class,
+        GiveCommand::class,
         // UseCommand::class,
     ];
 
