@@ -90,6 +90,12 @@ export default {
         },
 
         submitInput() {
+            if (this.input === 'clear') {
+                this.input = '';
+                this.output = '';
+                return;
+            }
+
             this.runCommand(this.input)
                 .then(this.handleResponse)
                 .then(this.resetInput)
