@@ -24,6 +24,7 @@ class GoCommand extends Command
     public function patterns()
     {
         return [
+            '/^go$/',
             '/^go (?<direction>.*)$/',
         ];
     }
