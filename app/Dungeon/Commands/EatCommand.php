@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dungeon\Commands;
+namespace Dungeon\Commands;
 
-use App\Dungeon\Entities\Food\Food;
+use Dungeon\Entities\Food\Food;
 
 class EatCommand extends Command
 {

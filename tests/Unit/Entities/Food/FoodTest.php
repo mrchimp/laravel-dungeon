@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Dungeon\Entities\Food;
 
-use App\Dungeon\EntityFinder;
-use App\Dungeon\Entities\Food\Food;
+use Dungeon\EntityFinder;
+use Dungeon\Entities\Food\Food;
 use App\Entity;
 use App\Room;
 use App\User;

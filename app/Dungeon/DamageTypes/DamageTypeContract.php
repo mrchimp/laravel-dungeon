@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dungeon\DamageTypes;
+namespace Dungeon\DamageTypes;
 
 interface DamageType
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dungeon\Contracts;
+namespace Dungeon\Contracts;
 
 interface Interactable
 {

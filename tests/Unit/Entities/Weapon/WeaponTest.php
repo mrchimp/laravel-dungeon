@@ -3,8 +3,8 @@
 namespace Tests\Unit\Dungeon\Entities\Weapons;
 
 use Tests\TestCase;
-use App\Dungeon\Entities\Weapon;
-use App\Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\Entities\Weapon;
+use Dungeon\DamageTypes\MeleeDamage;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dungeon\Traits;
+namespace Dungeon\Traits;
 
 use App\User;
 
@@ -16,7 +16,7 @@ trait Pickupable
         $user->inventory->add($this);
 
         $this->owner = $user;
-        
+
         return $this;
     }
 }

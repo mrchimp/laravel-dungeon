@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dungeon\Entities;
+namespace Dungeon\Entities;
 
 use App\Entity;
 use App\User;

@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use App\Dungeon\Apparel\Apparel;
-use App\Dungeon\Commands\EquipCommand;
-use App\Dungeon\Entities\Food\Food;
+use Dungeon\Apparel\Apparel;
+use Dungeon\Commands\EquipCommand;
+use Dungeon\Entities\Food\Food;
 use App\Entity;
 use App\Room;
 use App\User;

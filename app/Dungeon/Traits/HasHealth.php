@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dungeon\Traits;
+namespace Dungeon\Traits;
 
 trait HasHealth
 {

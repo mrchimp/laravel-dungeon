@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use App\Dungeon\Collections\EntityCollection;
+use Dungeon\Collections\EntityCollection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 

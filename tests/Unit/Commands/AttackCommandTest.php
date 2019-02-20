@@ -5,11 +5,11 @@ namespace Tests\Unit\Dungeon\Commands;
 use App\Room;
 use App\User;
 use Tests\TestCase;
-use App\Dungeon\Commands\AttackCommand;
-use App\Dungeon\Entities\Weapons\Melee\MeleeWeapon;
+use Dungeon\Commands\AttackCommand;
+use Dungeon\Entities\Weapons\Melee\MeleeWeapon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use App\Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\DamageTypes\MeleeDamage;
 
 class AttackCommandTest extends TestCase
 {

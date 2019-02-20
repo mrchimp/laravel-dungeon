@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Dungeon;
 
-use App\Dungeon\Apparel\Apparel;
+use Dungeon\Apparel\Apparel;
 use App\NPC;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

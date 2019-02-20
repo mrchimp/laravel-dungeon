@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Dungeon;
 
-use App\Dungeon\CurrentLocation;
-use App\Dungeon\Entities\Food\Food;
+use Dungeon\CurrentLocation;
+use Dungeon\Entities\Food\Food;
 use App\NPC;
 use App\Room;
 use App\User;

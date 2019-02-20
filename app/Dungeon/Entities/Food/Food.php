@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dungeon\Entities\Food;
+namespace Dungeon\Entities\Food;
 
 use App\Entity;
 use App\User;

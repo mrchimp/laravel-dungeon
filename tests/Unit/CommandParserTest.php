@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Dungeon;
 
-use App\Dungeon\CommandParser;
+use Dungeon\CommandParser;
 use Tests\TestCase;
 
 class CommandParserTest extends TestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dungeon\Commands;
+namespace Dungeon\Commands;
 
 class HiCommand extends Command
 {

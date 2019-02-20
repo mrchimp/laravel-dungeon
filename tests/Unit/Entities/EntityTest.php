@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Dungeon\Entities;
 
-use App\Dungeon\Entities\Food\Food;
+use Dungeon\Entities\Food\Food;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;

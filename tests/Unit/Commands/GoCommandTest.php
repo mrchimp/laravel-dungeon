@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use App\Dungeon\Commands\GoCommand;
+use Dungeon\Commands\GoCommand;
 use App\Room;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

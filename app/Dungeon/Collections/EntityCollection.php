@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dungeon\Collections;
+namespace Dungeon\Collections;
 
 use App\Entity;
 use Illuminate\Database\Eloquent\Collection;

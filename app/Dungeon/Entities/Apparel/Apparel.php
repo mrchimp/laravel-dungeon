@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dungeon\Apparel;
+namespace Dungeon\Apparel;
 
-use App\Dungeon\Traits\IsEquipable;
+use Dungeon\Traits\IsEquipable;
 use App\Entity;
 
 /**

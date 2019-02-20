@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use App\Dungeon\Commands\LookCommand;
-use App\Dungeon\Entities\Food\Food;
+use Dungeon\Commands\LookCommand;
+use Dungeon\Entities\Food\Food;
 use App\NPC;
 use App\Room;
 use App\User;

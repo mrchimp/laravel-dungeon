@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Dungeon\Commands;
+namespace Dungeon\Commands;
 
 use Auth;
 use App\User;
-use App\Dungeon\CurrentLocation;
-use App\Dungeon\EntityFinder;
+use Dungeon\CurrentLocation;
+use Dungeon\EntityFinder;
 
 abstract class Command
 {

@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Dungeon\Commands\AttackCommand;
-use App\Dungeon\Commands\DropCommand;
-use App\Dungeon\Commands\EatCommand;
-use App\Dungeon\Commands\EquipCommand;
-use App\Dungeon\Commands\GoCommand;
-use App\Dungeon\Commands\HelpCommand;
-use App\Dungeon\Commands\HiCommand;
-use App\Dungeon\Commands\InspectCommand;
-use App\Dungeon\Commands\InventoryCommand;
-use App\Dungeon\Commands\KillCommand;
-use App\Dungeon\Commands\LookCommand;
-use App\Dungeon\Commands\RespawnCommand;
-use App\Dungeon\Commands\TakeCommand;
-use App\Dungeon\Commands\UseCommand;
+use Dungeon\Commands\AttackCommand;
+use Dungeon\Commands\DropCommand;
+use Dungeon\Commands\EatCommand;
+use Dungeon\Commands\EquipCommand;
+use Dungeon\Commands\GoCommand;
+use Dungeon\Commands\HelpCommand;
+use Dungeon\Commands\HiCommand;
+use Dungeon\Commands\InspectCommand;
+use Dungeon\Commands\InventoryCommand;
+use Dungeon\Commands\KillCommand;
+use Dungeon\Commands\LookCommand;
+use Dungeon\Commands\RespawnCommand;
+use Dungeon\Commands\TakeCommand;
+use Dungeon\Commands\UseCommand;
 use Illuminate\Http\Request;
 use Log;
-use App\Dungeon\Commands\GiveCommand;
+use Dungeon\Commands\GiveCommand;
 
 class CmdController extends Controller
 {

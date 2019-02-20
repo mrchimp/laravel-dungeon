@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dungeon\DamageTypes;
+namespace Dungeon\DamageTypes;
 
-use App\Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\DamageTypes\MeleeDamage;
 
 class MeleeDamage implements DamageType
 {

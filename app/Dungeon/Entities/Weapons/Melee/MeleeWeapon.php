@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Dungeon\Entities\Weapons\Melee;
+namespace Dungeon\Entities\Weapons\Melee;
 
-use App\Dungeon\Entities\Weapon;
-use App\Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\Entities\Weapon;
+use Dungeon\DamageTypes\MeleeDamage;
 
 /**
  * A generic melee weapon.

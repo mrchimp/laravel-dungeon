@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Dungeon\Entities;
+namespace Dungeon\Entities;
 
 use App\Entity;
-use App\Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\DamageTypes\MeleeDamage;
 
 class Weapon extends Entity
 {

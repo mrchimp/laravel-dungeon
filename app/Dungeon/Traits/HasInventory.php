@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dungeon\Traits;
+namespace Dungeon\Traits;
 
-use App\Dungeon\Traits\Pickupable;
+use Dungeon\Traits\Pickupable;
 use App\Entity;
 
 trait HasInventory

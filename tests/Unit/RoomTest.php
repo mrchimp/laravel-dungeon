@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Dungeon\Entities\Food\Food;
+use Dungeon\Entities\Food\Food;
 use App\Room;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

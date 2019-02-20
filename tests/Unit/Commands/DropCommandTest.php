@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use App\Dungeon\Commands\DropCommand;
-use App\Dungeon\Entities\Food\Food;
+use Dungeon\Commands\DropCommand;
+use Dungeon\Entities\Food\Food;
 use App\Entity;
 use App\Room;
 use App\User;

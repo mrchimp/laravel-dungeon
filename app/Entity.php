@@ -2,10 +2,10 @@
 
 namespace App;
 
-use App\Dungeon\Collections\EntityCollection;
-use App\Dungeon\Contracts\Interactable;
-use App\Dungeon\Traits\Findable;
-use App\Dungeon\Traits\HasSerializableAttributes;
+use Dungeon\Collections\EntityCollection;
+use Dungeon\Contracts\Interactable;
+use Dungeon\Traits\Findable;
+use Dungeon\Traits\HasSerializableAttributes;
 use App\Observers\HasOwnClassObserver;
 use App\Observers\SerializableObserver;
 use App\Traits\HasUuid;

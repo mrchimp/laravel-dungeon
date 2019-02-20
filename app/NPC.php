@@ -2,10 +2,10 @@
 
 namespace App;
 
-use App\Dungeon\Traits\HasApparel;
-use App\Dungeon\Traits\HasHealth;
-use App\Dungeon\Traits\HasInventory;
-use App\Dungeon\Traits\HasSerializableAttributes;
+use Dungeon\Traits\HasApparel;
+use Dungeon\Traits\HasHealth;
+use Dungeon\Traits\HasInventory;
+use Dungeon\Traits\HasSerializableAttributes;
 use App\Observers\SerializableObserver;
 use Illuminate\Database\Eloquent\Model;
 

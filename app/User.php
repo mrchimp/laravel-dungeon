@@ -2,12 +2,12 @@
 
 namespace App;
 
-use App\Dungeon\Contracts\Interactable;
-use App\Dungeon\Traits\Findable;
-use App\Dungeon\Traits\HasApparel;
-use App\Dungeon\Traits\HasHealth;
-use App\Dungeon\Traits\HasInventory;
-use App\Dungeon\Traits\HasSerializableAttributes;
+use Dungeon\Contracts\Interactable;
+use Dungeon\Traits\Findable;
+use Dungeon\Traits\HasApparel;
+use Dungeon\Traits\HasHealth;
+use Dungeon\Traits\HasInventory;
+use Dungeon\Traits\HasSerializableAttributes;
 use App\Observers\SerializableObserver;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;

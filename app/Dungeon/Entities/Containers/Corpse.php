@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dungeon\Entities\Containers;
+namespace Dungeon\Entities\Containers;
 
 class Corpse extends Entity
 {
