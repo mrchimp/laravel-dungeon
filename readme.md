@@ -81,7 +81,10 @@ Just getting started making the engine. You can move around different rooms and 
     * ✗ Traps
     * ✗ Followers
 * ✗ Character Creation Screen
+* ✗ Safe Rooms
 
 ## Ideas
 
 Big doors: Maybe have a door with a LOT of health that would take multiple players to break through. This could unlock a new area of the map.
+
+How to handle offline players. Players cannot be interacted with while they are offline (to prevent them being murderred while not there to defend themselves). Maybe they turn to stone while offline.
