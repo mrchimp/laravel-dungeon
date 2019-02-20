@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Dungeon;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 

@@ -2,7 +2,7 @@
 
 namespace Dungeon\Entities\Food;
 
-use App\Entity;
+use Dungeon\Entity;
 use App\User;
 
 class Food extends Entity

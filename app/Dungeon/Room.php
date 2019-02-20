@@ -1,7 +1,8 @@
 <?php
 
-namespace App;
+namespace Dungeon;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model

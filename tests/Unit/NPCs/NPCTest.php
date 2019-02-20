@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Dungeon\Entities\NPCs;
 
-use App\NPC;
+use Dungeon\NPC;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;

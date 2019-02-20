@@ -2,9 +2,9 @@
 
 namespace Dungeon;
 
-use App\Room;
 use App\User;
-use App\Entity;
+use Dungeon\Entity;
+use Dungeon\Room;
 
 class EntityFinder
 {

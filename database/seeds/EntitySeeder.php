@@ -3,8 +3,8 @@
 use Dungeon\Apparel\Apparel;
 use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\Weapon;
-use App\Entity;
-use App\Room;
+use Dungeon\Entity;
+use Dungeon\Room;
 use Illuminate\Database\Seeder;
 
 class EntitySeeder extends Seeder

@@ -4,8 +4,8 @@ namespace Tests\Unit\Dungeon;
 
 use Dungeon\CurrentLocation;
 use Dungeon\Entities\Food\Food;
-use App\NPC;
-use App\Room;
+use Dungeon\NPC;
+use Dungeon\Room;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

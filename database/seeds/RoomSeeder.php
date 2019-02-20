@@ -1,6 +1,6 @@
 <?php
 
-use App\Room;
+use Dungeon\Room;
 use Illuminate\Database\Seeder;
 
 class RoomSeeder extends Seeder

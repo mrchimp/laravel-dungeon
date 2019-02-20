@@ -4,7 +4,7 @@ namespace Tests\Unit\Dungeon\Commands;
 
 use Dungeon\Commands\InventoryCommand;
 use Dungeon\Entities\Food\Food;
-use App\Room;
+use Dungeon\Room;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

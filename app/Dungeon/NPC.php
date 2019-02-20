@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Dungeon;
 
 use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasHealth;

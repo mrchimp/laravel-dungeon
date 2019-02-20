@@ -2,7 +2,7 @@
 
 namespace Dungeon\Commands;
 
-use App\Room;
+use Dungeon\Room;
 use Auth;
 
 /**

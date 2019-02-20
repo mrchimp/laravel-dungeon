@@ -2,7 +2,7 @@
 
 namespace Dungeon\Entities;
 
-use App\Entity;
+use Dungeon\Entity;
 use Dungeon\DamageTypes\MeleeDamage;
 
 class Weapon extends Entity

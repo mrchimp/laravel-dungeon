@@ -3,7 +3,7 @@
 namespace Dungeon\Apparel;
 
 use Dungeon\Traits\IsEquipable;
-use App\Entity;
+use Dungeon\Entity;
 
 /**
  * A piece of clothing or armour that can be equipped

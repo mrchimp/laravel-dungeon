@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Room;
+use Dungeon\Room;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

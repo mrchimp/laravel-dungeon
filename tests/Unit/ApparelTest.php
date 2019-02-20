@@ -3,7 +3,7 @@
 namespace Tests\Unit\Dungeon;
 
 use Dungeon\Apparel\Apparel;
-use App\NPC;
+use Dungeon\NPC;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

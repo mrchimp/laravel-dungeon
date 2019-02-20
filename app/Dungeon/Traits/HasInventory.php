@@ -3,7 +3,7 @@
 namespace Dungeon\Traits;
 
 use Dungeon\Traits\Pickupable;
-use App\Entity;
+use Dungeon\Entity;
 
 trait HasInventory
 {

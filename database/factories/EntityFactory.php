@@ -1,13 +1,13 @@
 <?php
 
 use Faker\Generator as Faker;
-use App\Entity;
+use Dungeon\Entity;
 
 $factory->define(Entity::class, function (Faker $faker) {
     return [
         'name' => 'Entity',
         'description' => 'A generic entity that hasn\'t had its description set.',
-        'class' => App\Entity::class,
+        'class' => Dungeon\Entity::class,
         'data' => [],
     ];
 });

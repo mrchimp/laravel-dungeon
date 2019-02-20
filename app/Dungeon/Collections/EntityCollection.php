@@ -2,7 +2,7 @@
 
 namespace Dungeon\Collections;
 
-use App\Entity;
+use Dungeon\Entity;
 use Illuminate\Database\Eloquent\Collection;
 
 class EntityCollection extends Collection

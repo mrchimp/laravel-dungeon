@@ -1,6 +1,6 @@
 <?php
 
-use App\Room;
+use Dungeon\Room;
 use App\User;
 use Illuminate\Database\Seeder;
 

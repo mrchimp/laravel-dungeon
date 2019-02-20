@@ -3,6 +3,7 @@
 namespace App;
 
 use Dungeon\Contracts\Interactable;
+use Dungeon\Room;
 use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasHealth;

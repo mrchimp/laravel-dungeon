@@ -2,7 +2,7 @@
 
 namespace Dungeon\Entities;
 
-use App\Entity;
+use Dungeon\Entity;
 use App\User;
 
 class ItemFinder

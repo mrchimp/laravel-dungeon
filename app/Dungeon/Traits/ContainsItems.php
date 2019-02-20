@@ -2,7 +2,7 @@
 
 namespace Dungeon\Traits;
 
-use App\Entity;
+use Dungeon\Entity;
 
 trait ContainsItems
 {

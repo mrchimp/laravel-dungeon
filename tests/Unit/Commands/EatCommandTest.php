@@ -4,8 +4,8 @@ namespace Tests\Unit\Dungeon\Commands;
 
 use Dungeon\Commands\EatCommand;
 use Dungeon\Entities\Food\Food;
-use App\Entity;
-use App\Room;
+use Dungeon\Entity;
+use Dungeon\Room;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
