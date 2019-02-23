@@ -130,6 +130,8 @@ class User extends Authenticatable implements Interactable
         $this->setHealth(self::DEFAULT_HEALTH);
         $this->moveTo($room);
 
+        // @todo create new body
+
         return $this;
     }
 }
