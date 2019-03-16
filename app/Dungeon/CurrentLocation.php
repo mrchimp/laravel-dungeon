@@ -8,81 +8,81 @@ class CurrentLocation
 {
     protected $user;
 
+    protected $room;
+
     public function __construct($user)
     {
         $this->user = $user;
+        $this->room = $this->user->getRoom();
+    }
+
+    public function getRoom()
+    {
+        return $this->room;
     }
 
     public function getDescription()
     {
-        if (is_null($this->user->room)) {
+        if (is_null($this->room)) {
             return 'You float in an endless void.';
         }
 
-        return $this->user->room->getDescription();
+        return $this->room->getDescription();
     }
 
     public function getPlayers($refresh = false, $exclude_self = true)
     {
-        if (!$this->user->room) {
+        if (!$this->room) {
             return new Collection([]);
         }
 
         if ($refresh) {
-            $this->user->room->load('people');
+            $this->room->load('contents');
         }
 
-        return $this->user->room->people
-            ->filter(function ($user) use ($exclude_self) {
-                if (!$exclude_self) {
-                    return true;
-                }
-                return $user->id !== $this->user->id;
-            })
+        return $this
+            ->room
+            ->people($this->user->getBody())
             ->values();
     }
 
     public function getNPCs($refresh = false)
     {
-        if (!$this->user->room) {
+        if (!$this->room) {
             return new Collection([]);
         }
 
-        if ($refresh) {
-            $this->user->room->load('npcs');
-        }
-
-        return $this->user->room->npcs;
+        return $this->room->npcs();
     }
 
     public function getItems($refresh = false)
     {
-        if (!$this->user->room) {
+        if (!$this->user->getRoom()) {
             return new Collection([]);
         }
 
         if ($refresh) {
-            $this->user->room->load('contents');
+            $this->room->load('contents');
         }
 
-        return $this->user->room->contents;
+        return $this->room->items();
     }
 
     public function getExits($refresh = false)
     {
-        if (is_null($this->user->room)) {
+        if (is_null($this->user->getRoom())) {
             return new Collection([]);
         }
 
         if ($refresh) {
-            $this->user->room->load('northExits', 'southExits', 'westExits', 'eastExits');
+            $this->room->load('northExits', 'southExits', 'westExits', 'eastExits');
         }
 
         return (new Collection([
-            'north' => $this->user->room->northExit,
-            'south' => $this->user->room->southExit,
-            'west' => $this->user->room->westExit,
-            'east' => $this->user->room->eastExit,
+            'north' => $this->room->northExit,
+            'south' => $this->room->southExit,
+            'west' => $this->room->westExit,
+            'east' => $this->room->eastExit,
         ]))->filter();
     }
 }

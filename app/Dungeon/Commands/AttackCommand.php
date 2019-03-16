@@ -24,7 +24,7 @@ class AttackCommand extends Command
      */
     protected function run()
     {
-        if (!$this->user->room) {
+        if (!$this->user->getRoom()) {
             return $this->fail('You cannot attack the void.');
         }
 
@@ -32,7 +32,7 @@ class AttackCommand extends Command
         $weapon_name = $this->inputPart('weapon');
 
         $weapon = $this->entityFinder->findInInventory($weapon_name, $this->user);
-        $target = $this->entityFinder->findUsers($target_name, $this->user->room);
+        $target = $this->entityFinder->findUsers($target_name, $this->user->getRoom());
 
         if (!$weapon) {
             return $this->fail('Can\'t use that weapon.');

@@ -7,6 +7,7 @@ use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Dungeon\Entities\People\Body;
 
 class UserTest extends TestCase
 {
@@ -16,11 +17,12 @@ class UserTest extends TestCase
     {
         parent::setup();
 
-        $this->user = new User([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'sercretmagicword',
         ]);
+
+        $this->body = factory(Body::class)->create();
+        $this->body->giveToUser($this->user)->save();
     }
 
     /** @test */
@@ -67,6 +69,7 @@ class UserTest extends TestCase
     {
         $this->user->setHealth(50);
         $this->user->save();
+        $this->user->body->save();
 
         $user = User::first();
 
@@ -82,9 +85,10 @@ class UserTest extends TestCase
 
         $this->user->moveTo($room);
         $this->user->save();
+        $this->user->body->save();
 
-        $user = User::with('room')->first();
+        $user = User::first();
 
-        $this->assertEquals('This is a room.', $user->room->getDescription());
+        $this->assertEquals('This is a room.', $user->getRoom()->getDescription());
     }
 }

@@ -2,13 +2,14 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\Commands\InventoryCommand;
-use Dungeon\Entities\Food\Food;
-use Dungeon\Room;
 use App\User;
+use Dungeon\Room;
+use Tests\TestCase;
+use Dungeon\Entities\Food\Food;
+use Dungeon\Entities\People\Body;
+use Dungeon\Commands\InventoryCommand;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
 
 class InventoryCommandTest extends TestCase
 {
@@ -28,26 +29,25 @@ class InventoryCommandTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
 
-        $this->room = Room::create([
+        $this->body = factory(Body::class)->create();
+        $this->body->giveToUser($this->user)->save();
+
+        $this->room = factory(Room::class)->create([
             'description' => 'A room. Maybe with a potato in it.',
         ]);
 
-        $this->potato = Food::create([
+        $this->potato = factory(Food::class)->create([
             'name' => 'Potato',
             'description' => 'A potato.',
-            'data' => [],
         ]);
 
-        $this->banana = Food::create([
+        $this->banana = factory(Food::class)->create([
             'name' => 'Banana',
             'description' => 'A banana.',
-            'data' => [],
         ]);
     }
 

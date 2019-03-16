@@ -2,22 +2,22 @@
 
 namespace App;
 
-use Dungeon\Contracts\Interactable;
 use Dungeon\Room;
+use Dungeon\Traits\HasBody;
 use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasApparel;
-use Dungeon\Traits\HasHealth;
 use Dungeon\Traits\HasInventory;
-use Dungeon\Traits\HasSerializableAttributes;
+use Dungeon\Entities\People\Body;
+use Dungeon\Contracts\Interactable;
 use App\Observers\SerializableObserver;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Dungeon\Traits\HasSerializableAttributes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements Interactable
 {
-    use Notifiable,
-        HasHealth,
+    use HasBody,
+        Notifiable,
         HasSerializableAttributes,
         HasInventory,
         HasApparel,
@@ -82,14 +82,23 @@ class User extends Authenticatable implements Interactable
         ];
     }
 
-    public function room()
+    public function body()
     {
-        return $this->belongsTo(Room::class);
+        return $this->hasOne(Body::class, 'owner_id');
     }
 
-    public function moveTo(Room $room)
+    public function getRoom()
     {
-        return $this->room()->associate($room);
+        if (!$this->hasBody()) {
+            return null;
+        }
+
+        return $this->body->getRoom();
+    }
+
+    public function room()
+    {
+        throw new \Exception('Dont use user-room relationship - go through body instead');
     }
 
     public function getName()
@@ -99,11 +108,15 @@ class User extends Authenticatable implements Interactable
 
     public function getInventory($refresh = false)
     {
-        if ($refresh) {
-            $this->load('inventory');
+        if (!$this->body) {
+            return null;
         }
 
-        return $this->inventory;
+        if ($refresh) {
+            $this->body->load('contents');
+        }
+
+        return $this->body->content;
     }
 
     /**
@@ -114,13 +127,12 @@ class User extends Authenticatable implements Interactable
      */
     public static function replaceClass($model)
     {
-        return $model;
+        throw new \Exception('Shouldnt be using finder on users any more');
     }
 
     public function kill()
     {
-        $this->room_id = null;
-        $this->save();
+        throw new \Exception('refactor User::kill');
     }
 
     public function respawn()
@@ -131,7 +143,53 @@ class User extends Authenticatable implements Interactable
         $this->moveTo($room);
 
         // @todo create new body
+        throw new \Exception('refactor respawn command');
 
         return $this;
+    }
+
+    public function hurt($amount)
+    {
+        if ($this->hasBody()) {
+            return $this->body->hurt($amount);
+        }
+
+        return null;
+    }
+
+    public function heal($amount)
+    {
+        if ($this->hasBody()) {
+            return $this->body->heal($amount);
+        }
+
+        return null;
+    }
+
+    public function setHealth($amount)
+    {
+        if ($this->hasBody()) {
+            return $this->body->setHealth($amount);
+        }
+
+        return null;
+    }
+
+    public function getHealth()
+    {
+        if ($this->hasBody()) {
+            return $this->body->getHealth();
+        }
+
+        return null;
+    }
+
+    public function isDead()
+    {
+        if ($this->hasBody()) {
+            return $this->body->isDead();
+        }
+
+        return false;
     }
 }

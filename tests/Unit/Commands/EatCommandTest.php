@@ -2,14 +2,15 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\Commands\EatCommand;
-use Dungeon\Entities\Food\Food;
-use Dungeon\Entity;
-use Dungeon\Room;
 use App\User;
+use Dungeon\Room;
+use Dungeon\Entity;
+use Tests\TestCase;
+use Dungeon\Entities\Food\Food;
+use Dungeon\Commands\EatCommand;
+use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
 
 class EatCommandTest extends TestCase
 {
@@ -19,21 +20,23 @@ class EatCommandTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
-        $this->user->setHealth(27)->save();
 
-        $this->room = Room::create([
+        $this->body = factory(Body::class)->create();
+        $this->body
+            ->giveToUser($this->user)
+            ->setHealth(27)
+            ->save();
+
+        $this->room = factory(Room::class)->create([
             'description' => 'A room. Maybe with a potato in it.',
         ]);
 
-        $this->potato = Food::create([
+        $this->potato = factory(Food::class)->create([
             'name' => 'Potato',
             'description' => 'A potato.',
-            'data' => [],
         ]);
 
         $this->potato->giveToUser($this->user);
@@ -69,10 +72,9 @@ class EatCommandTest extends TestCase
     /** @test */
     public function you_cant_eat_things_that_arent_food()
     {
-        $rock = Entity::create([
+        $rock = factory(Entity::class)->create([
             'name' => 'Rock',
             'description' => 'An inedible object.',
-            'data' => [],
         ]);
 
         $rock->giveToUser($this->user);
@@ -92,10 +94,10 @@ class EatCommandTest extends TestCase
         $command = new EatCommand('eat potato', $this->user);
         $command->execute();
 
-        $response = $command->getMessage();
+        $command->getMessage();
 
         $this->user->load('inventory');
 
-        $this->assertEmpty($this->user->inventory);
+        $this->assertEmpty($this->user->getInventory());
     }
 }

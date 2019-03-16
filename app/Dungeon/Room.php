@@ -2,7 +2,9 @@
 
 namespace Dungeon;
 
-use App\User;
+use Dungeon\NPC;
+use Dungeon\Portal;
+use Dungeon\Entities\People\Body;
 use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
@@ -13,14 +15,25 @@ class Room extends Model
 
     protected $exits = [];
 
-    public function people()
+    public function people(Body $exclude = null)
     {
-        return $this->hasMany(User::class, 'room_id');
+        return $this
+            ->contents
+            ->people($exclude);
     }
 
     public function npcs()
     {
-        return $this->hasMany(NPC::class, 'room_id');
+        return $this
+            ->contents
+            ->npcs();
+    }
+
+    public function items()
+    {
+        return $this
+            ->contents
+            ->items();
     }
 
     public function contents()
@@ -30,7 +43,8 @@ class Room extends Model
 
     public function exits()
     {
-        return $this->belongsToMany();
+        // @todo - this is half finished...
+        return $this->belongsToMany(Portal::class);
     }
 
     public function getDescription()

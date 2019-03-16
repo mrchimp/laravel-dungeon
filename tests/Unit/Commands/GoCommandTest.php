@@ -2,12 +2,13 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\Commands\GoCommand;
-use Dungeon\Room;
 use App\User;
+use Dungeon\Room;
+use Tests\TestCase;
+use Dungeon\Commands\GoCommand;
+use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
 
 class GoCommandTest extends TestCase
 {
@@ -25,17 +26,20 @@ class GoCommandTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
 
-        $this->north_room = Room::create([
+        factory(Body::class)
+            ->create()
+            ->giveToUser($this->user)
+            ->save();
+
+        $this->north_room = factory(Room::class)->create([
             'description' => 'This is the north room.',
         ]);
 
-        $this->south_room = Room::create([
+        $this->south_room = factory(Room::class)->create([
             'description' => 'This is the south room.',
         ]);
 
@@ -76,15 +80,17 @@ class GoCommandTest extends TestCase
     /** @test */
     public function if_we_can_go_where_we_want_to_go_then_lets_go_there()
     {
-        $this->assertEquals($this->north_room->id, $this->user->room_id);
+        $this->assertEquals($this->north_room->id, $this->user->getRoom()->id);
 
         $command = new GoCommand('go south', $this->user);
         $command->execute();
+
         $response = $command->getMessage();
 
         $this->assertStringContainsString('You go', $response);
 
         $user = User::first();
-        $this->assertEquals($this->south_room->id, $user->room_id);
+
+        $this->assertEquals($this->south_room->id, $user->getRoom()->id);
     }
 }

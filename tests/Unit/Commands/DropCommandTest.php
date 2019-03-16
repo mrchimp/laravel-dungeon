@@ -2,14 +2,15 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\Commands\DropCommand;
-use Dungeon\Entities\Food\Food;
-use Dungeon\Entity;
-use Dungeon\Room;
 use App\User;
+use Dungeon\Room;
+use Dungeon\Entity;
+use Tests\TestCase;
+use Dungeon\Entities\Food\Food;
+use Dungeon\Commands\DropCommand;
+use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
 
 class DropCommandTest extends TestCase
 {
@@ -19,20 +20,20 @@ class DropCommandTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
 
-        $this->room = Room::create([
+        $this->body = factory(Body::class)->create();
+        $this->body->giveToUser($this->user)->save();
+
+        $this->room = factory(Room::class)->create([
             'description' => 'A room. Maybe with a potato in it.',
         ]);
 
-        $this->potato = Food::create([
+        $this->potato = factory(Food::class)->create([
             'name' => 'Potato',
             'description' => 'A potato.',
-            'data' => [],
         ]);
     }
 
@@ -61,6 +62,7 @@ class DropCommandTest extends TestCase
 
         $command = new DropCommand('drop potato', $this->user);
         $command->execute();
+
         $response = $command->getMessage();
 
         $potato = Entity::find($this->potato->id);

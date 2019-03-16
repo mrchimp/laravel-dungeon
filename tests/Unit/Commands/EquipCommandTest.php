@@ -11,6 +11,7 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
+use Dungeon\Entities\People\Body;
 
 class EquipCommandTest extends TestCase
 {
@@ -20,26 +21,26 @@ class EquipCommandTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
 
-        $this->room = Room::create([
+        $this->body = factory(Body::class)->create();
+        $this->body->giveToUser($this->user)->save();
+
+        $this->room = factory(Room::class)->create([
             'description' => 'A room. Maybe with a potato in it.',
         ]);
 
-        $this->hat = Apparel::create([
+        $this->hat = factory(Apparel::class)->create([
             'name' => 'Hat',
             'description' => 'Headwear',
             'equiped' => false,
         ]);
 
-        $this->potato = Food::create([
+        $this->potato = factory(Food::class)->create([
             'name' => 'Potato',
             'description' => 'A potato.',
-            'data' => [],
         ]);
     }
 

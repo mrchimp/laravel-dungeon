@@ -2,14 +2,15 @@
 
 namespace Tests\Unit\Dungeon;
 
+use App\User;
+use Dungeon\Room;
+use Dungeon\Entity;
+use Tests\TestCase;
 use Dungeon\EntityFinder;
 use Dungeon\Entities\Food\Food;
-use Dungeon\Entity;
-use Dungeon\Room;
-use App\User;
+use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
 
 class EntityFinderTest extends TestCase
 {
@@ -25,23 +26,30 @@ class EntityFinderTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('fakepassword'),
         ]);
 
-        $this->room = Room::create([
+        $this->body = factory(Body::class)->create([
+            'name' => 'Test Body',
+        ]);
+
+        $this->body->giveToUser($this->user)->save();
+        $this->user->load('body');
+
+        $this->room = factory(Room::class)->create([
             'description' => 'A room. Maybe with a potato in it.',
         ]);
 
-        $this->potato = Food::create([
+        $this->potato = factory(Food::class)->create([
             'name' => 'A Potato',
             'description' => 'A potato.',
             'data' => [],
         ]);
 
-        $this->box = Entity::create([
+        $this->box = factory(Entity::class)->create([
             'name' => 'Box of frogs',
             'description' => 'You can put things in it.',
             'class' => Entity::class,
@@ -88,21 +96,23 @@ class EntityFinderTest extends TestCase
     /** @test */
     public function it_finds_users_in_the_same_room()
     {
-        $other_player = User::create([
+        $other_player = factory(User::class)->create([
             'name' => 'Other Player',
-            'email' => 'test2@example.com',
-            'password' => 'whatever',
         ]);
+
+        $other_body = factory(Body::class)->create();
+        $other_body->giveToUser($other_player)->save();
+        $other_player->load('body');
 
         $this->user->moveTo($this->room)->save();
         $other_player->moveTo($this->room)->save();
 
         $entity = $this->finder->find('other player', $this->user);
 
-        $this->assertEquals($other_player->id, $entity->id);
+        $this->assertEquals($other_player->body->id, $entity->id);
 
         $entity = $this->finder->find('other', $this->user);
 
-        $this->assertEquals($other_player->id, $entity->id);
+        $this->assertEquals($other_player->body->id, $entity->id);
     }
 }

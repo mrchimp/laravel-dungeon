@@ -2,14 +2,15 @@
 
 namespace Tests\Feature;
 
-use Dungeon\Entities\Food\Food;
-use Dungeon\Room;
 use App\User;
+use Dungeon\Room;
+use Tests\TestCase;
+use Dungeon\Entities\Food\Food;
+use Dungeon\Entities\People\Body;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
 class RoomTest extends TestCase
 {
@@ -21,7 +22,7 @@ class RoomTest extends TestCase
     {
         parent::setup();
 
-        $this->room = new Room([
+        $this->room = factory(Room::class)->create([
             'description' => 'This is a room.',
         ]);
     }
@@ -38,18 +39,18 @@ class RoomTest extends TestCase
     /** @test */
     public function can_have_people_in_it()
     {
-        $user = User::create([
+        $user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'secretmagicword',
         ]);
 
-        $this->room->save();
-        $this->room->people()->save($user);
+        $body = factory(Body::class)->create();
+        $body->giveToUser($user)->save();
 
-        $room = Room::with('people')->first();
+        $user->moveTo($this->room)->save();
 
-        $person = $room->people->first();
+        $room = Room::with('contents')->first();
+
+        $person = $room->people()->first();
 
         $this->assertEquals('Test User', $person->name);
     }
@@ -57,19 +58,14 @@ class RoomTest extends TestCase
     /** @test */
     public function can_have_entities_in_it()
     {
-        $room = Room::create([
-            'description' => 'This room has something in it.',
-        ]);
-
-        $potato = Food::create([
+        $potato = factory(Food::class)->create([
             'name' => 'Potato',
             'description' => 'A potato.',
         ]);
 
-        $potato->moveToRoom($room);
+        $potato->moveToRoom($this->room);
 
         $potato->save();
-        $room->save();
 
         $room = Room::first();
 

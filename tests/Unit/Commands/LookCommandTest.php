@@ -2,14 +2,16 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\Commands\LookCommand;
-use Dungeon\Entities\Food\Food;
+use App\User;
 use Dungeon\NPC;
 use Dungeon\Room;
-use App\User;
+use Tests\TestCase;
+use Dungeon\Entities\Food\Food;
+use Dungeon\Commands\LookCommand;
+use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Dungeon\Collections\EntityCollection;
 
 class LookCommandTest extends TestCase
 {
@@ -21,32 +23,46 @@ class LookCommandTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
 
-        $this->player_2 = User::create([
+        $user_body = factory(Body::class)
+            ->create()
+            ->giveToUser($this->user);
+        $user_body->save();
+
+        $this->player_2 = factory(User::class)->create([
             'name' => 'Player 2',
-            'email' => 'player2@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
 
-        $this->npc = NPC::create([
+        $player_2_body = factory(Body::class)
+            ->create()
+            ->giveToUser($this->player_2);
+        $player_2_body->save();
+
+        $this->npc = factory(NPC::class)->create([
             'name' => 'Test NPC',
             'description' => 'An NPC for testing',
         ]);
 
-        $this->north_room = Room::create([
+        $npc_body = factory(Body::class)
+            ->create()
+            ->giveToNPC($this->npc);
+        $npc_body->save();
+
+        $this->npc->load('body');
+        $this->npc->fresh();
+
+        $this->north_room = factory(Room::class)->create([
             'description' => 'This is the north room.',
         ]);
 
-        $this->south_room = Room::create([
+        $this->south_room = factory(Room::class)->create([
             'description' => 'This is the south room.',
         ]);
 
-        $this->potato = new Food([
+        $this->potato = factory(Food::class)->create([
             'name' => 'Potato',
             'description' => 'You can eat it',
         ]);
@@ -146,7 +162,7 @@ class LookCommandTest extends TestCase
         $command->execute();
         $players = $command->getOutputItem('players');
 
-        $this->assertIsCollection($players);
+        $this->assertEquals(EntityCollection::class, get_class($players));
         $this->assertCount(1, $players);
         $this->assertEquals('Player 2', $players->first()->getName());
     }
@@ -162,7 +178,7 @@ class LookCommandTest extends TestCase
         $command->execute();
         $npcs = $command->getOutputItem('npcs');
 
-        $this->assertIsCollection($npcs);
+        $this->assertEquals(EntityCollection::class, get_class($npcs));
         $this->assertCount(1, $npcs);
         $this->assertEquals('Test NPC', $npcs->first()->getName());
     }
@@ -179,7 +195,7 @@ class LookCommandTest extends TestCase
 
         $items = $command->getOutputItem('items');
 
-        $this->assertIsEntityCollection($items);
+        $this->assertEquals(EntityCollection::class, get_class($items));
         $this->assertCount(1, $items);
         $this->assertEquals('Potato', $items->first()->getName());
     }

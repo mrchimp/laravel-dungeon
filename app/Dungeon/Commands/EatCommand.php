@@ -2,8 +2,6 @@
 
 namespace Dungeon\Commands;
 
-use Dungeon\Entities\Food\Food;
-
 class EatCommand extends Command
 {
     /**

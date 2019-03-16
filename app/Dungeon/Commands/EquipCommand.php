@@ -33,7 +33,7 @@ class EquipCommand extends Command
      */
     protected function run()
     {
-        if (!$this->user->room) {
+        if (!$this->user->getRoom()) {
             return $this->fail('You float in an endless void.');
         }
 

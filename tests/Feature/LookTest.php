@@ -2,12 +2,13 @@
 
 namespace Tests\Feature;
 
-use Dungeon\Room;
 use App\User;
+use Dungeon\Room;
+use Tests\TestCase;
+use Dungeon\Entities\People\Body;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class LookTest extends TestCase
 {
@@ -23,18 +24,18 @@ class LookTest extends TestCase
     {
         parent::setup();
 
-        $this->room = Room::create([
+        $this->room = factory(Room::class)->create([
             'description' => 'This is a room.',
         ]);
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'secretmagicword',
         ]);
 
-        $this->user->moveTo($this->room);
-        $this->user->save();
+        $this->body = factory(Body::class)->create();
+        $this->body->giveToUser($this->user)->save();
+
+        $this->user->moveTo($this->room)->save();
     }
 
     /** @test */

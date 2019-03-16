@@ -138,7 +138,7 @@ class Entity extends Model implements Interactable
         return $this->belongsTo(NPC::class);
     }
 
-    public function moveToRoom(Room $room)
+    public function moveToRoom(Room $room = null)
     {
         $this->moveToVoid();
 
@@ -147,8 +147,13 @@ class Entity extends Model implements Interactable
         return $this;
     }
 
-    public function givetoUser(User $user)
+    public function givetoUser(User $user = null)
     {
+        if (is_null($user)) {
+            $this->owner()->dissociate();
+            return $this;
+        }
+
         $this->moveToVoid();
 
         $this->owner()->associate($user);
@@ -156,7 +161,7 @@ class Entity extends Model implements Interactable
         return $this;
     }
 
-    public function moveToContainer(Entity $container)
+    public function moveToContainer(Entity $container = null)
     {
         $this->moveToVoid();
 
@@ -165,7 +170,7 @@ class Entity extends Model implements Interactable
         return $this;
     }
 
-    public function giveToNPC(NPC $npc)
+    public function giveToNPC(NPC $npc = null)
     {
         $this->moveToVoid();
 
@@ -217,5 +222,14 @@ class Entity extends Model implements Interactable
         $array['type'] = $this->getType();
 
         return $array;
+    }
+
+    public function getRoom()
+    {
+        if (!$this->room) {
+            return null;
+        }
+
+        return $this->room;
     }
 }

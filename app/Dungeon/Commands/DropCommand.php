@@ -30,7 +30,7 @@ class DropCommand extends Command
             return $this->fail('You don\'t have a ' . e($query));
         }
 
-        $entity->moveToRoom($this->user->room);
+        $entity->moveToRoom($this->current_location->getRoom());
         $entity->save();
 
         $this->setMessage('You drop the ' . e($entity->getName()) . '.');

@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Dungeon\Entities\Food;
 
+use App\User;
+use Dungeon\Room;
+use Tests\TestCase;
 use Dungeon\EntityFinder;
 use Dungeon\Entities\Food\Food;
-use Dungeon\Entity;
-use Dungeon\Room;
-use App\User;
+use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
 
 class FoodTest extends TestCase
 {
@@ -19,21 +19,21 @@ class FoodTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
+
+        $body = factory(Body::class)->create();
+        $body->giveToUser($this->user)->save();
         $this->user->setHealth(50)->save();
 
-        $this->food = Food::create([
+        $this->food = factory(Food::class)->create([
             'name' => 'Potato',
             'description' => 'A potato.',
         ]);
         $this->food->setHealing(10);
 
-        $this->room = Room::create([
-            'name' => 'A room.',
+        $this->room = factory(Room::class)->create([
             'description' => 'A space for things.',
         ]);
     }
@@ -46,12 +46,12 @@ class FoodTest extends TestCase
     }
 
     /** @test */
-    public function healing_is_stored_and_retrieved()
+    public function healing_is_stored_and_retrieved_to_db()
     {
         $this->food->setHealing(23);
         $this->food->save();
 
-        $food = Food::first();
+        $food = Food::find($this->food->id);
 
         $this->assertEquals(23, $food->healing);
     }

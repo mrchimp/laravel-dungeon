@@ -2,16 +2,20 @@
 
 namespace Dungeon;
 
-use Dungeon\Traits\HasApparel;
+use Dungeon\Room;
+use Dungeon\Traits\HasBody;
 use Dungeon\Traits\HasHealth;
+use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasInventory;
-use Dungeon\Traits\HasSerializableAttributes;
+use Dungeon\Entities\People\Body;
 use App\Observers\SerializableObserver;
 use Illuminate\Database\Eloquent\Model;
+use Dungeon\Traits\HasSerializableAttributes;
 
 class NPC extends Model
 {
-    use HasHealth,
+    use HasBody,
+        HasHealth,
         HasSerializableAttributes,
         HasInventory,
         HasApparel;
@@ -41,12 +45,12 @@ class NPC extends Model
 
     public function room()
     {
-        return $this->belongsTo(room::class);
+        return $this->belongsTo(Room::class);
     }
 
-    public function moveTo(Room $room)
+    public function body()
     {
-        return $this->room()->associate($room);
+        return $this->hasOne(Body::class, 'npc_id');
     }
 
     public function inventory()

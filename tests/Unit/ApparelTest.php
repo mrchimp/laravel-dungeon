@@ -17,18 +17,16 @@ class ApparelTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
 
-        $this->npc = NPC::create([
+        $this->npc = factory(NPC::class)->create([
             'name' => 'Test NPC',
             'description' => 'An NPC for testing.',
         ]);
 
-        $this->hat = Apparel::create([
+        $this->hat = factory(Apparel::class)->create([
             'name' => 'Hat',
             'description' => 'You can wear it on yer head.',
         ]);

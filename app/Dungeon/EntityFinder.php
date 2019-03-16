@@ -23,15 +23,15 @@ class EntityFinder
         $entity = $this->findInInventory($query, $user);
 
         if (!$entity) {
-            $entity = $this->findInRoom($query, $user->room);
+            $entity = $this->findInRoom($query, $user->getRoom());
         }
 
         if (!$entity) {
-            $entity = $this->findInContainersInRoom($query, $user->room);
+            $entity = $this->findInContainersInRoom($query, $user->getRoom());
         }
 
         if (!$entity) {
-            $entity = $this->findUsers($query, $user->room);
+            $entity = $this->findUsers($query, $user->getRoom());
         }
 
         if (!$entity) {
@@ -108,8 +108,11 @@ class EntityFinder
             return null;
         }
 
-        return $room->people->first(function ($person) use ($query) {
+        return $room->contents->first(function ($person) use ($query) {
             return $person->nameMatchesQuery($query);
         });
+        // return $room->people->first(function ($person) use ($query) {
+        //     return $person->nameMatchesQuery($query);
+        // });
     }
 }

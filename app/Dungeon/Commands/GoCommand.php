@@ -47,14 +47,15 @@ class GoCommand extends Command
         }
 
         $exit = $direction . 'Exit';
-        $destination = $this->user->room->$exit;
+        $destination = $this->user->getRoom()->$exit;
 
         if (!$destination) {
             return $this->fail('I can\'t go that way.');
         }
 
-        $this->user->moveTo($destination);
-        $this->user->save();
+        $this->user
+            ->moveTo($destination)
+            ->save();
 
         $this->setMessage('You go ' . $direction . '.');
     }

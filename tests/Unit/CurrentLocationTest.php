@@ -2,15 +2,17 @@
 
 namespace Tests\Unit\Dungeon;
 
-use Dungeon\CurrentLocation;
-use Dungeon\Entities\Food\Food;
+use App\User;
 use Dungeon\NPC;
 use Dungeon\Room;
-use App\User;
+use Tests\TestCase;
+use Dungeon\CurrentLocation;
+use Dungeon\Entities\Food\Food;
+use Dungeon\Entities\People\Body;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Dungeon\Collections\EntityCollection;
 
 class CurrentLocationTest extends TestCase
 {
@@ -20,33 +22,36 @@ class CurrentLocationTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
+        $user_body = factory(Body::class)->create();
+        $user_body->giveToUser($this->user)->save();
 
-        $this->player_2 = User::create([
+        $this->player_2 = factory(User::class)->create([
             'name' => 'Player 2',
-            'email' => 'player2@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
+        $player_2_body = factory(Body::class)->create();
+        $player_2_body->giveToUser($this->player_2)->save();
 
-        $this->potato = Food::create([
+        $this->potato = factory(Food::class)->create([
             'name' => 'Potato',
             'description' => 'You can eat it.',
         ]);
 
-        $this->npc = NPC::create([
+        $this->npc = factory(NPC::class)->create([
             'name' => 'Test NPC',
             'description' => 'An NPC for testing',
         ]);
 
-        $this->north_room = Room::create([
+        $npc_body = factory(Body::class)->create();
+        $npc_body->giveToNPC($this->npc)->save();
+
+        $this->north_room = factory(Room::class)->create([
             'description' => 'This is the north room.',
         ]);
 
-        $this->south_room = Room::create([
+        $this->south_room = factory(Room::class)->create([
             'description' => 'This is the south room.',
         ]);
 
@@ -64,7 +69,7 @@ class CurrentLocationTest extends TestCase
     {
         $players = $this->location->getPlayers();
 
-        $this->assertIsCollection($players);
+        $this->assertIsEntityCollection($players);
         $this->assertCount(1, $players);
         $this->assertEquals('Player 2', $players->first()->getName());
     }
@@ -74,7 +79,7 @@ class CurrentLocationTest extends TestCase
     {
         $npcs = $this->location->getNPCs();
 
-        $this->assertIsCollection($npcs);
+        $this->assertIsEntityCollection($npcs);
         $this->assertCount(1, $npcs);
         $this->assertEquals('Test NPC', $npcs->first()->getName());
     }

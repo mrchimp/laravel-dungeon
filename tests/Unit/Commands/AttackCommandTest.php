@@ -2,14 +2,15 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\Room;
 use App\User;
+use Dungeon\Room;
 use Tests\TestCase;
+use Dungeon\Entities\People\Body;
 use Dungeon\Commands\AttackCommand;
+use Dungeon\DamageTypes\MeleeDamage;
 use Dungeon\Entities\Weapons\Melee\MeleeWeapon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Dungeon\DamageTypes\MeleeDamage;
 
 class AttackCommandTest extends TestCase
 {
@@ -19,25 +20,31 @@ class AttackCommandTest extends TestCase
     {
         parent::setup();
 
-        $this->user = User::create([
+        $this->user = factory(User::class)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
-        $this->user->setHealth(50)->save();
 
-        $this->enemy = User::create([
+        $this->body = factory(Body::class)->create();
+        $this->body
+            ->setHealth(50)
+            ->giveToUser($this->user)
+            ->save();
+
+        $this->enemy = factory(User::class)->create([
             'name' => 'Enemy',
-            'email' => 'test2@example.com',
-            'password' => bcrypt('fakepassword'),
         ]);
-        $this->user->setHealth(50)->save();
 
-        $this->room = Room::create([
+        $this->enemy_body = factory(Body::class)->create();
+        $this->enemy_body
+            ->setHealth(100)
+            ->giveToUser($this->enemy)
+            ->save();
+
+        $this->room = factory(Room::class)->create([
             'description' => 'A room. Maybe with a potato in it.',
         ]);
 
-        $this->rock = MeleeWeapon::create([
+        $this->rock = factory(MeleeWeapon::class)->create([
             'name' => 'Rock',
             'description' => 'You can hit people with it.',
             'damage_types' => [
@@ -50,14 +57,16 @@ class AttackCommandTest extends TestCase
     public function you_can_attack_people_in_the_same_room_as_you()
     {
         $this->user->moveTo($this->room)->save();
+
         $this->enemy->moveTo($this->room)->save();
+
         $this->rock->giveToUser($this->user)->save();
 
         $command = new AttackCommand('attack enemy with rock', $this->user);
         $command->execute();
 
-        $enemy = User::where('name', 'Enemy')->first();
+        $enemy = User::where('name', 'Enemy')->with('body')->first();
 
-        $this->assertEquals(50, $enemy->getHealth());
+        $this->assertEquals(50, $enemy->body->getHealth());
     }
 }

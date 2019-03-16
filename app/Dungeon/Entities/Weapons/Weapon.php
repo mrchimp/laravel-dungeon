@@ -72,8 +72,8 @@ class Weapon extends Entity
         }
 
         $target->save();
-
         $total_damage = array_sum($damages);
+
         $damages['total'] = $total_damage;
 
         return $damages;

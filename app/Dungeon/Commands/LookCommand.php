@@ -2,9 +2,6 @@
 
 namespace Dungeon\Commands;
 
-use Dungeon\Room;
-use Auth;
-
 /**
  * Look at the surrounding environment or a specific object
  */
@@ -30,7 +27,7 @@ class LookCommand extends Command
      */
     protected function run()
     {
-        if (is_null($this->user->room)) {
+        if (is_null($this->user->getRoom())) {
             return $this->fail($this->current_location->getDescription());
         }
 
