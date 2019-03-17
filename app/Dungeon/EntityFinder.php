@@ -102,7 +102,7 @@ class EntityFinder
      * @param Room $room
      * @return User
      */
-    public function findUsers($query, Room $room)
+    public function findUsers($query, Room $room = null)
     {
         if (!$room) {
             return null;

@@ -29,11 +29,8 @@ class RespawnCommand extends Command
         $target_name = $this->inputPart('target');
 
         if (!$target_name) {
-            $respawn_self = true;
             $target = $this->user;
         } else {
-            $respawn_self = false;
-
             // @todo - this is pointless cos they'll be dead...
             // should add a method to the finder for finding dead people
             $target = $this->entityFinder->find($target_name, $this->user);

@@ -1,8 +1,9 @@
 <?php
 
-use Dungeon\Room;
 use App\User;
+use Dungeon\Room;
 use Illuminate\Database\Seeder;
+use Dungeon\Entities\People\Body;
 
 class UserSeeder extends Seeder
 {
@@ -21,8 +22,14 @@ class UserSeeder extends Seeder
             'password' => bcrypt('secretpassword'),
         ]);
 
-        $player_1->moveTo($room);
-        $player_1->save();
+        $player_1_body = Body::create([
+            'name' => 'Player 1',
+            'description' => 'Player 1\'s body',
+        ]);
+        $player_1_body->giveToUser($player_1)->save();
+
+        $player_1->moveTo($room)->save();
+
 
         $player_2 = User::create([
             'name' => 'Player 2',
@@ -30,7 +37,12 @@ class UserSeeder extends Seeder
             'password' => bcrypt('secretpassword'),
         ]);
 
-        $player_2->moveTo($room);
-        $player_2->save();
+        $player_2_body = Body::create([
+            'name' => 'Player 2',
+            'description' => 'Player 2\'s body',
+        ]);
+        $player_2_body->giveToUser($player_2)->save();
+
+        $player_2->moveTo($room)->save();
     }
 }
