@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Dungeon\Commands\AttackCommand;
-use Dungeon\Commands\DropCommand;
-use Dungeon\Commands\EatCommand;
-use Dungeon\Commands\EquipCommand;
+use Log;
+use Illuminate\Http\Request;
 use Dungeon\Commands\GoCommand;
-use Dungeon\Commands\HelpCommand;
 use Dungeon\Commands\HiCommand;
-use Dungeon\Commands\InspectCommand;
-use Dungeon\Commands\InventoryCommand;
+use Dungeon\Commands\EatCommand;
+use Dungeon\Commands\SayCommand;
+use Dungeon\Commands\DropCommand;
+use Dungeon\Commands\GiveCommand;
+use Dungeon\Commands\HelpCommand;
 use Dungeon\Commands\KillCommand;
 use Dungeon\Commands\LookCommand;
-use Dungeon\Commands\RespawnCommand;
 use Dungeon\Commands\TakeCommand;
-use Dungeon\Commands\SayCommand;
-use Illuminate\Http\Request;
-use Log;
-use Dungeon\Commands\GiveCommand;
+use Dungeon\Commands\EquipCommand;
+use Dungeon\Commands\AttackCommand;
+use Dungeon\Commands\InspectCommand;
+use Dungeon\Commands\RespawnCommand;
+use Dungeon\Commands\WhisperCommand;
+use Dungeon\Commands\InventoryCommand;
 
 class CmdController extends Controller
 {
@@ -38,6 +39,7 @@ class CmdController extends Controller
         RespawnCommand::class,
         GiveCommand::class,
         SayCommand::class,
+        WhisperCommand::class,
     ];
 
     public function run(Request $request)

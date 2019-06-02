@@ -81,6 +81,18 @@ export default {
 
   mounted() {
     this.run("look");
+
+    Echo.private("App.User." + window.user_id).notification(notification => {
+      switch (notification.type) {
+        case "Dungeon\\Notifications\\WhisperToUser":
+          this.output.push(
+            `${notification.author_name} whispers: ${notification.message}`
+          );
+          break;
+        default:
+          console.error("unknown notification type", notification);
+      }
+    });
   },
 
   methods: {

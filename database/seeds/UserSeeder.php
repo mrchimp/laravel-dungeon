@@ -17,13 +17,13 @@ class UserSeeder extends Seeder
         $room = Room::first();
 
         $player_1 = User::create([
-            'name' => 'Test User',
+            'name' => 'testuser',
             'email' => 'test@example.com',
             'password' => bcrypt('secretpassword'),
         ]);
 
         $player_1_body = Body::create([
-            'name' => 'Player 1',
+            'name' => 'testuser',
             'description' => 'Player 1\'s body',
         ]);
         $player_1_body->giveToUser($player_1)->save();
@@ -32,13 +32,13 @@ class UserSeeder extends Seeder
 
 
         $player_2 = User::create([
-            'name' => 'Player 2',
+            'name' => 'player2',
             'email' => 'test2@example.com',
             'password' => bcrypt('secretpassword'),
         ]);
 
         $player_2_body = Body::create([
-            'name' => 'Player 2',
+            'name' => 'player2',
             'description' => 'Player 2\'s body',
         ]);
         $player_2_body->giveToUser($player_2)->save();

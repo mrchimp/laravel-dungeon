@@ -9,6 +9,9 @@
 
   <script>
     window.pusher_key = '{{ config('broadcasting.connections.pusher.key') }}';
+    @if(Auth::check())
+      window.user_id = {{ Auth::user()->id }};
+    @endif
   </script>
   <script src="{{ mix('js/app.js') }}" defer></script>
 
