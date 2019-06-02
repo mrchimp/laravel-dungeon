@@ -20,6 +20,8 @@
         "vue": "^2.5.17"
     },
     "dependencies": {
-        "bulma": "^0.7.2"
+        "bulma": "^0.7.2",
+        "laravel-echo": "^1.5.3",
+        "pusher-js": "^4.4.0"
     }
 }

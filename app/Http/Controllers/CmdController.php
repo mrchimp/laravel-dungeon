@@ -15,7 +15,7 @@ use Dungeon\Commands\KillCommand;
 use Dungeon\Commands\LookCommand;
 use Dungeon\Commands\RespawnCommand;
 use Dungeon\Commands\TakeCommand;
-use Dungeon\Commands\UseCommand;
+use Dungeon\Commands\SayCommand;
 use Illuminate\Http\Request;
 use Log;
 use Dungeon\Commands\GiveCommand;
@@ -37,7 +37,7 @@ class CmdController extends Controller
         TakeCommand::class,
         RespawnCommand::class,
         GiveCommand::class,
-        // UseCommand::class,
+        SayCommand::class,
     ];
 
     public function run(Request $request)

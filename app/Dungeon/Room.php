@@ -136,4 +136,14 @@ class Room extends Model
     {
         return $this->eastExits->first();
     }
+
+    public function toArray()
+    {
+        $output = [
+            'id' => $this->id,
+            'description' => $this->description,
+        ];
+
+        return $output;
+    }
 }

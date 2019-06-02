@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -9,43 +8,6 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-const output = $('#cmdout');
-const input = $('#cmdin');
-
-$('#cmdform')
-    .on('submit', (e) => {
-        e.preventDefault();
-
-        let in_str = input.val();
-
-        if (in_str === 'clear') {
-            output.empty();
-            return;
-        }
-
-        axios
-            .post('cmd', {
-                input: in_str,
-            })
-            .then((response) => {
-                if (response.data.success = false) {
-                    throw response.data.message;
-                }
-
-                if (response.data.message) {
-                    response.data.message.replace(/\n/g, '<br>');
-                } else {
-                    response.data.message = 'No response.';
-                }
-
-                output.append('<p>' + response.data.message + '</p>');
-                input.val('');
-            })
-            .catch((error) => {
-                output.append(error + '<br>');
-            });
-    })
-
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -54,10 +16,16 @@ $('#cmdform')
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// Vue.component('dungeon-interface', require('./components/DungeonInterface.vue'));
-
-const files = require.context('./', true, /\.vue$/i)
-files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
+const files = require.context('./', true, /\.vue$/i);
+files.keys().map(key =>
+  Vue.component(
+    key
+      .split('/')
+      .pop()
+      .split('.')[0],
+    files(key)
+  )
+);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -66,5 +34,5 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
  */
 
 const app = new Vue({
-    el: '#app'
+  el: '#app',
 });

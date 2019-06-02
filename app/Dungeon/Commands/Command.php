@@ -146,6 +146,7 @@ abstract class Command
         $this->setOutputItem('players', $this->current_location->getPlayers(true));
         $this->setOutputItem('npcs', $this->current_location->getNpcs(true));
         $this->setOutputItem('inventory', $this->user->getInventory(true));
+        $this->setOutputItem('room', $this->current_location->getRoom());
     }
 
     /**
