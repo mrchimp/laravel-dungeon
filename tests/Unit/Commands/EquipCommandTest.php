@@ -5,13 +5,13 @@ namespace Tests\Unit\Dungeon\Commands;
 use Dungeon\Apparel\Apparel;
 use Dungeon\Commands\EquipCommand;
 use Dungeon\Entities\Food\Food;
+use Dungeon\Entities\People\Body;
 use Dungeon\Entity;
 use Dungeon\Room;
-use App\User;
+use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
-use Dungeon\Entities\People\Body;
 
 /**
  * @covers \Dungeon\Commands\EquipCommand

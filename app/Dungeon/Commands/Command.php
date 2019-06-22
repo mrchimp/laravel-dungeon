@@ -3,9 +3,9 @@
 namespace Dungeon\Commands;
 
 use Auth;
-use App\User;
 use Dungeon\CurrentLocation;
 use Dungeon\EntityFinder;
+use Dungeon\User;
 
 abstract class Command
 {

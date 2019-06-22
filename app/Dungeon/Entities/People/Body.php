@@ -2,13 +2,13 @@
 
 namespace Dungeon\Entities\People;
 
-use App\User;
+use Dungeon\Entity;
 use Dungeon\NPC;
 use Dungeon\Room;
-use Dungeon\Entity;
-use Dungeon\Traits\HasHealth;
 use Dungeon\Traits\HasApparel;
+use Dungeon\Traits\HasHealth;
 use Dungeon\Traits\HasInventory;
+use Dungeon\User;
 
 class Body extends Entity
 {

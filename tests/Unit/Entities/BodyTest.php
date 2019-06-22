@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Entities;
 
-use App\User;
 use Dungeon\Entities\People\Body;
 use Dungeon\NPC;
+use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;

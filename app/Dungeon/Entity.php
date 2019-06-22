@@ -2,14 +2,14 @@
 
 namespace Dungeon;
 
+use App\Observers\HasOwnClassObserver;
+use App\Observers\SerializableObserver;
+use App\Traits\HasUuid;
 use Dungeon\Collections\EntityCollection;
 use Dungeon\Contracts\Interactable;
 use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasSerializableAttributes;
-use App\Observers\HasOwnClassObserver;
-use App\Observers\SerializableObserver;
-use App\Traits\HasUuid;
-use App\User;
+use Dungeon\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Entity extends Model implements Interactable

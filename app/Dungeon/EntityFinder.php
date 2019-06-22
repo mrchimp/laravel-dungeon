@@ -2,9 +2,8 @@
 
 namespace Dungeon;
 
-use App\User;
-use Dungeon\Entity;
 use Dungeon\Room;
+use Dungeon\User;
 
 class EntityFinder
 {

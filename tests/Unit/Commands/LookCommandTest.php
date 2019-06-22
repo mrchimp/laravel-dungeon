@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use App\User;
+use Dungeon\User;
 use Dungeon\NPC;
 use Dungeon\Room;
 use Tests\TestCase;

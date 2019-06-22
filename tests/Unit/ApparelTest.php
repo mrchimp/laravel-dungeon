@@ -4,7 +4,7 @@ namespace Tests\Unit\Dungeon;
 
 use Dungeon\Apparel\Apparel;
 use Dungeon\NPC;
-use App\User;
+use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Dungeon;
 
 use Dungeon\Room;
 use Dungeon\Traits\HasBody;

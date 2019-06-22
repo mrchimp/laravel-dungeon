@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Dungeon\Entities\Food;
 
-use App\User;
-use Dungeon\Room;
-use Tests\TestCase;
-use Dungeon\EntityFinder;
 use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\People\Body;
+use Dungeon\EntityFinder;
+use Dungeon\Room;
+use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 /**
  * @covers \Dungeon\Entities\Food\Food

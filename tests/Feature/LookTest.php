@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\User;
-use Dungeon\Room;
-use Tests\TestCase;
 use Dungeon\Entities\People\Body;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Dungeon\Room;
+use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class LookTest extends TestCase
 {

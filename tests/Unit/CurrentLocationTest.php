@@ -2,15 +2,15 @@
 
 namespace Tests\Unit\Dungeon;
 
-use App\User;
-use Dungeon\NPC;
-use Dungeon\Room;
-use Tests\TestCase;
 use Dungeon\CurrentLocation;
 use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\People\Body;
+use Dungeon\NPC;
+use Dungeon\Room;
+use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 /**
  * @covers \Dungeon\CurrentLocation
