@@ -10,6 +10,9 @@ use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+/**
+ * @covers \Dungeon\Commands\GoCommand
+ */
 class GoCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

@@ -11,6 +11,9 @@ use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+/**
+ * @covers \Dungeon\Entities\Food\Food
+ */
 class FoodTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

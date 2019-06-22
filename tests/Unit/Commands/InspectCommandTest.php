@@ -12,6 +12,9 @@ use Dungeon\Commands\InspectCommand;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+/**
+ * @covers \Dungeon\Commands\InspectCommand
+ */
 class InspectCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

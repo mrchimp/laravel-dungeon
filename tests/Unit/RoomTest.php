@@ -7,11 +7,12 @@ use Dungeon\Room;
 use Tests\TestCase;
 use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\People\Body;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+/**
+ * @covers \Dungeon\Room
+ */
 class RoomTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

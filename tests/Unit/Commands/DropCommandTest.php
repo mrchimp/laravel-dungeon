@@ -12,6 +12,9 @@ use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+/**
+ * @covers \Dungeon\Commands\DropCommand
+ */
 class DropCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * @covers \Dungeon\Entity
+ */
 class EntityTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

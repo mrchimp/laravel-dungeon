@@ -5,6 +5,9 @@ namespace Tests\Unit\Dungeon;
 use Dungeon\CommandParser;
 use Tests\TestCase;
 
+/**
+ * @covers \Dungeon\CommandParser
+ */
 class CommandParserTest extends TestCase
 {
     /** @test */

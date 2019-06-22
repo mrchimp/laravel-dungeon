@@ -12,6 +12,9 @@ use Dungeon\Entities\Weapons\Melee\MeleeWeapon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+/**
+ * @covers \Dungeon\Commands\AttackCommand
+ */
 class AttackCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

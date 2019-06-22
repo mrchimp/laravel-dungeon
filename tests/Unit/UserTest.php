@@ -9,6 +9,9 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Dungeon\Entities\People\Body;
 
+/**
+ * @covers \App\User
+ */
 class UserTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

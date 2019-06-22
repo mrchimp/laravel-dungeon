@@ -9,6 +9,9 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * @covers \Dungeon\Apparel\Apparel
+ */
 class ApparelTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

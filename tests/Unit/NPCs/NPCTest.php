@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * @covers \Dungeon\NPC
+ */
 class NPCTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

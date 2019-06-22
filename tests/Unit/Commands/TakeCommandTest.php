@@ -12,6 +12,9 @@ use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+/**
+ * @covers \Dungeon\Commands\TakeCommand
+ */
 class TakeCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
@@ -93,8 +96,8 @@ class TakeCommandTest extends TestCase
     public function you_cant_take_things_that_dont_exist()
     {
         $command = new TakeCommand('take avocado', $this->user);
-        $response = $command->execute();
+        $command->execute();
 
-        $this->assertEquals('Take what?', $response);
+        $this->assertEquals('Take what?', $command->getMessage());
     }
 }

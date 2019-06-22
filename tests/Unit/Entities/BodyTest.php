@@ -7,10 +7,11 @@ use Dungeon\Entities\People\Body;
 use Dungeon\NPC;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+ * @covers \Dungeon\Entities\People\Body
+ */
 class BodyTest extends TestCase
 {
     use DatabaseMigrations,

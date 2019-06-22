@@ -13,6 +13,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Dungeon\Entities\People\Body;
 
+/**
+ * @covers \Dungeon\Commands\EquipCommand
+ */
 class EquipCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

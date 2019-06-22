@@ -13,6 +13,9 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Dungeon\Collections\EntityCollection;
 
+/**
+ * @covers \Dungeon\Commands\LookCommand
+ */
 class LookCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

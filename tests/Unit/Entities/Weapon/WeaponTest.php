@@ -8,6 +8,9 @@ use Dungeon\DamageTypes\MeleeDamage;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+/**
+ * @covers \Dungeon\Entities\Weapon
+ */
 class WeaponTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

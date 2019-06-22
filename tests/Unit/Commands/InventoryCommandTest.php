@@ -11,6 +11,9 @@ use Dungeon\Commands\InventoryCommand;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+/**
+ * @covers \Dungeon\Commands\InventoryCommand
+ */
 class InventoryCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;

@@ -9,11 +9,12 @@ use Tests\TestCase;
 use Dungeon\CurrentLocation;
 use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\People\Body;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Dungeon\Collections\EntityCollection;
 
+/**
+ * @covers \Dungeon\CurrentLocation
+ */
 class CurrentLocationTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
