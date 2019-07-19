@@ -2,15 +2,15 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\User;
-use Dungeon\Room;
-use Dungeon\Entity;
-use Tests\TestCase;
-use Dungeon\Entities\Food\Food;
 use Dungeon\Commands\TakeCommand;
+use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\People\Body;
+use Dungeon\Entity;
+use Dungeon\Room;
+use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 /**
  * @covers \Dungeon\Commands\TakeCommand
@@ -59,6 +59,21 @@ class TakeCommandTest extends TestCase
         $potato = Entity::find($this->potato->id);
 
         $this->assertEquals($this->user->id, $potato->owner_id);
+    }
+
+    /** @test */
+    public function cant_take_things_that_are_untakeable()
+    {
+        $this->potato->can_be_taken = false;
+        $this->potato->moveToRoom($this->room);
+        $this->potato->save();
+
+        $command = new TakeCommand('take potato', $this->user);
+        $command->execute();
+
+        $potato = Entity::find($this->potato->id);
+
+        $this->assertNull($potato->owner_id);
     }
 
     /** @test */

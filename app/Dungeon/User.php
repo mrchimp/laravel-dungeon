@@ -2,17 +2,17 @@
 
 namespace Dungeon;
 
+use App\Observers\SerializableObserver;
+use Dungeon\Contracts\Interactable;
+use Dungeon\Entities\People\Body;
 use Dungeon\Room;
-use Dungeon\Traits\HasBody;
 use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasApparel;
+use Dungeon\Traits\HasBody;
 use Dungeon\Traits\HasInventory;
-use Dungeon\Entities\People\Body;
-use Dungeon\Contracts\Interactable;
-use App\Observers\SerializableObserver;
-use Illuminate\Notifications\Notifiable;
 use Dungeon\Traits\HasSerializableAttributes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements Interactable
 {
@@ -77,9 +77,7 @@ class User extends Authenticatable implements Interactable
 
     public function getSerializable()
     {
-        return [
-            'health',
-        ];
+        return ['health', 'can_be_taken'];
     }
 
     public function body()

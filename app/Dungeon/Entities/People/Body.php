@@ -20,9 +20,9 @@ class Body extends Entity
 
     public function getSerializable()
     {
-        return [
+        return array_merge(parent::getSerializable(), [
             'health',
-        ];
+        ]);
     }
 
     public function ownerType()

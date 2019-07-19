@@ -2,15 +2,15 @@
 
 namespace Dungeon;
 
+use App\Observers\SerializableObserver;
+use Dungeon\Entities\People\Body;
 use Dungeon\Room;
+use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasBody;
 use Dungeon\Traits\HasHealth;
-use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasInventory;
-use Dungeon\Entities\People\Body;
-use App\Observers\SerializableObserver;
-use Illuminate\Database\Eloquent\Model;
 use Dungeon\Traits\HasSerializableAttributes;
+use Illuminate\Database\Eloquent\Model;
 
 class NPC extends Model
 {
@@ -36,11 +36,6 @@ class NPC extends Model
         parent::boot();
 
         self::observe(new SerializableObserver);
-    }
-
-    public function getSerializable()
-    {
-        return [];
     }
 
     public function room()

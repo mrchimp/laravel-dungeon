@@ -36,6 +36,10 @@ class TakeCommand extends Command
             return $this->fail('You already have that.');
         }
 
+        if (!$entity->canBeTaken()) {
+            return $this->fail('You cannot take that.');
+        }
+
         $entity->giveToUser($this->user);
         $entity->save();
 

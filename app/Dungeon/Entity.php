@@ -47,6 +47,11 @@ class Entity extends Model implements Interactable
         self::observe(new HasOwnClassObserver);
     }
 
+    public function getSerializable()
+    {
+        return ['can_be_taken'];
+    }
+
     public function isEquipable()
     {
         return false;
@@ -231,5 +236,10 @@ class Entity extends Model implements Interactable
         }
 
         return $this->room;
+    }
+
+    public function canBeTaken()
+    {
+        return $this->can_be_taken;
     }
 }

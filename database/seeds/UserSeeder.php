@@ -1,9 +1,9 @@
 <?php
 
-use App\User;
-use Dungeon\Room;
-use Illuminate\Database\Seeder;
 use Dungeon\Entities\People\Body;
+use Dungeon\Room;
+use Dungeon\User;
+use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
