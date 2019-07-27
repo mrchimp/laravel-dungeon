@@ -16,6 +16,8 @@ class Entity extends Model implements Interactable
 {
     use HasUuid, HasSerializableAttributes, Findable;
 
+    public $can_be_taken = true;
+
     protected $table = 'entities';
 
     protected $casts = [
@@ -213,7 +215,7 @@ class Entity extends Model implements Interactable
 
     public function ownedBy(User $user)
     {
-        return (int)$this->owner_id === (int)$user->id;
+        return (int) $this->owner_id === (int) $user->id;
     }
 
     public function toArray()
