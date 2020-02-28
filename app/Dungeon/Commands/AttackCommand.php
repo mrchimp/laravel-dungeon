@@ -29,18 +29,26 @@ class AttackCommand extends Command
         }
 
         $target_name = $this->inputPart('target');
-        $weapon_name = $this->inputPart('weapon');
-
-        $weapon = $this->entityFinder->findInInventory($weapon_name, $this->user);
         $target = $this->entityFinder->findUsers($target_name, $this->user->getRoom());
+
+        if (!$target) {
+            return $this->fail('Don\'t know who to attack.');
+        }
+
+        if (!$target->canBeAttacked()) {
+            return $this->fail('User cannot be attacked.');
+        }
+
+        $weapon_name = $this->inputPart('weapon');
+        $weapon = $this->entityFinder->findInInventory($weapon_name, $this->user);
 
         if (!$weapon) {
             return $this->fail('Can\'t use that weapon.');
         }
 
-        if (!$target) {
-            return $this->fail('Don\'t know who to attack.');
-        }
+        $target->owner->update([
+            'can_be_attacked' => false,
+        ]);
 
         $result = $weapon->attack($target);
 

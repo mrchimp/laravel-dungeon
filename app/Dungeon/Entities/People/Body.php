@@ -88,4 +88,17 @@ class Body extends Entity
         $this->giveToUser(null);
         $this->save();
     }
+
+    public function canBeAttacked()
+    {
+        if (!$this->owner) {
+            return false;
+        }
+
+        if (!$this->owner->canBeAttacked()) {
+            return false;
+        }
+
+        return true;
+    }
 }

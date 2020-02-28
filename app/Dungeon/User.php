@@ -47,6 +47,7 @@ class User extends Authenticatable implements Interactable
         'password',
         'health',
         'room_id',
+        'can_be_attacked',
     ];
 
     /**
@@ -189,5 +190,10 @@ class User extends Authenticatable implements Interactable
         }
 
         return false;
+    }
+
+    public function canBeAttacked()
+    {
+        return $this->can_be_attacked;
     }
 }

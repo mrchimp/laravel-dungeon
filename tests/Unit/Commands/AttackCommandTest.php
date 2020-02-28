@@ -22,45 +22,23 @@ class AttackCommandTest extends TestCase
     public function setup()
     {
         parent::setup();
-
-        $this->user = factory(User::class)->create([
-            'name' => 'Test User',
-        ]);
-
-        $this->body = factory(Body::class)->create();
-        $this->body
-            ->setHealth(50)
-            ->giveToUser($this->user)
-            ->save();
-
-        $this->enemy = factory(User::class)->create([
-            'name' => 'Enemy',
-        ]);
-
-        $this->enemy_body = factory(Body::class)->create();
-        $this->enemy_body
-            ->setHealth(100)
-            ->giveToUser($this->enemy)
-            ->save();
-
-        $this->room = factory(Room::class)->create([
-            'description' => 'A room. Maybe with a potato in it.',
-        ]);
-
-        $this->rock = factory(MeleeWeapon::class)->create([
-            'name' => 'Rock',
-            'description' => 'You can hit people with it.',
-            'damage_types' => [
-                MeleeDamage::class => 50,
-            ],
-        ]);
     }
 
     /** @test */
     public function you_can_attack_people_in_the_same_room_as_you()
     {
-        $this->user->moveTo($this->room)->save();
+        $this->user = $this->makeUser([
+            'name' => 'Test User',
+        ], 50);
+        $this->enemy = $this->makeUser([
+            'name' => 'Enemy',
+        ], 100);
+        $this->room = $this->makeRoom([
+            'description' => 'A room. Maybe with a potato in it.',
+        ]);
+        $this->rock = $this->makeRock();
 
+        $this->user->moveTo($this->room)->save();
         $this->enemy->moveTo($this->room)->save();
 
         $this->rock->giveToUser($this->user)->save();
@@ -70,6 +48,117 @@ class AttackCommandTest extends TestCase
 
         $enemy = User::where('name', 'Enemy')->with('body')->first();
 
-        $this->assertEquals(50, $enemy->body->getHealth());
+        $this->assertEquals(90, $enemy->body->getHealth());
+    }
+
+    /** @test */
+    public function you_cant_attack_someone_in_another_room()
+    {
+        $this->user = $this->makeUser([
+            'name' => 'Test User',
+        ], 50);
+        $this->enemy = $this->makeUser([
+            'name' => 'Enemy',
+        ], 100);
+        $this->room = $this->makeRoom();
+        $this->other_room = $this->makeRoom();
+        $this->rock = $this->makeRock();
+
+        $this->user->moveTo($this->room)->save();
+        $this->enemy->moveTo($this->other_room)->save();
+
+        $this->rock->giveToUser($this->user)->save();
+
+        $command = new AttackCommand('attack enemy with rock', $this->user);
+        $command->execute();
+
+        $enemy = User::where('name', 'Enemy')->first();
+
+        $this->assertEquals(100, $enemy->body->getHealth());
+    }
+
+    /** @test */
+    public function users_cant_be_attacked_if_can_be_attacked_is_false()
+    {
+        $this->user = $this->makeUser([
+            'name' => 'Test User',
+        ], 50);
+        $this->enemy = $this->makeUser([
+            'name' => 'Enemy',
+            'can_be_attacked' => false,
+        ], 100);
+        $this->room = $this->makeRoom();
+        $this->rock = $this->makeRock();
+
+        $this->user->moveTo($this->room)->save();
+        $this->enemy->moveTo($this->room)->save();
+        $this->rock->giveToUser($this->user)->save();
+
+        $command = new AttackCommand('attack enemy with rock', $this->user);
+        $command->execute();
+
+        $enemy = User::where('name', 'Enemy')->with('body')->first();
+
+        $this->assertEquals(100, $enemy->body->getHealth());
+    }
+
+    /** @test */
+    public function users_cant_be_attacked_if_they_are_dead()
+    {
+        $this->user = $this->makeUser([
+            'name' => 'Test User',
+        ], 50);
+        $this->enemy = $this->makeUser([
+            'name' => 'Enemy',
+            'can_be_attacked' => false,
+        ], 100);
+        $this->enemy->body->kill();
+        $this->room = $this->makeRoom();
+        $this->rock = $this->makeRock();
+
+        $this->user->moveTo($this->room)->save();
+        $this->enemy->moveTo($this->room)->save();
+        $this->rock->giveToUser($this->user)->save();
+
+        $command = new AttackCommand('attack enemy with rock', $this->user);
+        $command->execute();
+
+        $enemy = User::where('name', 'Enemy')->with('body')->first();
+
+        $this->assertFalse($command->success);
+        $this->assertNull($enemy->body);
+    }
+
+    /** @test */
+    public function users_can_only_be_attacked_once_per_turn()
+    {
+        $this->user = $this->makeUser([
+            'name' => 'Test User',
+        ], 50);
+        $this->enemy = $this->makeUser([
+            'name' => 'Enemy',
+        ], 100);
+        $this->room = $this->makeRoom();
+        $this->rock = $this->makeRock();
+
+        $this->user->moveTo($this->room)->save();
+        $this->enemy->moveTo($this->room)->save();
+        $this->rock->giveToUser($this->user)->save();
+
+        $command = new AttackCommand('attack enemy with rock', $this->user);
+        $command->execute();
+
+        $enemy = User::where('name', 'Enemy')->with('body')->first();
+
+        // First attack reduces health
+        $this->assertEquals(90, $enemy->body->getHealth());
+
+        $command = new AttackCommand('attack enemy with rock', $this->user);
+        $command->execute();
+
+        $enemy = User::where('name', 'Enemy')->with('body')->first();
+
+        // Second attack does nothing
+        $this->assertEquals(90, $enemy->body->getHealth());
     }
 }

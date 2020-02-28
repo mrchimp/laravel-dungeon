@@ -244,4 +244,9 @@ class Entity extends Model implements Interactable
     {
         return $this->can_be_taken;
     }
+
+    public function canBeAttacked()
+    {
+        return false;
+    }
 }

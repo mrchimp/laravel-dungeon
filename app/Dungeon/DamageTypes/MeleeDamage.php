@@ -2,8 +2,6 @@
 
 namespace Dungeon\DamageTypes;
 
-use Dungeon\DamageTypes\MeleeDamage;
-
 class MeleeDamage implements DamageType
 {
     /**
