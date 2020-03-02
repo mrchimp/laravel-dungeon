@@ -189,7 +189,7 @@ class User extends Authenticatable implements Interactable
             return $this->body->isDead();
         }
 
-        return false;
+        return true;
     }
 
     public function canBeAttacked()

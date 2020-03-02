@@ -25,7 +25,7 @@ abstract class TestCase extends BaseTestCase
         $this->assertEquals(EntityCollection::class, get_class($item));
     }
 
-    protected function makeUser($attributes = [], $health = 100)
+    protected function makeUser($attributes = [], $health = 100, $room = null)
     {
         $user = factory(User::class)->create(array_merge([
             'name' => 'Test User',
@@ -36,21 +36,30 @@ abstract class TestCase extends BaseTestCase
             ->giveToUser($user)
             ->save();
 
+        if ($room) {
+            $user->moveToRoom($room)->save();
+        }
+
         return $user->fresh()->load('body');
     }
 
     protected function makeRoom($attributes = [])
     {
-        return factory(Room::class)->create($attributes);
+        return factory(Room::class)->create(array_merge(
+            [
+                'description' => 'A room. Maybe with a potato in it.',
+            ],
+            $attributes
+        ));
     }
 
-    protected function makeRock()
+    protected function makeRock($damage = 10)
     {
         return factory(MeleeWeapon::class)->create([
             'name' => 'Rock',
             'description' => 'You can hit people with it.',
             'damage_types' => [
-                MeleeDamage::Class => 10
+                MeleeDamage::class => $damage,
             ],
         ]);
     }
