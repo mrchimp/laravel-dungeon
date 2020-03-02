@@ -2,6 +2,8 @@
 
 namespace Dungeon;
 
+use Dungeon\Contracts\WeaponInterface;
+use Dungeon\Entities\People\Body;
 use Dungeon\Room;
 use Dungeon\User;
 
@@ -55,6 +57,18 @@ class EntityFinder
     }
 
     /**
+     * Find a weapon in an inventory
+     *
+     * @return Entity
+     */
+    public function findWeaponInInventory($query, User $user)
+    {
+        return $user->inventory->first(function ($entity) use ($query) {
+            return $entity->nameMatchesQuery($query) && $entity instanceof WeaponInterface;
+        });
+    }
+
+    /**
      * Find an Entity in the current room by name
      *
      * @param string $query
@@ -99,7 +113,7 @@ class EntityFinder
      *
      * @param string $query
      * @param Room $room
-     * @return User
+     * @return Body
      */
     public function findUsers($query, Room $room = null)
     {

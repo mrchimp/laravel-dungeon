@@ -37,7 +37,7 @@ abstract class TestCase extends BaseTestCase
             ->save();
 
         if ($room) {
-            $user->moveToRoom($room)->save();
+            $user->moveTo($room)->save();
         }
 
         return $user->fresh()->load('body');

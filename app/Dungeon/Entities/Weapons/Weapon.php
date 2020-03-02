@@ -2,10 +2,11 @@
 
 namespace Dungeon\Entities;
 
-use Dungeon\Entity;
+use Dungeon\Contracts\WeaponInterface;
 use Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\Entity;
 
-class Weapon extends Entity
+class Weapon extends Entity implements WeaponInterface
 {
     /**
      * Default serializable attributes

@@ -2,11 +2,13 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\User;
-use Tests\TestCase;
 use Dungeon\Commands\AttackCommand;
+use Dungeon\Events\AfterAttack;
+use Dungeon\Events\BeforeAttack;
+use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 /**
  * @covers \Dungeon\Commands\AttackCommand
@@ -24,12 +26,8 @@ class AttackCommandTest extends TestCase
     public function you_can_attack_people_in_the_same_room_as_you()
     {
         $room = $this->makeRoom();
-        $user = $this->makeUser([
-            'name' => 'Test User',
-        ], 50, $room);
-        $enemy = $this->makeUser([
-            'name' => 'Enemy',
-        ], 100, $room);
+        $user = $this->makeUser([], 50, $room);
+        $enemy = $this->makeUser(['name' => 'Enemy'], 100, $room);
 
         $rock = $this->makeRock();
         $rock->giveToUser($user)->save();
@@ -47,12 +45,8 @@ class AttackCommandTest extends TestCase
     {
         $room = $this->makeRoom();
         $other_room = $this->makeRoom();
-        $user = $this->makeUser([
-            'name' => 'Test User',
-        ], 50, $room);
-        $enemy = $this->makeUser([
-            'name' => 'Enemy',
-        ], 100, $other_room);
+        $user = $this->makeUser([], 50, $room);
+        $enemy = $this->makeUser(['name' => 'Enemy'], 100, $other_room);
 
         $rock = $this->makeRock();
         $rock->giveToUser($user)->save();
@@ -69,9 +63,7 @@ class AttackCommandTest extends TestCase
     public function users_cant_be_attacked_if_can_be_attacked_is_false()
     {
         $room = $this->makeRoom();
-        $user = $this->makeUser([
-            'name' => 'Test User',
-        ], 50, $room);
+        $user = $this->makeUser([], 50, $room);
         $enemy = $this->makeUser([
             'name' => 'Enemy',
             'can_be_attacked' => false,
@@ -92,9 +84,7 @@ class AttackCommandTest extends TestCase
     public function users_cant_be_attacked_if_they_are_dead()
     {
         $room = $this->makeRoom();
-        $user = $this->makeUser([
-            'name' => 'Test User',
-        ], 50, $room);
+        $user = $this->makeUser([], 50, $room);
         $enemy = $this->makeUser([
             'name' => 'Enemy',
             'can_be_attacked' => false,
@@ -117,12 +107,8 @@ class AttackCommandTest extends TestCase
     public function users_can_only_be_attacked_once_per_turn()
     {
         $room = $this->makeRoom();
-        $user = $this->makeUser([
-            'name' => 'Test User',
-        ], 50, $room);
-        $enemy = $this->makeUser([
-            'name' => 'Enemy',
-        ], 100, $room);
+        $user = $this->makeUser([], 50, $room);
+        $enemy = $this->makeUser(['name' => 'Enemy'], 100, $room);
         $rock = $this->makeRock();
 
         $rock->giveToUser($user)->save();
@@ -147,15 +133,9 @@ class AttackCommandTest extends TestCase
     /** @test */
     public function dealing_enough_damage_kills_the_user()
     {
-        $room = $this->makeRoom([
-            'description' => 'A room. Maybe with a potato in it.',
-        ]);
-        $user = $this->makeUser([
-            'name' => 'Test User',
-        ], 50, $room);
-        $enemy = $this->makeUser([
-            'name' => 'Enemy',
-        ], 100, $room);
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 50, $room);
+        $enemy = $this->makeUser(['name' => 'Enemy'], 100, $room);
         $rock = $this->makeRock(200);
 
         $rock->giveToUser($user)->save();
@@ -168,4 +148,37 @@ class AttackCommandTest extends TestCase
         $this->assertTrue($enemy->isDead());
         $this->assertNull($enemy->body);
     }
+
+    /** @test */
+    public function beforeAttack_event_is_triggered_before_an_attack_happens()
+    {
+        $this->expectsEvents(BeforeAttacK::class);
+
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 50, $room);
+        $this->makeUser(['name' => 'Enemy'], 100, $room);
+        $rock = $this->makeRock(100);
+
+        $rock->giveToUser($user)->save();
+
+        $command = new AttackCommand('attack enemy with rock', $user);
+        $command->execute();
+    }
+
+    /** @test */
+    public function afterAttack_event_is_triggered_after_an_attack_happens()
+    {
+        $this->expectsEvents(AfterAttack::class);
+
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 50, $room);
+        $this->makeUser(['name' => 'Enemy'], 100, $room);
+        $rock = $this->makeRock(100);
+
+        $rock->giveTOUser($user)->save();
+
+        $command = new AttackCommand('attack enemy with rock', $user);
+        $command->execute();
+    }
+
 }

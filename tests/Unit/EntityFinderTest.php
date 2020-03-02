@@ -118,4 +118,21 @@ class EntityFinderTest extends TestCase
 
         $this->assertEquals($other_player->body->id, $entity->id);
     }
+
+    /** @test */
+    public function can_find_weapons()
+    {
+        $rocket = factory(Entity::class)->create();
+
+        $user = $this->makeUser([], 10);
+        $rock = $this->makeRock();
+
+        $rocket->giveToUser($user)->save();
+        $rock->giveToUser($user)->save();
+
+        $entity = $this->finder->findWeaponInInventory('rock', $user);
+
+        $this->assertEquals($rock->id, $entity->id);
+    }
+
 }
