@@ -2,7 +2,7 @@
 
 namespace Dungeon\Commands;
 
-use App\User;
+use Dungeon\User;
 
 class RespawnCommand extends Command
 {
@@ -31,13 +31,7 @@ class RespawnCommand extends Command
         if (!$target_name) {
             $target = $this->user;
         } else {
-            // @todo - this is pointless cos they'll be dead...
-            // should add a method to the finder for finding dead people
-            $target = $this->entityFinder->find($target_name, $this->user);
-
-            if (!$target) {
-                $target = User::where('name', 'like', '%' . $target_name . '%')->first();
-            }
+            $target = User::where('name', 'like', '%' . $target_name . '%')->first();
         }
 
         if (!$target->isDead()) {
