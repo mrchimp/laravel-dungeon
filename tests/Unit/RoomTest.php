@@ -10,44 +10,30 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-/**
- * @covers \Dungeon\Room
- */
 class RoomTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    protected $room;
-
-    public function setup()
-    {
-        parent::setup();
-
-        $this->room = factory(Room::class)->create([
-            'description' => 'This is a room.',
-        ]);
-    }
-
     /** @test */
     public function has_a_description()
     {
+        $room = $this->makeRoom([
+            'description' => 'This is a room.',
+        ]);
+
         $this->assertEquals(
             'This is a room.',
-            $this->room->getDescription()
+            $room->getDescription()
         );
     }
 
     /** @test */
     public function can_have_people_in_it()
     {
-        $user = factory(User::class)->create([
-            'name' => 'Test User',
-        ]);
+        $room = $this->makeRoom();
+        $user = $this->makeUser();
 
-        $body = factory(Body::class)->create();
-        $body->giveToUser($user)->save();
-
-        $user->moveTo($this->room)->save();
+        $user->moveTo($room)->save();
 
         $room = Room::with('contents')->first();
 
@@ -59,14 +45,9 @@ class RoomTest extends TestCase
     /** @test */
     public function can_have_entities_in_it()
     {
-        $potato = factory(Food::class)->create([
-            'name' => 'Potato',
-            'description' => 'A potato.',
-        ]);
-
-        $potato->moveToRoom($this->room);
-
-        $potato->save();
+        $room = $this->makeRoom();
+        $potato = $this->makePotato();
+        $potato->moveToRoom($room)->save();
 
         $room = Room::first();
 

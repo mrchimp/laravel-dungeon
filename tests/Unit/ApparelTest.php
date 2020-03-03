@@ -13,24 +13,24 @@ class ApparelTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    public function setup()
-    {
-        parent::setup();
+    // public function setup()
+    // {
+    //     parent::setup();
 
-        $this->user = factory(User::class)->create([
-            'name' => 'Test User',
-        ]);
+    //     $this->user = factory(User::class)->create([
+    //         'name' => 'Test User',
+    //     ]);
 
-        $this->npc = factory(NPC::class)->create([
-            'name' => 'Test NPC',
-            'description' => 'An NPC for testing.',
-        ]);
+    //     $this->npc = factory(NPC::class)->create([
+    //         'name' => 'Test NPC',
+    //         'description' => 'An NPC for testing.',
+    //     ]);
 
-        $this->hat = factory(Apparel::class)->create([
-            'name' => 'Hat',
-            'description' => 'You can wear it on yer head.',
-        ]);
-    }
+    //     $this->hat = factory(Apparel::class)->create([
+    //         'name' => 'Hat',
+    //         'description' => 'You can wear it on yer head.',
+    //     ]);
+    // }
 
     /** @test */
     public function users_can_wear_apparel()

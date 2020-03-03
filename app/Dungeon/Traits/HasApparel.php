@@ -2,7 +2,7 @@
 
 namespace Dungeon\Traits;
 
-use Dungeon\Entity;
+use Dungeon\Apparel\Apparel;
 
 trait HasApparel
 {
@@ -11,13 +11,17 @@ trait HasApparel
         return $this
             ->inventory
             ->filter(function ($apparel) {
-                return $apparel->isEquiped() && $apparel->getType() === 'apparel';
+                if ($apparel->getType() !== 'apparel') {
+                    return false;
+                }
+
+                return $apparel->isEquiped();
             });
     }
 
     public function wear(Apparel $apparel)
     {
-        $apparel->giveToUser($apparel);
+        $apparel->giveToUser($this);
         $apparel->equip();
 
         return $this;

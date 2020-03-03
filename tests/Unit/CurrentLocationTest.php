@@ -3,82 +3,44 @@
 namespace Tests\Unit\Dungeon;
 
 use Dungeon\CurrentLocation;
-use Dungeon\Entities\Food\Food;
-use Dungeon\Entities\People\Body;
-use Dungeon\NPC;
-use Dungeon\Room;
-use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-/**
- * @covers \Dungeon\CurrentLocation
- */
 class CurrentLocationTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    public function setup()
-    {
-        parent::setup();
-
-        $this->user = factory(User::class)->create([
-            'name' => 'Test User',
-        ]);
-        $user_body = factory(Body::class)->create();
-        $user_body->giveToUser($this->user)->save();
-
-        $this->player_2 = factory(User::class)->create([
-            'name' => 'Player 2',
-        ]);
-        $player_2_body = factory(Body::class)->create();
-        $player_2_body->giveToUser($this->player_2)->save();
-
-        $this->potato = factory(Food::class)->create([
-            'name' => 'Potato',
-            'description' => 'You can eat it.',
-        ]);
-
-        $this->npc = factory(NPC::class)->create([
-            'name' => 'Test NPC',
-            'description' => 'An NPC for testing',
-        ]);
-
-        $npc_body = factory(Body::class)->create();
-        $npc_body->giveToNPC($this->npc)->save();
-
-        $this->north_room = factory(Room::class)->create([
-            'description' => 'This is the north room.',
-        ]);
-
-        $this->south_room = factory(Room::class)->create([
-            'description' => 'This is the south room.',
-        ]);
-
-        $this->user->moveTo($this->north_room)->save();
-        $this->player_2->moveTo($this->north_room)->save();
-        $this->npc->moveTo($this->north_room)->save();
-        $this->potato->moveToRoom($this->north_room)->save();
-        $this->north_room->setSouthExit($this->south_room)->save();
-
-        $this->location = new CurrentLocation($this->user);
-    }
-
     /** @test */
     public function gets_players_in_room()
     {
-        $players = $this->location->getPlayers();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([
+            'name' => 'Gordon',
+        ], 100, $room);
+        $this->makeUser([
+            'name' => 'Larry',
+        ], 100, $room);
+
+        $location = new CurrentLocation($user);
+
+        $players = $location->getPlayers();
 
         $this->assertIsEntityCollection($players);
         $this->assertCount(1, $players);
-        $this->assertEquals('Player 2', $players->first()->getName());
+        $this->assertEquals('Larry', $players->first()->getName());
     }
 
     /** @test */
     public function gets_npcs_in_room()
     {
-        $npcs = $this->location->getNPCs();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
+        $this->makeNPC([], 100, $room);
+
+        $location = new CurrentLocation($user);
+
+        $npcs = $location->getNPCs();
 
         $this->assertIsEntityCollection($npcs);
         $this->assertCount(1, $npcs);
@@ -88,7 +50,16 @@ class CurrentLocationTest extends TestCase
     /** @test */
     public function gets_items_in_room()
     {
-        $items = $this->location->getItems();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
+        $potato = $this->makePotato([
+            'name' => 'Potato',
+        ]);
+        $potato->moveToRoom($room)->save();
+
+        $location = new CurrentLocation($user);
+
+        $items = $location->getItems();
 
         $this->assertIsEntityCollection($items);
         $this->assertCount(1, $items);
@@ -98,7 +69,17 @@ class CurrentLocationTest extends TestCase
     /** @test */
     public function gets_exits_in_room()
     {
-        $exits = $this->location->getExits();
+        $north_room = $this->makeRoom();
+        $south_room = $this->makeRoom([
+            'description' => 'This is the south room.',
+        ]);
+        $user = $this->makeUser([], 100, $north_room);
+
+        $north_room->setSouthExit($south_room)->save();
+
+        $location = new CurrentLocation($user);
+
+        $exits = $location->getExits();
 
         $this->assertIsCollection($exits);
         $this->assertCount(1, $exits);

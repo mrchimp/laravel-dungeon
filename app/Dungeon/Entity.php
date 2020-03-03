@@ -162,7 +162,7 @@ class Entity extends Model implements Interactable
         }
 
         $this->moveToVoid();
-
+        // dd('associating with', $user);
         $this->owner()->associate($user);
 
         return $this;

@@ -5,9 +5,6 @@ namespace Tests\Unit\Dungeon;
 use Dungeon\CommandParser;
 use Tests\TestCase;
 
-/**
- * @covers \Dungeon\CommandParser
- */
 class CommandParserTest extends TestCase
 {
     /** @test */
@@ -92,6 +89,7 @@ class CommandParserTest extends TestCase
         $this->assertEquals('box', $parser->getObjects()[1]);
     }
 
+    /** @test */
     public function handles_verb_object_in_object_structure_with_spaces()
     {
         $parser = new CommandParser('put raw potato in pre-heated oven');
@@ -100,6 +98,6 @@ class CommandParserTest extends TestCase
         $this->assertCount(2, $parser->getObjects());
         $this->assertCount(0, $parser->getSubjects());
         $this->assertEquals('raw potato', $parser->getObjects()[0]);
-        $this->assertEquals('pre-heated box', $parser->getObjects()[1]);
+        $this->assertEquals('pre-heated oven', $parser->getObjects()[1]);
     }
 }

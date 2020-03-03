@@ -105,6 +105,12 @@ class User extends Authenticatable implements Interactable
         return $this->name;
     }
 
+    /**
+     * @todo remove - go through bdy instead
+     *
+     * @param boolean $refresh
+     * @return void
+     */
     public function getInventory($refresh = false)
     {
         if (!$this->body) {
