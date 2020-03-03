@@ -40,6 +40,7 @@ class EatCommand extends Command
 
         $entity->eat($this->user);
         $this->user->save();
+        $this->user->body->save();
 
         $message = 'You eat the ' . e($entity->getName()) . '. '.
             'It heals you for ' . $entity->getHealing() . '. ' .

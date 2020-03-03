@@ -3,18 +3,11 @@
 namespace Tests\Unit\Dungeon\Commands;
 
 use Dungeon\Commands\DropCommand;
-use Dungeon\Entities\Food\Food;
-use Dungeon\Entities\People\Body;
 use Dungeon\Entity;
-use Dungeon\Room;
-use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-/**
- * @covers \Dungeon\Commands\DropCommand
- */
 class DropCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
@@ -23,54 +16,50 @@ class DropCommandTest extends TestCase
     {
         parent::setup();
 
-        $this->user = factory(User::class)->create([
-            'name' => 'Test User',
-        ]);
-
-        $this->body = factory(Body::class)->create();
-        $this->body->giveToUser($this->user)->save();
-
-        $this->room = factory(Room::class)->create([
-            'description' => 'A room. Maybe with a potato in it.',
-        ]);
-
-        $this->potato = factory(Food::class)->create([
-            'name' => 'Potato',
-            'description' => 'A potato.',
-        ]);
+        $room = $this->makeRoom();
+        $this->user = $this->makeUser([], 100, $room);
+        $this->potato = $this->makePotato();
     }
 
     /** @test */
     public function you_cant_drop_things_that_arent_in_your_inventory()
     {
-        $command = new DropCommand('drop potato', $this->user);
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
+        $potato = $this->makePotato();
+
+        $command = new DropCommand('drop potato', $user);
         $command->execute();
 
         $response = $command->getMessage();
 
         $this->assertEquals('You don\'t have a potato', $response);
-        $this->assertNull($this->potato->owner_id);
-        $this->assertNull($this->potato->room_id);
-        $this->assertNull($this->potato->container_id);
+        $this->assertNull($potato->owner_id);
+        $this->assertNull($potato->room_id);
+        $this->assertNull($potato->container_id);
     }
 
     /** @test */
     public function you_can_drop_items()
     {
-        $this->potato->giveToUser($this->user);
-        $this->potato->save();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
+        $potato = $this->makePotato();
 
-        $this->user->moveTo($this->room);
-        $this->user->save();
+        $potato->giveToUser($user);
+        $potato->save();
 
-        $command = new DropCommand('drop potato', $this->user);
+        $user->moveTo($room);
+        $user->save();
+
+        $command = new DropCommand('drop potato', $user);
         $command->execute();
 
         $response = $command->getMessage();
 
-        $potato = Entity::find($this->potato->id);
+        $potato = Entity::find($potato->id);
 
         $this->assertEquals('You drop the Potato.', $response);
-        $this->assertEquals($this->room->id, $potato->room_id);
+        $this->assertEquals($room->id, $potato->room_id);
     }
 }

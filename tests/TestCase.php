@@ -2,10 +2,14 @@
 
 namespace Tests;
 
+use Dungeon\Apparel\Apparel;
 use Dungeon\Collections\EntityCollection;
 use Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\People\Body;
 use Dungeon\Entities\Weapons\Melee\MeleeWeapon;
+use Dungeon\Entity;
+use Dungeon\NPC;
 use Dungeon\Room;
 use Dungeon\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -43,6 +47,22 @@ abstract class TestCase extends BaseTestCase
         return $user->fresh()->load('body');
     }
 
+    /**
+     * Create an enemy
+     *
+     * @param array $attributes
+     * @param integer $health
+     * @param Room $room
+     *
+     * @return User
+     */
+    protected function makeEnemy($attributes = [], $health = 100, $room = null)
+    {
+        return $this->makeUser(array_merge([
+            'name' => 'Enemy',
+        ], $attributes), $health, $room);
+    }
+
     protected function makeRoom($attributes = [])
     {
         return factory(Room::class)->create(array_merge(
@@ -53,7 +73,7 @@ abstract class TestCase extends BaseTestCase
         ));
     }
 
-    protected function makeRock($damage = 10)
+    protected function makeRock(int $damage = 10)
     {
         return factory(MeleeWeapon::class)->create([
             'name' => 'Rock',
@@ -62,5 +82,58 @@ abstract class TestCase extends BaseTestCase
                 MeleeDamage::class => $damage,
             ],
         ]);
+    }
+
+    protected function makePotato(array $attributes = [], int $healing = 50)
+    {
+        return factory(Food::class)->create(array_merge([
+            'name' => 'Potato',
+            'description' => 'A potato.',
+        ], $attributes));
+    }
+
+    protected function makeHat(array $attributes = [])
+    {
+        return factory(Apparel::class)->create(array_merge([
+            'name' => 'Hat',
+            'description' => 'Headwear',
+            'equiped' => false,
+        ], $attributes));
+    }
+
+    protected function makeBox(array $attributes = [])
+    {
+        return factory(Entity::class)->create(array_merge([
+            'name' => 'Box',
+            'description' => 'You can put things in it.',
+            'class' => Entity::class,
+            'data' => [],
+        ], $attributes));
+    }
+
+    protected function makeNPC($attributes = [], $health = 100, $room = null)
+    {
+        $npc = factory(NPC::class)->create([
+            'name' => 'Test NPC',
+            'description' => 'An NPC for testing',
+        ]);
+
+        $npc_body = factory(Body::class)
+            ->create()
+            ->giveToNPC($npc);
+
+        $npc_body->save();
+
+        if ($room) {
+            $npc_body->moveToRoom($room);
+            $npc_body->save();
+        }
+
+        $npc->save();
+
+        $npc->load('body');
+        $npc->fresh();
+
+        return $npc;
     }
 }

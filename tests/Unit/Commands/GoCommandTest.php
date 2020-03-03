@@ -2,98 +2,76 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\User;
-use Dungeon\Room;
-use Tests\TestCase;
 use Dungeon\Commands\GoCommand;
-use Dungeon\Entities\People\Body;
+use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
-/**
- * @covers \Dungeon\Commands\GoCommand
- */
 class GoCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    protected $user;
-
-    protected $north_room;
-
-    protected $south_room;
-
-    protected $command;
-
-    public function setup()
-    {
-        parent::setup();
-
-        $this->user = factory(User::class)->create([
-            'name' => 'Test User',
-        ]);
-
-        factory(Body::class)
-            ->create()
-            ->giveToUser($this->user)
-            ->save();
-
-        $this->north_room = factory(Room::class)->create([
-            'description' => 'This is the north room.',
-        ]);
-
-        $this->south_room = factory(Room::class)->create([
-            'description' => 'This is the south room.',
-        ]);
-
-        $this->user->moveTo($this->north_room);
-        $this->north_room->setSouthExit($this->south_room);
-    }
-
     /** @test */
-    public function if_no_direction_is_given_give_error()
+    public function if_no_direction_is_given_command_fails()
     {
-        $command = new GoCommand('go', $this->user);
-        $command->execute();
-        $response = $command->getMessage();
+        $user = $this->makeUser();
 
-        $this->assertEquals('Go where?', $response);
+        $command = new GoCommand('go', $user);
+        $command->execute();
+
+        $this->assertFalse($command->success);
+        $this->assertEquals('Go where?', $command->getMessage());
     }
 
     /** @test */
     public function if_unknown_direction_is_given_give_an_error()
     {
-        $command = new GoCommand('go fake_direction_that_doesnt_exists', $this->user);
-        $command->execute();
-        $response = $command->getMessage();
+        $user = $this->makeUser();
 
-        $this->assertEquals('I don\'t know which way that is.', $response);
+        $command = new GoCommand('go fake_direction_that_doesnt_exists', $user);
+        $command->execute();
+
+        $this->assertFalse($command->success);
+        $this->assertEquals('I don\'t know which way that is.', $command->getMessage());
     }
 
     /** @test */
     public function if_no_exit_in_chosen_direction_give_error()
     {
-        $command = new GoCommand('go east', $this->user);
-        $command->execute();
-        $response = $command->getMessage();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
 
-        $this->assertEquals('I can\'t go that way.', $response);
+        $command = new GoCommand('go east', $user);
+        $command->execute();
+
+        $this->assertFalse($command->success);
+        $this->assertEquals('I can\'t go that way.', $command->getMessage());
     }
 
     /** @test */
     public function if_we_can_go_where_we_want_to_go_then_lets_go_there()
     {
-        $this->assertEquals($this->north_room->id, $this->user->getRoom()->id);
+        $north_room = $this->makeRoom([
+                'description' => 'This is the north room.',
+        ]);
+        $south_room = $this->makeRoom([
+                'description' => 'This is the south room.',
+        ]);
 
-        $command = new GoCommand('go south', $this->user);
+        $north_room->setSouthExit($south_room);
+        $user = $this->makeUser([], 100, $north_room);
+
+        $this->assertEquals($north_room->id, $user->getRoom()->id);
+
+        $command = new GoCommand('go south', $user);
         $command->execute();
 
-        $response = $command->getMessage();
-
-        $this->assertStringContainsString('You go', $response);
+        $this->assertTrue($command->success);
+        $this->assertStringContainsString('You go', $command->getMessage());
 
         $user = User::first();
 
-        $this->assertEquals($this->south_room->id, $user->getRoom()->id);
+        $this->assertEquals($south_room->id, $user->getRoom()->id);
     }
 }

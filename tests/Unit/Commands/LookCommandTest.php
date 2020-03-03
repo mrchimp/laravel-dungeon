@@ -2,79 +2,22 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\User;
-use Dungeon\NPC;
-use Dungeon\Room;
-use Tests\TestCase;
-use Dungeon\Entities\Food\Food;
+use Dungeon\Collections\EntityCollection;
 use Dungeon\Commands\LookCommand;
-use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Dungeon\Collections\EntityCollection;
+use Tests\TestCase;
 
-/**
- * @covers \Dungeon\Commands\LookCommand
- */
 class LookCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    protected $user;
-
-    public function setup()
-    {
-        parent::setup();
-
-        $this->user = factory(User::class)->create([
-            'name' => 'Test User',
-        ]);
-
-        $user_body = factory(Body::class)
-            ->create()
-            ->giveToUser($this->user);
-        $user_body->save();
-
-        $this->player_2 = factory(User::class)->create([
-            'name' => 'Player 2',
-        ]);
-
-        $player_2_body = factory(Body::class)
-            ->create()
-            ->giveToUser($this->player_2);
-        $player_2_body->save();
-
-        $this->npc = factory(NPC::class)->create([
-            'name' => 'Test NPC',
-            'description' => 'An NPC for testing',
-        ]);
-
-        $npc_body = factory(Body::class)
-            ->create()
-            ->giveToNPC($this->npc);
-        $npc_body->save();
-
-        $this->npc->load('body');
-        $this->npc->fresh();
-
-        $this->north_room = factory(Room::class)->create([
-            'description' => 'This is the north room.',
-        ]);
-
-        $this->south_room = factory(Room::class)->create([
-            'description' => 'This is the south room.',
-        ]);
-
-        $this->potato = factory(Food::class)->create([
-            'name' => 'Potato',
-            'description' => 'You can eat it',
-        ]);
-    }
-
     /** @test */
     public function matches_look_syntax()
     {
-        $command = new LookCommand('look', $this->user);
+        $user = $this->makeUser();
+
+        $command = new LookCommand('look', $user);
 
         $matches = $command->matches();
 
@@ -87,7 +30,9 @@ class LookCommandTest extends TestCase
     /** @test */
     public function matches_look_at_object_syntax()
     {
-        $command = new LookCommand('look at potato', $this->user);
+        $user = $this->makeUser();
+
+        $command = new LookCommand('look at potato', $user);
 
         $matches = $command->matches();
 
@@ -98,7 +43,9 @@ class LookCommandTest extends TestCase
     /** @test */
     public function matches_look_at_object_syntax_with_spaces()
     {
-        $command = new LookCommand('look at hot potato', $this->user);
+        $user = $this->makeUser();
+
+        $command = new LookCommand('look at hot potato', $user);
 
         $matches = $command->matches();
 
@@ -109,8 +56,9 @@ class LookCommandTest extends TestCase
     /** @test */
     public function gets_a_response_if_not_in_a_room()
     {
-        $command = new LookCommand('look', $this->user);
+        $user = $this->makeUser();
 
+        $command = new LookCommand('look', $user);
         $command->execute();
 
         $response = $command->getMessage();
@@ -124,28 +72,34 @@ class LookCommandTest extends TestCase
     /** @test */
     public function gets_current_room_description_if_logged_in()
     {
-        $this->user->moveTo($this->north_room);
+        $north_room = $this->makeRoom([
+            'description' => 'This is the north room.',
+        ]);
 
-        $command = new LookCommand('look', $this->user);
+        $user = $this->makeUser([], 100, $north_room);
 
+        $command = new LookCommand('look', $user);
         $command->execute();
-        $response = $command->getMessage();
 
         $this->assertEquals(
             'This is the north room.',
-            $response
+            $command->getMessage()
         );
     }
 
     /** @test */
     public function gets_exits()
     {
-        $this->user->moveTo($this->north_room);
-        $this->north_room->setSouthExit($this->south_room, [
+        $north_room = $this->makeRoom();
+        $south_room = $this->makeRoom();
+
+        $user = $this->makeUser([], 100, $north_room);
+
+        $north_room->setSouthExit($south_room, [
             'description' => 'A wooden door.',
         ]);
 
-        $command = new LookCommand('look', $this->user);
+        $command = new LookCommand('look', $user);
 
         $command->execute();
         $exits = $command->getOutputItem('exits');
@@ -157,12 +111,21 @@ class LookCommandTest extends TestCase
     /** @test */
     public function you_can_see_other_people_if_they_are_in_the_same_room()
     {
-        $this->user->moveTo($this->north_room)->save();
-        $this->player_2->moveTo($this->north_room)->save();
+        $north_room = $this->makeRoom();
+        $south_room = $this->makeRoom();
 
-        $command = new LookCommand('look', $this->user);
+        $user = $this->makeUser([], 100, $north_room);
+        $this->makeUser([
+            'name' => 'Player 2',
+        ], 100, $north_room);
 
+        $north_room->setSouthExit($south_room, [
+            'description' => 'A wooden door.',
+        ]);
+
+        $command = new LookCommand('look', $user);
         $command->execute();
+
         $players = $command->getOutputItem('players');
 
         $this->assertEquals(EntityCollection::class, get_class($players));
@@ -173,12 +136,15 @@ class LookCommandTest extends TestCase
     /** @test */
     public function you_can_see_npcs_if_they_are_in_the_same_room()
     {
-        $this->user->moveTo($this->north_room)->save();
-        $this->npc->moveTo($this->north_room)->save();
+        $north_room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $north_room);
+        $this->makeNPC([
+            'name' => 'Test NPC',
+        ], 100, $north_room);
 
-        $command = new LookCommand('look', $this->user);
-
+        $command = new LookCommand('look', $user);
         $command->execute();
+
         $npcs = $command->getOutputItem('npcs');
 
         $this->assertEquals(EntityCollection::class, get_class($npcs));
@@ -189,11 +155,15 @@ class LookCommandTest extends TestCase
     /** @test */
     public function you_can_see_items_that_are_in_the_room()
     {
-        $this->user->moveTo($this->north_room)->save();
-        $this->potato->moveToRoom($this->north_room)->save();
+        $north_room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $north_room);
+        $potato = $this->makePotato([
+            'name' => 'Potato',
+            'description' => 'You can eat it',
+        ])->moveToRoom($north_room);
+        $potato->save();
 
-        $command = new LookCommand('look', $this->user);
-
+        $command = new LookCommand('look', $user);
         $command->execute();
 
         $items = $command->getOutputItem('items');
@@ -206,10 +176,14 @@ class LookCommandTest extends TestCase
     /** @test */
     public function you_can_see_the_description_of_a_specific_entity()
     {
-        $this->user->moveTo($this->north_room)->save();
-        $this->potato->moveToRoom($this->north_room)->save();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
+        $this->makePotato([
+            'name' => 'Potato',
+            'description' => 'You can eat it',
+        ])->moveToRoom($room)->save();
 
-        $command = new LookCommand('look at potato', $this->user);
+        $command = new LookCommand('look at potato', $user);
         $command->matches();
         $command->execute();
 

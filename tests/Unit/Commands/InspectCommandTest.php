@@ -2,122 +2,85 @@
 
 namespace Tests\Unit\Dungeon\Commands;
 
-use Dungeon\User;
-use Dungeon\Room;
-use Dungeon\Entity;
-use Tests\TestCase;
-use Dungeon\Entities\Food\Food;
-use Dungeon\Entities\People\Body;
 use Dungeon\Commands\InspectCommand;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
-/**
- * @covers \Dungeon\Commands\InspectCommand
- */
 class InspectCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    public function setup()
-    {
-        parent::setup();
-
-        $this->user = factory(User::class)->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('fakepassword'),
-        ]);
-
-        $this->body = factory(Body::class)->create();
-        $this->body->giveToUser($this->user)->save();
-
-        $this->room = factory(Room::class)->create([
-            'description' => 'A room. Maybe with a potato in it.',
-        ]);
-
-        $this->potato = factory(Food::class)->create([
-            'name' => 'Potato',
-            'description' => 'A potato.',
-            'data' => [],
-        ]);
-
-        $this->box = factory(Entity::class)->create([
-            'name' => 'Box',
-            'description' => 'You can put things in it.',
-            'class' => Entity::class,
-            'data' => [],
-        ]);
-
-        $this->user->moveTo($this->room);
-        $this->user->save();
-    }
-
     /** @test */
     public function you_cant_inspect_things_that_you_cant_find()
     {
-        $this->command = new InspectCommand('inspect atlantis', $this->user);
-        $this->command->execute();
-        $response = $this->command->getMessage();
+        $user = $this->makeUser();
 
-        $this->assertStringContainsString('Could not find atlantis.', $response);
+        $command = new InspectCommand('inspect atlantis', $user);
+        $command->execute();
+
+        $this->assertStringContainsString('Could not find atlantis.', $command->getMessage());
     }
 
     /** @test */
     public function you_can_inspect_things_in_your_inventory()
     {
-        $this->potato->giveToUser($this->user);
-        $this->potato->save();
+        $user = $this->makeUser();
 
-        $this->command = new InspectCommand('inspect potato', $this->user);
-        $this->command->execute();
-        $response = $this->command->getMessage();
+        $potato = $this->makePotato()->giveToUser($user);
+        $potato->save();
 
-        $this->assertStringContainsString('A potato.', $response);
+        $command = new InspectCommand('inspect potato', $user);
+        $command->execute();
+
+        $this->assertStringContainsString('A potato.', $command->getMessage());
     }
 
     /** @test */
     public function you_can_inspect_things_in_the_room()
     {
-        $this->potato->moveToRoom($this->room);
-        $this->potato->save();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
+        $potato = $this->makePotato()->moveToRoom($room);
+        $potato->save();
 
-        $this->command = new InspectCommand('inspect potato', $this->user);
-        $this->command->execute();
-        $response = $this->command->getMessage();
+        $command = new InspectCommand('inspect potato', $user);
+        $command->execute();
 
-        $this->assertStringContainsString('A potato.', $response);
+        $this->assertStringContainsString('A potato.', $command->getMessage());
     }
 
     /** @test */
     public function you_can_inspect_things_in_containers()
     {
-        $this->potato->moveToContainer($this->box);
-        $this->potato->save();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
+        $box = $this->makeBox();
+        $box->moveToRoom($room)->save();
 
-        $this->box->moveToRoom($this->room);
-        $this->box->save();
+        $potato = $this->makePotato()->moveToContainer($box);
+        $potato->save();
 
-        $this->command = new InspectCommand('inspect potato', $this->user);
-        $this->command->execute();
-        $response = $this->command->getMessage();
+        $command = new InspectCommand('inspect potato', $user);
+        $command->execute();
 
-        $this->assertStringContainsString('A potato.', $response);
+        $this->assertStringContainsString('A potato.', $command->getMessage());
     }
 
     /** @test */
     public function you_can_see_the_contents_of_a_container_when_inspecting_it()
     {
-        $this->potato->moveToContainer($this->box);
-        $this->potato->save();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
+        $box = $this->makeBox()->moveToRoom($room);
+        $box->save();
 
-        $this->box->moveToRoom($this->room);
-        $this->box->save();
+        $potato = $this->makePotato()->moveToContainer($box);
+        $potato->save();
 
-        $this->command = new InspectCommand('inspect box', $this->user);
-        $this->command->execute();
-        $response = $this->command->getMessage();
+        $command = new InspectCommand('inspect box', $user);
+        $command->execute();
 
-        $this->assertStringContainsString('Potato', $response);
+        $this->assertStringContainsString('Potato', $command->getMessage());
     }
 }

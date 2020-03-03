@@ -10,9 +10,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-/**
- * @covers \Dungeon\Commands\AttackCommand
- */
 class AttackCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
@@ -27,7 +24,7 @@ class AttackCommandTest extends TestCase
     {
         $room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
-        $enemy = $this->makeUser(['name' => 'Enemy'], 100, $room);
+        $enemy = $this->makeEnemy([], 100, $room);
 
         $rock = $this->makeRock();
         $rock->giveToUser($user)->save();
@@ -46,7 +43,7 @@ class AttackCommandTest extends TestCase
         $room = $this->makeRoom();
         $other_room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
-        $enemy = $this->makeUser(['name' => 'Enemy'], 100, $other_room);
+        $enemy = $this->makeEnemy([], 100, $other_room);
 
         $rock = $this->makeRock();
         $rock->giveToUser($user)->save();
@@ -64,8 +61,7 @@ class AttackCommandTest extends TestCase
     {
         $room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
-        $enemy = $this->makeUser([
-            'name' => 'Enemy',
+        $enemy = $this->makeEnemy([
             'can_be_attacked' => false,
         ], 100, $room);
 
@@ -85,8 +81,7 @@ class AttackCommandTest extends TestCase
     {
         $room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
-        $enemy = $this->makeUser([
-            'name' => 'Enemy',
+        $enemy = $this->makeEnemy([
             'can_be_attacked' => false,
         ], 100, $room);
         $enemy->body->kill();
@@ -108,7 +103,7 @@ class AttackCommandTest extends TestCase
     {
         $room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
-        $enemy = $this->makeUser(['name' => 'Enemy'], 100, $room);
+        $enemy = $this->makeEnemy([], 100, $room);
         $rock = $this->makeRock();
 
         $rock->giveToUser($user)->save();
@@ -135,7 +130,7 @@ class AttackCommandTest extends TestCase
     {
         $room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
-        $enemy = $this->makeUser(['name' => 'Enemy'], 100, $room);
+        $enemy = $this->makeEnemy([], 100, $room);
         $rock = $this->makeRock(200);
 
         $rock->giveToUser($user)->save();
@@ -156,7 +151,7 @@ class AttackCommandTest extends TestCase
 
         $room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
-        $this->makeUser(['name' => 'Enemy'], 100, $room);
+        $this->makeEnemy([], 100, $room);
         $rock = $this->makeRock(100);
 
         $rock->giveToUser($user)->save();
@@ -172,7 +167,7 @@ class AttackCommandTest extends TestCase
 
         $room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
-        $this->makeUser(['name' => 'Enemy'], 100, $room);
+        $this->makeEnemy([], 100, $room);
         $rock = $this->makeRock(100);
 
         $rock->giveTOUser($user)->save();
@@ -180,5 +175,4 @@ class AttackCommandTest extends TestCase
         $command = new AttackCommand('attack enemy with rock', $user);
         $command->execute();
     }
-
 }
