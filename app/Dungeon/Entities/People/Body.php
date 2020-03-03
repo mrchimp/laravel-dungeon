@@ -18,14 +18,14 @@ class Body extends Entity
 
     protected $table = 'entities';
 
-    public function getSerializable()
+    public function getSerializable(): array
     {
         return array_merge(parent::getSerializable(), [
             'health',
         ]);
     }
 
-    public function ownerType()
+    public function ownerType(): ?string
     {
         if (!is_null($this->owner_id)) {
             return 'user';
@@ -43,7 +43,7 @@ class Body extends Entity
         throw new \Exception('You want to use the "owner" relationship, not "user".');
     }
 
-    public function giveToUser(User $user = null)
+    public function giveToUser(User $user = null): Body
     {
         $this->npc()->dissociate();
 
@@ -59,7 +59,7 @@ class Body extends Entity
         return $this;
     }
 
-    public function giveToNPC(NPC $npc = null)
+    public function giveToNPC(NPC $npc = null): Body
     {
         $this->owner()->dissociate();
 
@@ -75,21 +75,21 @@ class Body extends Entity
         return $this;
     }
 
-    public function moveToRoom(Room $room = null)
+    public function moveToRoom(Room $room = null): Body
     {
         $this->room()->associate($room);
 
         return $this;
     }
 
-    public function kill()
+    public function kill(): void
     {
         $this->room_id = null;
         $this->giveToUser(null);
         $this->save();
     }
 
-    public function canBeAttacked()
+    public function canBeAttacked(): bool
     {
         if (!$this->owner) {
             return false;
@@ -100,5 +100,15 @@ class Body extends Entity
         }
 
         return true;
+    }
+
+    /**
+     * Determine if the body is alive
+     *
+     * @return boolean
+     */
+    public function isAlive(): bool
+    {
+        return $this->health > 0;
     }
 }

@@ -86,10 +86,14 @@ abstract class TestCase extends BaseTestCase
 
     protected function makePotato(array $attributes = [], int $healing = 50)
     {
-        return factory(Food::class)->create(array_merge([
+        $potato = factory(Food::class)->create(array_merge([
             'name' => 'Potato',
             'description' => 'A potato.',
         ], $attributes));
+
+        $potato->setHealing($healing)->save();
+
+        return $potato;
     }
 
     protected function makeHat(array $attributes = [])
@@ -113,10 +117,10 @@ abstract class TestCase extends BaseTestCase
 
     protected function makeNPC($attributes = [], $health = 100, $room = null)
     {
-        $npc = factory(NPC::class)->create([
+        $npc = factory(NPC::class)->create(array_merge([
             'name' => 'Test NPC',
             'description' => 'An NPC for testing',
-        ]);
+        ], $attributes));
 
         $npc_body = factory(Body::class)
             ->create()

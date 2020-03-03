@@ -2,23 +2,15 @@
 
 namespace Tests\Unit\Dungeon\Entities\Weapons;
 
-use Tests\TestCase;
-use Dungeon\Entities\Weapon;
 use Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\Entities\Weapon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
-/**
- * @covers \Dungeon\Entities\Weapon
- */
 class WeaponTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
-
-    public function setup()
-    {
-        parent::setup();
-    }
 
     /** @test */
     public function damage_types_are_stored_and_restored_when_saved_to_database_using_create()

@@ -3,76 +3,50 @@
 namespace Tests\Unit\Dungeon\Entities\Food;
 
 use Dungeon\Entities\Food\Food;
-use Dungeon\Entities\People\Body;
 use Dungeon\EntityFinder;
-use Dungeon\Room;
-use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-/**
- * @covers \Dungeon\Entities\Food\Food
- */
 class FoodTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    public function setup()
-    {
-        parent::setup();
-
-        $this->user = factory(User::class)->create([
-            'name' => 'Test User',
-        ]);
-
-        $body = factory(Body::class)->create();
-        $body->giveToUser($this->user)->save();
-        $this->user->setHealth(50)->save();
-
-        $this->food = factory(Food::class)->create([
-            'name' => 'Potato',
-            'description' => 'A potato.',
-        ]);
-        $this->food->setHealing(10);
-
-        $this->room = factory(Room::class)->create([
-            'description' => 'A space for things.',
-        ]);
-    }
-
     /** @test */
     public function eating_heals_consumer()
     {
-        $this->food->eat($this->user);
-        $this->assertEquals(60, $this->user->getHealth());
+        $user = $this->makeUser([], 50);
+        $potato = $this->makePotato([], 50);
+
+        $potato->eat($user);
+
+        $this->assertEquals(100, $user->getHealth());
     }
 
     /** @test */
     public function healing_is_stored_and_retrieved_to_db()
     {
-        $this->food->setHealing(23);
-        $this->food->save();
+        $potato = $this->makePotato([], 50);
+        $potato->setHealing(23)->save();
 
-        $food = Food::find($this->food->id);
+        $potato = Food::find($potato->id);
 
-        $this->assertEquals(23, $food->healing);
+        $this->assertEquals(23, $potato->healing);
     }
 
     /** @test */
     public function healing_is_stored_and_retrieved_when_using_finder()
     {
-        $this->user->moveTo($this->room);
-        $this->user->save();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
 
-        $this->food->setHealing(23);
-        $this->food->giveToUser($this->user);
-        $this->food->save();
+        $potato = $this->makePotato()->setHealing(23)->giveToUser($user);
+        $potato->save();
 
         $finder = new EntityFinder;
 
-        $food = $finder->find('potato', $this->user);
+        $potato = $finder->find('potato', $user);
 
-        $this->assertEquals(23, $food->healing);
+        $this->assertEquals(23, $potato->healing);
     }
 }

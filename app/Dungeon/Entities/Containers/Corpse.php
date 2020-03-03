@@ -6,5 +6,5 @@ use Dungeon\Entity;
 
 class Corpse extends Entity
 {
-
+    //
 }

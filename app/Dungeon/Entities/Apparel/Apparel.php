@@ -2,8 +2,8 @@
 
 namespace Dungeon\Apparel;
 
-use Dungeon\Traits\IsEquipable;
 use Dungeon\Entity;
+use Dungeon\Traits\IsEquipable;
 
 /**
  * A piece of clothing or armour that can be equipped
@@ -15,41 +15,32 @@ class Apparel extends Entity
 
     /**
      * The name of this type of entity
-     *
-     * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'apparel';
     }
 
     /**
      * Whether this item can be equipped
-     *
-     * @return boolean
      */
-    public function isEquipable()
+    public function isEquipable(): bool
     {
         return true;
     }
 
     /**
      * Whether this item is currently being worn
-     *
-     * @return boolean
      */
-    public function isWorn()
+    public function isWorn(): bool
     {
         return $this->isEquiped();
     }
 
     /**
      * Put this item of apparel on
-     *
-     * @param boolean $wear
-     * @return self
      */
-    public function wear($wear = true)
+    public function wear(bool $wear = true): Apparel
     {
         if (is_null($this->owner_id) && is_null($this->npc_id)) {
             throw new \Exception('Trying to wear an item that has no owner.');
@@ -64,10 +55,8 @@ class Apparel extends Entity
      * Verbs that this items supports
      *
      * @todo don't think this way of doing things is sustainable
-     *
-     * @return void
      */
-    public function getVerbs()
+    public function getVerbs(): array
     {
         $verbs = parent::getVerbs();
 

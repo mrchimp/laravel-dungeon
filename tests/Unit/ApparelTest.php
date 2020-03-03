@@ -9,9 +9,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-/**
- * @covers \Dungeon\Apparel\Apparel
- */
 class ApparelTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
@@ -38,9 +35,9 @@ class ApparelTest extends TestCase
     /** @test */
     public function users_can_wear_apparel()
     {
-        $this->hat->giveToUser($this->user);
-        $this->hat->wear();
-        $this->hat->save();
+        $user = $this->makeUser();
+        $hat = $this->makeHat()->giveToUser($user)->wear();
+        $hat->save();
 
         $user = User::first();
 
@@ -52,9 +49,9 @@ class ApparelTest extends TestCase
     /** @test */
     public function npcs_can_wear_apparel()
     {
-        $this->hat->giveToNPC($this->npc);
-        $this->hat->wear();
-        $this->hat->save();
+        $npc = $this->makeNPC();
+        $hat = $this->makeHat()->giveToNPC($npc)->wear();
+        $hat->save();
 
         $npc = NPC::first();
 

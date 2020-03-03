@@ -54,14 +54,15 @@ class BodyTest extends TestCase
         $this->assertEquals($npc->id, $the_npc->id);
     }
 
+    /** @test */
     public function can_have_health()
     {
         $this->body->setHealth(50);
 
-        $health = $this->body->getHealth();
         $this->assertEquals(50, $this->body->getHealth());
     }
 
+    /** @test */
     public function can_be_hurt()
     {
         $user = factory(User::class)->create([
@@ -71,22 +72,23 @@ class BodyTest extends TestCase
         $this->body->setHealth(100);
 
         $this->body->hurt(50);
-        $health = $this->body->getHealth();
 
-        $this->assertEquals(50, $health);
+        $this->assertEquals(50, $this->body->getHealth());
     }
 
+    /** @test */
     public function can_die()
     {
         $this->body->setHealth(100);
 
-        $this->assert(true, $this->body->isAlive());
+        $this->assertEquals(true, $this->body->isAlive());
 
         $this->body->hurt(100);
 
-        $this->assert(false, $this->body->isAlive());
+        $this->assertEquals(false, $this->body->isAlive());
     }
 
+    /** @test */
     public function when_killed_the_user_is_detached()
     {
         $user = factory(User::class)->create([
@@ -102,18 +104,30 @@ class BodyTest extends TestCase
         $this->assertNull($body->owner);
     }
 
+    /** @test */
     public function if_alive_cannot_be_looted()
     {
         $this->markTestIncomplete();
+
     }
 
+    /** @test */
     public function if_dead_can_be_looted()
     {
         $this->markTestIncomplete();
     }
 
+    /** @test */
     public function the_body_should_inherit_the_owners_name()
     {
-        $this->markTestIncomplete();
+        $user = factory(User::class)->create([
+            'name' => 'Geoff',
+        ]);
+
+        $body = factory(Body::class)->create();
+
+        $body->giveToUser($user)->save();
+
+        $this->assertEquals('Geoff', $body->getName());
     }
 }
