@@ -2,39 +2,29 @@
 
 namespace Dungeon;
 
-use App\Observers\SerializableObserver;
-use Dungeon\Contracts\Interactable;
 use Dungeon\Entities\People\Body;
+use Dungeon\Observers\SerializableObserver;
 use Dungeon\Room;
 use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasBody;
-use Dungeon\Traits\HasInventory;
 use Dungeon\Traits\HasSerializableAttributes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements Interactable
+class User extends Authenticatable
 {
     use HasBody,
         Notifiable,
         HasSerializableAttributes,
-        HasInventory,
         HasApparel,
         Findable;
 
     const DEFAULT_HEALTH = 100;
 
     protected $casts = [
-        'data' => 'array',
+        'serialized_data' => 'array',
     ];
-
-    /**
-     * Default serializable attributes
-     *
-     * @var array
-     */
-    public $serializable = [];
 
     /**
      * The attributes that are mass assignable.
@@ -66,11 +56,6 @@ class User extends Authenticatable implements Interactable
         self::observe(new SerializableObserver);
     }
 
-    public function getType()
-    {
-        return 'user';
-    }
-
     public function isEquipable()
     {
         return false;
@@ -78,7 +63,10 @@ class User extends Authenticatable implements Interactable
 
     public function getSerializable()
     {
-        return ['health', 'can_be_taken'];
+        return [
+            'health' => 100,
+            'can_be_taken' => false,
+        ];
     }
 
     public function body()
@@ -111,18 +99,18 @@ class User extends Authenticatable implements Interactable
      * @param boolean $refresh
      * @return void
      */
-    public function getInventory($refresh = false)
-    {
-        if (!$this->body) {
-            return null;
-        }
+    // public function getInventory($refresh = false)
+    // {
+    //     if (!$this->body) {
+    //         return null;
+    //     }
 
-        if ($refresh) {
-            $this->body->load('contents');
-        }
+    //     if ($refresh) {
+    //         $this->body->load('contents');
+    //     }
 
-        return $this->body->content;
-    }
+    //     return $this->body->content;
+    // }
 
     /**
      * @todo

@@ -1,5 +1,6 @@
 <?php
 
+use Dungeon\DamageTypes\MeleeDamage;
 use Dungeon\Entities\Weapons\Melee\MeleeWeapon;
 use Faker\Generator as Faker;
 

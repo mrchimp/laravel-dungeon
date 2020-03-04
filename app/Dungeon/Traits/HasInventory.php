@@ -8,6 +8,6 @@ trait HasInventory
 {
     public function inventory()
     {
-        return $this->hasMany(Entity::class, 'owner_id');
+        return $this->hasMany(Entity::class, 'container_id');
     }
 }

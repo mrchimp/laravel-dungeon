@@ -7,7 +7,7 @@ use Dungeon\User;
 
 class Food extends Entity
 {
-    public $healing = 0;
+    public $healing = 25;
 
     protected $fillable = [
         'name',
@@ -18,13 +18,8 @@ class Food extends Entity
     public function getSerializable()
     {
         return array_merge(parent::getSerializable(), [
-            'healing',
+            'healing' => 25,
         ]);
-    }
-
-    public function getType()
-    {
-        return 'food';
     }
 
     public function eat(User $consumer)

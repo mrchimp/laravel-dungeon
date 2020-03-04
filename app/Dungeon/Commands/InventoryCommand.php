@@ -23,7 +23,7 @@ class InventoryCommand extends Command
      */
     protected function run()
     {
-        $entities = $this->user->inventory;
+        $entities = $this->user->getInventory();
 
         if (count($entities) === 0) {
             $this->setMessage('You don\'t have anything.');

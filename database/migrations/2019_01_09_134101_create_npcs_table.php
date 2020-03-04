@@ -17,7 +17,7 @@ class CreateNpcsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('description');
-            $table->json('data')->nullable();
+            $table->json('serialized_data')->nullable();
             $table->integer('room_id')->nullable();
             $table->timestamps();
 

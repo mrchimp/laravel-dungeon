@@ -21,7 +21,7 @@ class Body extends Entity
     public function getSerializable(): array
     {
         return array_merge(parent::getSerializable(), [
-            'health',
+            'health' => 100,
         ]);
     }
 
@@ -38,7 +38,7 @@ class Body extends Entity
         return null;
     }
 
-    public function user()
+    public function user(): void
     {
         throw new \Exception('You want to use the "owner" relationship, not "user".');
     }

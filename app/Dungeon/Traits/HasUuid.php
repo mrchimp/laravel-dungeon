@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace Dungeon\Traits;
 
 use Ramsey\Uuid\Uuid;
 

@@ -3,6 +3,7 @@
 namespace Dungeon\Traits;
 
 use Dungeon\Room;
+use Illuminate\Support\Collection;
 
 trait HasBody
 {
@@ -27,5 +28,18 @@ trait HasBody
         }
 
         return $this->body->moveToRoom($room);
+    }
+
+    public function getInventory(bool $refresh = false): Collection
+    {
+        if (!$this->body) {
+            return null;
+        }
+
+        if ($refresh) {
+            $this->body->load('inventory');
+        }
+
+        return $this->body->inventory;
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Dungeon;
 
-use Exception;
-
 class CommandParser
 {
     protected $command_name;
@@ -51,7 +49,7 @@ class CommandParser
             return;
         }
 
-        throw Exception('Failed to parse input.');
+        throw new \Exception('Failed to parse input.');
     }
 
     public function getCommandName()

@@ -17,7 +17,9 @@ class EquipCommandTest extends TestCase
     {
         $room = $this->makeRoom();
         $user = $this->makeUser([], 100, $room);
-        $hat = $this->makeHat()->giveToUser($user);
+        $hat = $this->makeHat([
+            'name' => 'Hat',
+        ])->giveToUser($user);
         $hat->save();
 
         $command = new EquipCommand('equip hat', $user);

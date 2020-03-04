@@ -2,8 +2,8 @@
 
 namespace Dungeon;
 
-use App\Observers\SerializableObserver;
 use Dungeon\Entities\People\Body;
+use Dungeon\Observers\SerializableObserver;
 use Dungeon\Room;
 use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasBody;
@@ -28,7 +28,7 @@ class NPC extends Model
     ];
 
     protected $casts = [
-        'data' => 'array',
+        'serialized_data' => 'array',
     ];
 
     public static function boot()

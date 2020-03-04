@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Dungeon\Commands;
+namespace Tests\Unit\Commands;
 
 use Dungeon\Commands\AttackCommand;
 use Dungeon\Events\AfterAttack;
@@ -13,11 +13,6 @@ use Tests\TestCase;
 class AttackCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
-
-    public function setup()
-    {
-        parent::setup();
-    }
 
     /** @test */
     public function you_can_attack_people_in_the_same_room_as_you()

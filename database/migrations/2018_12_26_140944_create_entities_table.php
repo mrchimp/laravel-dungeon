@@ -20,9 +20,8 @@ class CreateEntitiesTable extends Migration
             $table->text('description');
             $table->string('class');
             $table->boolean('can_have_contents')->default(false);
-            $table->json('data')->nullable();
+            $table->json('serialized_data')->nullable();
             $table->integer('owner_id')->nullable();
-            $table->integer('wearer_id')->nullable();
             $table->integer('container_id')->nullable();
             $table->integer('room_id')->nullable();
             $table->integer('npc_id')->nullable();
@@ -31,7 +30,6 @@ class CreateEntitiesTable extends Migration
 
             $table->index('uuid');
             $table->index('owner_id');
-            $table->index('wearer_id');
             $table->index('container_id');
             $table->index('room_id');
             $table->index('npc_id');

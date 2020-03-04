@@ -3,7 +3,6 @@
 use Dungeon\Apparel\Apparel;
 use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\Weapon;
-use Dungeon\Entity;
 use Dungeon\Room;
 use Illuminate\Database\Seeder;
 
@@ -21,8 +20,8 @@ class EntitySeeder extends Seeder
         $rock = Weapon::create([
             'name' => 'Rock',
             'description' => 'You could probably hit things with it.',
-            'class' => App\Weapon::class,
-            'data' => [
+            'class' => Weapon::class,
+            'serialized_data' => [
                 'damage_amount' => 10,
                 'damage_type' => 'blunt',
             ],
@@ -33,8 +32,8 @@ class EntitySeeder extends Seeder
         $hat = Apparel::create([
             'name' => 'Hat',
             'description' => 'Basic headwear.',
-            'class' => App\Weapon::class,
-            'data' => [
+            'class' => Weapon::class,
+            'serialized_data' => [
                 'cold_protection' => 10,
                 'blunt_protection' => 10,
             ],
@@ -45,7 +44,7 @@ class EntitySeeder extends Seeder
         $potato = Food::create([
             'name' => 'Potato',
             'description' => 'A potato.',
-            'class' => App\Food::class,
+            'class' => Food::class,
         ]);
         $potato->setHealing(10);
         $potato->moveToRoom($room);

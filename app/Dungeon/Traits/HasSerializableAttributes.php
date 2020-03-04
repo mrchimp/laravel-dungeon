@@ -5,7 +5,18 @@ namespace Dungeon\Traits;
 trait HasSerializableAttributes
 {
     /**
-     * Get the names of attributes to be serialized
+     * Name of the JSON columnt that the serialized data
+     * will be stored in
+     *
+     * @return string
+     */
+    public function serializedDataColumnName()
+    {
+        return 'serialized_data';
+    }
+
+    /**
+     * Get the attributes to be serialized
      *
      * @return array
      */
@@ -15,24 +26,34 @@ trait HasSerializableAttributes
     }
 
     /**
+     * Get the names of attributes to be serialized
+     *
+     * @return array
+     */
+    public function getSerializableAttributes()
+    {
+        return array_keys($this->getSerializable());
+    }
+
+    /**
      * Take attributes and put them in the data array
      *
      * @return void
      */
     public function serializeAttributes()
     {
-        // If we try modifying $this->data directly, we get an
+        // If we try modifying $this->serialized_data directly, we get an
         // error "ErrorException: Indirect modification of
         // overloaded property App\User::$data has no effect"
         // I'm not sure why, but we can just do this instead...
         $data = [];
 
-        foreach ($this->getSerializable() as $field) {
-            $data[$field] = $this->$field;
-            unset($this->$field);
+        foreach ($this->getSerializableAttributes() as $field_name) {
+            $data[$field_name] = $this->$field_name;
+            unset($this->$field_name);
         }
 
-        $this->data = $data;
+        $this->{$this->serializedDataColumnName()} = $data;
     }
 
     /**
@@ -42,11 +63,11 @@ trait HasSerializableAttributes
      */
     public function deserializeAttributes()
     {
-        foreach ($this->getSerializable() as $field) {
-            if (isset($this->data[$field])) {
-                $this->$field = $this->data[$field];
-            } elseif (isset($this->serializable[$field])) {
-                $this->$field = $this->serializable[$field];
+        foreach ($this->getSerializableAttributes() as $field_name) {
+            if (isset($this->{$this->serializedDataColumnName()}[$field_name])) {
+                $this->$field_name = $this->{$this->serializedDataColumnName()}[$field_name];
+            } elseif (isset($this->{$this->serializedDataColumnName()}[$field_name])) {
+                $this->$field_name = $this->{$this->serializedDataColumnName()}[$field_name];
             }
         }
     }
@@ -59,11 +80,11 @@ trait HasSerializableAttributes
      */
     public function applyDefaultSerializableAttributes()
     {
-        foreach ($this->getSerializable() as $field) {
-            if (array_key_exists($field, $this->serializable)
-                && !isset($this->$field)
+        foreach ($this->getSerializableAttributes() as $field_name) {
+            if (array_key_exists($field_name, $this->getSerializable())
+                && !isset($this->$field_name)
             ) {
-                $this->$field = $this->serializable[$field];
+                $this->$field_name = $this->getSerializable()[$field_name];
             }
         }
     }

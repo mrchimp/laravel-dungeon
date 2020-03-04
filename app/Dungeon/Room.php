@@ -2,9 +2,8 @@
 
 namespace Dungeon;
 
-use Dungeon\NPC;
-use Dungeon\Portal;
 use Dungeon\Entities\People\Body;
+use Dungeon\Portal;
 use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model

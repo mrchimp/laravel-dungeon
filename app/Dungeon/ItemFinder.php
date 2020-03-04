@@ -2,9 +2,6 @@
 
 namespace Dungeon\Entities;
 
-use Dungeon\Entity;
-use App\User;
-
 class ItemFinder
 {
     public function find($query, $user)

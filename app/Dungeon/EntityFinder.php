@@ -51,7 +51,11 @@ class EntityFinder
      */
     public function findInInventory($query, User $user)
     {
-        return $user->inventory->first(function ($entity) use ($query) {
+        if (!$user->hasBody()) {
+            return;
+        }
+
+        return $user->body->inventory->first(function ($entity) use ($query) {
             return $entity->nameMatchesQuery($query);
         });
     }
@@ -63,7 +67,11 @@ class EntityFinder
      */
     public function findWeaponInInventory($query, User $user)
     {
-        return $user->inventory->first(function ($entity) use ($query) {
+        if (!$user->hasBody()) {
+            return;
+        }
+
+        return $user->body->inventory->first(function ($entity) use ($query) {
             return $entity->nameMatchesQuery($query) && $entity instanceof WeaponInterface;
         });
     }

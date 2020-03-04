@@ -111,7 +111,7 @@ abstract class TestCase extends BaseTestCase
             'name' => 'Box',
             'description' => 'You can put things in it.',
             'class' => Entity::class,
-            'data' => [],
+            'serialized_data' => [],
         ], $attributes));
     }
 

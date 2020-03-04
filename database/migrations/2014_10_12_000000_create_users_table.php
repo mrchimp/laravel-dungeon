@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->integer('room_id')->nullable();
             $table->timestamps();
-            $table->json('data')->nullable();
+            $table->json('serialized_data')->nullable();
 
             $table->index('room_id');
         });

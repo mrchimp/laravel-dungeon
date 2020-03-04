@@ -3,26 +3,12 @@
 namespace Dungeon\Entities;
 
 use Dungeon\Contracts\WeaponInterface;
-use Dungeon\DamageTypes\MeleeDamage;
 use Dungeon\Entity;
+use Dungeon\Traits\CanBeUsedAsWeapon;
 
 class Weapon extends Entity implements WeaponInterface
 {
-    /**
-     * Default serializable attributes
-     *
-     * @var array
-     */
-    public $serializable = [
-        'damage_types' => [
-            MeleeDamage::class => 10,
-        ],
-    ];
-
-    public function getType()
-    {
-        return 'weapon';
-    }
+    use CanBeUsedAsWeapon;
 
     public function getVerbs()
     {
@@ -31,16 +17,6 @@ class Weapon extends Entity implements WeaponInterface
         $verbs[] = 'attack';
 
         return $verbs;
-    }
-
-    /**
-     * The type of damage this weapon deals
-     *
-     * @return array
-     */
-    public function damageTypes()
-    {
-        return [];
     }
 
     /**
@@ -53,30 +29,8 @@ class Weapon extends Entity implements WeaponInterface
         return array_merge(
             parent::getSerializable(),
             [
-                'damage_types'
+                'damage_types' => 50,
             ]
         );
-    }
-
-    /**
-     * Attack a target with this weapon
-     *
-     * @return
-     */
-    public function attack($target)
-    {
-        $damages = [];
-
-        foreach ($this->damage_types as $damage_type => $damage_amount) {
-            $target->hurt($damage_amount);
-            $damages[$damage_type] = $damage_amount;
-        }
-
-        $target->save();
-        $total_damage = array_sum($damages);
-
-        $damages['total'] = $total_damage;
-
-        return $damages;
     }
 }

@@ -2,17 +2,18 @@
 
 namespace Dungeon;
 
-use App\Observers\HasOwnClassObserver;
-use App\Observers\SerializableObserver;
-use App\Traits\HasUuid;
 use Dungeon\Collections\EntityCollection;
-use Dungeon\Contracts\Interactable;
+use Dungeon\Entities\People\Body;
+use Dungeon\Observers\HasOwnClassObserver;
+use Dungeon\Observers\SerializableObserver;
 use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasSerializableAttributes;
+use Dungeon\Traits\HasUuid;
 use Dungeon\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-class Entity extends Model implements Interactable
+class Entity extends Model
 {
     use HasUuid, HasSerializableAttributes, Findable;
 
@@ -21,15 +22,8 @@ class Entity extends Model implements Interactable
     protected $table = 'entities';
 
     protected $casts = [
-        'data' => 'array',
+        'serialized_data' => 'array',
     ];
-
-    /**
-     * Default serializable attributes
-     *
-     * @var array
-     */
-    public $serializable = [];
 
     /**
      * Which fields are prevented from mass assignment
@@ -51,7 +45,9 @@ class Entity extends Model implements Interactable
 
     public function getSerializable()
     {
-        return ['can_be_taken'];
+        return [
+            'can_be_taken' => true,
+        ];
     }
 
     public function isEquipable()
@@ -84,7 +80,7 @@ class Entity extends Model implements Interactable
     public static function replaceClass($model)
     {
         $attributes = $model->getAttributes();
-        $data = $model->data;
+        $serialized_data = $model->serialized_data;
         $exists = $model->exists;
 
         $model = new $model->class;
@@ -96,7 +92,7 @@ class Entity extends Model implements Interactable
         // @todo Not sure why this is being set as a string
         // and not being cast to an array. Just gonna do it
         // manually for now.
-        $model->data = $data;
+        $model->serialized_data = $serialized_data;
         $model->exists = $exists;
 
         $model->deserializeAttributes();
@@ -108,16 +104,12 @@ class Entity extends Model implements Interactable
      * Create a new Eloquent Collection instance
      *
      * @param array $models
-     * @return \Illuminate\Database\Eloquent\Collection
+     *
+     * @return Collection
      */
     public function newCollection(array $models = [])
     {
         return new EntityCollection($models);
-    }
-
-    public function getType()
-    {
-        return 'generic';
     }
 
     public function owner()
@@ -154,16 +146,18 @@ class Entity extends Model implements Interactable
         return $this;
     }
 
-    public function givetoUser(User $user = null)
+    public function giveToUser(User $user = null)
     {
         if (is_null($user)) {
-            $this->owner()->dissociate();
+            $this->moveToVoid();
             return $this;
         }
 
-        $this->moveToVoid();
+        if (!$user->hasBody()) {
+            return $this;
+        }
 
-        $this->owner()->associate($user);
+        $this->moveToContainer($user->body);
 
         return $this;
     }
@@ -171,8 +165,8 @@ class Entity extends Model implements Interactable
     public function moveToContainer(Entity $container = null)
     {
         $this->moveToVoid();
-
         $this->container()->associate($container);
+        $this->save();
 
         return $this;
     }
@@ -181,7 +175,11 @@ class Entity extends Model implements Interactable
     {
         $this->moveToVoid();
 
-        $this->npc()->associate($npc);
+        if (!$npc->hasBody()) {
+            return;
+        }
+
+        $this->moveToContainer($npc->body);
 
         return $this;
     }
@@ -215,7 +213,9 @@ class Entity extends Model implements Interactable
 
     public function ownedBy(User $user)
     {
-        return (int) $this->owner_id === (int) $user->id;
+        if ($this->container instanceof Body) {
+            return (int) $this->container->owner_id === (int) $user->id;
+        }
     }
 
     public function toArray()
@@ -225,8 +225,6 @@ class Entity extends Model implements Interactable
         foreach ($this->getSerializable() as $serializable) {
             $array[$serializable] = $this->$serializable;
         }
-
-        $array['type'] = $this->getType();
 
         return $array;
     }

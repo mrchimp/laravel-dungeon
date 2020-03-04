@@ -2,17 +2,11 @@
 
 namespace Dungeon\Commands;
 
+use Dungeon\Contracts\ApparelInterface;
+use Dungeon\Traits\IsEquipable;
+
 class EquipCommand extends Command
 {
-    /**
-     * Types of items that can be equipped
-     *
-     * @var array
-     */
-    const EQUIPABLE_TYPES = [
-        'apparel',
-    ];
-
     /**
      * Patterns that this command handles
      *
@@ -48,7 +42,7 @@ class EquipCommand extends Command
             return $this->fail('You don\'t have that.');
         }
 
-        if (!in_array($entity->getType(), self::EQUIPABLE_TYPES)) {
+        if (!($entity instanceof ApparelInterface)) {
             return $this->fail('You can\'t equip that.');
         }
 

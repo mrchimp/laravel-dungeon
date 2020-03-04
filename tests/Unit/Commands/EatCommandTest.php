@@ -70,7 +70,7 @@ class EatCommandTest extends TestCase
         $command = new EatCommand('eat potato', $user);
         $command->execute();
 
-        $user->load('inventory');
+        $user->body->load('inventory');
 
         $this->assertEmpty($user->getInventory());
     }

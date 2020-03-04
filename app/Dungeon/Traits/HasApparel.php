@@ -3,15 +3,16 @@
 namespace Dungeon\Traits;
 
 use Dungeon\Apparel\Apparel;
+use Dungeon\Contracts\ApparelInterface;
 
 trait HasApparel
 {
     public function getApparel()
     {
         return $this
-            ->inventory
+            ->getInventory()
             ->filter(function ($apparel) {
-                if ($apparel->getType() !== 'apparel') {
+                if (!($apparel instanceof ApparelInterface)) {
                     return false;
                 }
 

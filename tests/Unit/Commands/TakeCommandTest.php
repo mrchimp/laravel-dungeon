@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Dungeon\Commands;
+namespace Tests\Unit\Commands;
 
 use Dungeon\Commands\TakeCommand;
 use Dungeon\Entity;
@@ -24,7 +24,7 @@ class TakeCommandTest extends TestCase
 
         $potato = Entity::find($potato->id);
 
-        $this->assertEquals($user->id, $potato->owner_id);
+        $this->assertEquals($user->id, $potato->container->owner_id);
     }
 
     /** @test */
@@ -57,7 +57,7 @@ class TakeCommandTest extends TestCase
 
         $potato = Entity::find($potato->id);
 
-        $this->assertEquals($user->id, $potato->owner_id);
+        $this->assertEquals($user->body->id, $potato->container_id);
     }
 
     /** @test */
@@ -77,7 +77,7 @@ class TakeCommandTest extends TestCase
 
         $potato = Entity::find($potato->id);
 
-        $this->assertEquals($user->id, $potato->owner_id);
+        $this->assertEquals($user->body->id, $potato->container_id);
     }
 
     /** @test */

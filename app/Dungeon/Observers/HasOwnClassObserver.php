@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Observers;
+namespace Dungeon\Observers;
 
 use Illuminate\Database\Eloquent\Model;
 
