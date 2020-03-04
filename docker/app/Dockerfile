@@ -24,13 +24,13 @@ RUN echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" > /etc/apt
   && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C300EE8C \
   && apt-get update \
   && apt-get install -y curl zip unzip git supervisor sqlite3 \
-  && apt-get install -y nginx php7.2-fpm php7.2-cli \
-  php7.2-pgsql php7.2-sqlite3 php7.2-gd \
-  php7.2-curl php7.2-memcached \
-  php7.2-imap php7.2-mysql php7.2-mbstring \
-  php7.2-xml php7.2-zip php7.2-bcmath php7.2-soap \
-  php7.2-intl php7.2-readline php7.2-xdebug \
-  php7.2-msgpack php7.2-igbinary \
+  && apt-get install -y nginx php7.4-fpm php7.4-cli \
+  php7.4-pgsql php7.4-sqlite3 php7.4-gd \
+  php7.4-curl php7.4-memcached \
+  php7.4-imap php7.4-mysql php7.4-mbstring \
+  php7.4-xml php7.4-zip php7.4-bcmath php7.4-soap \
+  php7.4-intl php7.4-readline php7.4-xdebug \
+  php7.4-msgpack php7.4-igbinary \
   && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
   && mkdir /run/php \
   && apt-get -y autoremove \
@@ -43,9 +43,9 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 
 COPY h5bp /etc/nginx/h5bp
 COPY default /etc/nginx/sites-available/default
-COPY php-fpm.conf /etc/php/7.2/fpm/php-fpm.conf
-COPY xdebug.ini /etc/php/7.2/mods-available/xdebug.ini
-COPY vessel.ini /etc/php/7.2/fpm/conf.d/99-vessel.ini
+COPY php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
+COPY xdebug.ini /etc/php/7.4/mods-available/xdebug.ini
+COPY vessel.ini /etc/php/7.4/fpm/conf.d/99-vessel.ini
 
 EXPOSE 80
 
