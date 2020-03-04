@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
+use Dungeon\Entities\People\Body;
 use Dungeon\Room;
 use Dungeon\User;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Dungeon\Entities\People\Body;
+use Tests\TestCase;
 
 /**
  * @covers \App\User
@@ -16,9 +16,9 @@ class UserTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    public function setup()
+    public function setUp(): void
     {
-        parent::setup();
+        parent::setUp();
 
         $this->user = factory(User::class)->create([
             'name' => 'Test User',

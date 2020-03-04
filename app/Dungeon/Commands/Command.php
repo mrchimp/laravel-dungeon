@@ -6,6 +6,7 @@ use Auth;
 use Dungeon\CurrentLocation;
 use Dungeon\EntityFinder;
 use Dungeon\User;
+use Illuminate\Support\Arr;
 
 abstract class Command
 {
@@ -188,7 +189,7 @@ abstract class Command
      */
     public function inputPart($key)
     {
-        return array_get($this->matches, $key);
+        return Arr::get($this->matches, $key);
     }
 
     /**
@@ -236,7 +237,7 @@ abstract class Command
      */
     public function getOutputItem($key)
     {
-        return array_get($this->output, $key);
+        return Arr::get($this->output, $key);
     }
 
     /**

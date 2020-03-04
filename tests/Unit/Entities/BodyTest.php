@@ -17,9 +17,9 @@ class BodyTest extends TestCase
     use DatabaseMigrations,
         DatabaseTransactions;
 
-    public function setup()
+    public function setUp(): void
     {
-        parent::setup();
+        parent::setUp();
 
         $this->body = factory(Body::class)->create([
             'name' => 'Test body',

@@ -19,9 +19,9 @@ class LookTest extends TestCase
 
     protected $banana;
 
-    public function setup()
+    public function setUp(): void
     {
-        parent::setup();
+        parent::setUp();
 
         $this->room = factory(Room::class)->create([
             'description' => 'This is a room.',

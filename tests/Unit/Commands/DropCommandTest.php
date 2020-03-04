@@ -12,9 +12,9 @@ class DropCommandTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    public function setup()
+    public function setUp(): void
     {
-        parent::setup();
+        parent::setUp();
 
         $room = $this->makeRoom();
         $this->user = $this->makeUser([], 100, $room);
