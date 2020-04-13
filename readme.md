@@ -13,10 +13,7 @@ Just getting started making the engine. You can move around different rooms and 
 ## Installing
 
 ```bash
-./vessel init # Set up docker containers etc
-./vessel start # Start the docker containers
-./vessel artisan migrate # Migrate the database
-./vessel artisan db:seed # Seed the database with some basic info
+bash ./install
 
 # ... do some stuff ...
 

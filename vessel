@@ -8,6 +8,11 @@ case "${UNAMEOUT}" in
     *)                  MACHINE="UNKNOWN"
 esac
 
+
+if [ ! -f .env ]; then
+    cp .env.example .env
+fi
+
 if [ "$MACHINE" == "UNKNOWN" ]; then
     echo "Unsupported system type"
     echo "System must be a Macintosh, Linux or Windows"
@@ -82,12 +87,6 @@ if [ $# -gt 0 ]; then
             $COMPOSER require predis/predis
         fi
 
-        if [ ! -f .env ]; then
-            echo "No .env file found within current working directory $(pwd)"
-            echo "Create a .env file before re-initializing"
-            exit 0
-        fi
-
         echo "VESSEL: Setting .env Variables"
         cp .env .env.bak.vessel
 
@@ -142,7 +141,7 @@ if [ $# -gt 0 ]; then
     # Stop the containers
     elif [ "$1" == "stop" ]; then
         $COMPOSE down
-    
+
     # If "php" is used, pass-thru to "php"
     # inside a new container
     elif [ "$1" == "php" ]; then
@@ -217,7 +216,7 @@ if [ $# -gt 0 ]; then
                 app \
                 php artisan tinker
         fi
-    
+
     # If "node" is used, run node
     # from our node container
     elif [ "$1" == "node" ]; then
