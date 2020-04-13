@@ -60,7 +60,7 @@ class Room extends Model
     {
         return $this->belongsToMany(Room::class, 'portals', 'south_room_id', 'north_room_id')
             ->using(Portal::class)
-            ->withPivot('description')
+            ->withPivot('description', 'locked', 'code')
             ->as('portal');
     }
 
@@ -68,7 +68,7 @@ class Room extends Model
     {
         return $this->belongsToMany(Room::class, 'portals', 'north_room_id', 'south_room_id')
             ->using(Portal::class)
-            ->withPivot('description')
+            ->withPivot('description', 'locked', 'code')
             ->as('portal');
     }
 
@@ -76,7 +76,7 @@ class Room extends Model
     {
         return $this->belongsToMany(Room::class, 'portals', 'east_room_id', 'west_room_id')
             ->using(Portal::class)
-            ->withPivot('description')
+            ->withPivot('description', 'locked', 'code')
             ->as('portal');
     }
 
@@ -84,7 +84,7 @@ class Room extends Model
     {
         return $this->belongsToMany(Room::class, 'portals', 'east_room_id', 'west_room_id')
             ->using(Portal::class)
-            ->withPivot('description')
+            ->withPivot('description', 'locked', 'code')
             ->as('portal');
     }
 

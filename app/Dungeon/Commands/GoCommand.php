@@ -53,10 +53,14 @@ class GoCommand extends Command
             return $this->fail('I can\'t go that way.');
         }
 
+        if ($destination->portal->isLocked()) {
+            return $this->fail('The door is locked.');
+        }
+
         $this->user
             ->moveTo($destination)
             ->save();
 
-        $this->setMessage('You go ' . $direction . '.');
+        $this->setMessage('You go ' . $direction . '. ' . $destination->getDescription());
     }
 }

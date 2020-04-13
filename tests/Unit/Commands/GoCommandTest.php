@@ -53,10 +53,10 @@ class GoCommandTest extends TestCase
     public function if_we_can_go_where_we_want_to_go_then_lets_go_there()
     {
         $north_room = $this->makeRoom([
-                'description' => 'This is the north room.',
+            'description' => 'This is the north room.',
         ]);
         $south_room = $this->makeRoom([
-                'description' => 'This is the south room.',
+            'description' => 'This is the south room.',
         ]);
 
         $north_room->setSouthExit($south_room);
@@ -73,5 +73,42 @@ class GoCommandTest extends TestCase
         $user = User::first();
 
         $this->assertEquals($south_room->id, $user->getRoom()->id);
+    }
+
+    /** @test */
+    public function if_portal_is_locked_then_command_fails()
+    {
+        $start_room = $this->makeRoom();
+        $other_room = $this->makeRoom();
+
+        $start_room->setNorthExit($other_room);
+        $user = $this->makeUser([], 100, $start_room);
+
+        $portal = $start_room->north_exit->portal;
+
+        $portal->lockWithCode('1234');
+        $portal->save();
+
+        $command = new GoCommand('go north', $user);
+        $command->execute();
+
+        $this->assertFalse($command->success);
+    }
+
+    /** @test */
+    public function after_moving_the_new_rooms_description_will_be_included_in_the_message()
+    {
+        $start_room = $this->makeRoom();
+        $other_room = $this->makeRoom([
+            'description' => 'This is the second room',
+        ]);
+
+        $start_room->setNorthExit($other_room);
+        $user = $this->makeUser([], 100, $start_room);
+
+        $command = new GoCommand('go north', $user);
+        $command->execute();
+
+        $this->assertStringContainsString('This is the second room', $command->getMessage());
     }
 }
