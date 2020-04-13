@@ -8,7 +8,7 @@ Just getting started making the engine. You can move around different rooms and 
 
 ## Requirements
 
--   Docker
+- Docker
 
 ## Installing
 
@@ -20,67 +20,72 @@ bash ./install
 ./vessel stop # Stop the docker containers
 ```
 
+## Default User
+
+Email: test@example.com
+Password: secretpassword
+
 ## Commands
 
--   ✓ look
--   ✓ go _direction_
--   ✓ inventory
+- ✓ look
+- ✓ go _direction_
+- ✓ inventory
 
--   ✓ take _entity_
--   ✓ drop _entity_
--   ✓ eat _entity_
--   ✓ inspect _item_
--   ✗ use _entity_
--   ✗ use _entity_ on _item_
--   ✓ equip _entity_
--   ✗ wear _entity_
--   ✗ attack _item_ with _weapon_
--   ✗ put _entity_ in _container_
--   ✗ combine _entity_ with _entity_
+- ✓ take _entity_
+- ✓ drop _entity_
+- ✓ eat _entity_
+- ✓ inspect _item_
+- ✗ use _entity_
+- ✗ use _entity_ on _item_
+- ✓ equip _entity_
+- ✗ wear _entity_
+- ✗ attack _item_ with _weapon_
+- ✗ put _entity_ in _container_
+- ✗ combine _entity_ with _entity_
 
--   ✗ verb _item_ (extendable)
--   ✗ verb _item_ with _item_ (extendable)
+- ✗ verb _item_ (extendable)
+- ✗ verb _item_ with _item_ (extendable)
 
 ## In-Game Features
 
--   ✗ User apparel
-    -   ✗ Damage reduction (armor)
--   ✗ NPCs
-    -   ✗ Races
-    -   ✗ Apparel
-    -   ✗ Inventory
--   ✗ Locked doors
-    -   ✗ Keys
-    -   ✗ Buttons ?
-    -   ✗ Breakable doors
--   ✗ Levelling
--   ✗ Player Stats
--   ✗ Unpickupable Items
+- ✗ User apparel
+  - ✗ Damage reduction (armor)
+- ✗ NPCs
+  - ✗ Races
+  - ✗ Apparel
+  - ✗ Inventory
+- ✗ Locked doors
+  - ✗ Keys
+  - ✗ Buttons ?
+  - ✗ Breakable doors
+- ✗ Levelling
+- ✗ Player Stats
+- ✗ Unpickupable Items
 
 ## Features
 
--   ✗ Command aliases
-    -   ✗ look at -> inspect
--   ✗ Extendable interface
--   ✗ Skill Tree
-    -   ✗ Speed
-    -   ✗ Strength
-    -   ✗ Stamina
-    -   ✗ Healing
-    -   ✗ Courage
-    -   ✗ Willpower
-    -   ✗ Perception
-    -   ✗ Reason
-    -   ✗ Intellect
-    -   ✗ Stealth
-    -   ✗ Memory
-    -   ✗ Lockpicking
--   ✗ Traps
--   ✗ Followers
--   ✗ Character Creation Screen
--   ✗ Safe Rooms
--   ✗ Permadeath?
--   ✗ Multiple Bodies?
+- ✗ Command aliases
+  - ✗ look at -> inspect
+- ✗ Extendable interface
+- ✗ Skill Tree
+  - ✗ Speed
+  - ✗ Strength
+  - ✗ Stamina
+  - ✗ Healing
+  - ✗ Courage
+  - ✗ Willpower
+  - ✗ Perception
+  - ✗ Reason
+  - ✗ Intellect
+  - ✗ Stealth
+  - ✗ Memory
+  - ✗ Lockpicking
+- ✗ Traps
+- ✗ Followers
+- ✗ Character Creation Screen
+- ✗ Safe Rooms
+- ✗ Permadeath?
+- ✗ Multiple Bodies?
 
 ## Ideas
 
