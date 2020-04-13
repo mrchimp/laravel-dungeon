@@ -2,7 +2,7 @@
 
 namespace Dungeon\DamageTypes;
 
-class ProjectileDamage implements DamageType
+class ProjectileDamage implements DamageTypeContract
 {
     /**
      * Get the name of this damage type

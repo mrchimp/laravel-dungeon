@@ -1,6 +1,6 @@
 <?php
 
-use Dungeon\Apparel\Apparel;
+use Dungeon\Entities\Apparel\Apparel;
 use Faker\Generator as Faker;
 
 $factory->define(Apparel::class, function (Faker $faker) {

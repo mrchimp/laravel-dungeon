@@ -2,8 +2,8 @@
 
 namespace Dungeon\Entities\Weapons\Melee;
 
-use Dungeon\Entities\Weapon;
 use Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\Entities\Weapons\Weapon;
 
 /**
  * A generic melee weapon.

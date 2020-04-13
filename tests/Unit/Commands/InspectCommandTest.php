@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Dungeon\Commands;
+namespace Tests\Unit\Commands;
 
 use Dungeon\Commands\InspectCommand;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

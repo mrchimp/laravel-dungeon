@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Dungeon;
+namespace Tests\Unit;
 
 use Dungeon\NPC;
 use Dungeon\User;

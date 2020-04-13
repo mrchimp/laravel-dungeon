@@ -2,7 +2,7 @@
 
 namespace Dungeon\Contracts;
 
-use Dungeon\Apparel\Apparel;
+use Dungeon\Entities\Apparel\Apparel;
 
 interface ApparelInterface
 {

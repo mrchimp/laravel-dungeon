@@ -2,7 +2,7 @@
 
 namespace Dungeon\DamageTypes;
 
-interface DamageType
+interface DamageTypeContract
 {
     /**
      * Get the name of this damage type

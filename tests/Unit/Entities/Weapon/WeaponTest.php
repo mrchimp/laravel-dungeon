@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\Dungeon\Entities\Weapons;
+namespace Tests\Unit\Entities\Weapon;
 
 use Dungeon\DamageTypes\MeleeDamage;
-use Dungeon\Entities\Weapon;
+use Dungeon\Entities\Weapons\Weapon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;

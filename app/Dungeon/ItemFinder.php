@@ -1,6 +1,6 @@
 <?php
 
-namespace Dungeon\Entities;
+namespace Dungeon;
 
 class ItemFinder
 {

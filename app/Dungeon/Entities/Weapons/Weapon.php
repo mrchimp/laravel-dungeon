@@ -1,6 +1,6 @@
 <?php
 
-namespace Dungeon\Entities;
+namespace Dungeon\Entities\Weapons;
 
 use Dungeon\Contracts\WeaponInterface;
 use Dungeon\Entity;

@@ -2,7 +2,7 @@
 
 namespace Dungeon\Traits;
 
-use Dungeon\Apparel\Apparel;
+use Dungeon\Entities\Apparel\Apparel;
 use Dungeon\Entities\People\Body;
 
 trait IsEquipable

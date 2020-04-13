@@ -1,6 +1,6 @@
 <?php
 
-namespace Dungeon\Apparel;
+namespace Dungeon\Entities\Apparel;
 
 use Dungeon\Contracts\ApparelInterface;
 use Dungeon\Entity;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use Dungeon\Entities\People\Body;
 use Dungeon\Room;

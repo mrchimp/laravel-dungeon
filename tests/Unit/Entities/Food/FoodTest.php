@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Dungeon\Entities\Food;
+namespace Tests\Unit\Entities\Food;
 
 use Dungeon\Entities\Food\Food;
 use Dungeon\EntityFinder;

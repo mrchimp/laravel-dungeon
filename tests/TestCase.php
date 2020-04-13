@@ -2,9 +2,9 @@
 
 namespace Tests;
 
-use Dungeon\Apparel\Apparel;
 use Dungeon\Collections\EntityCollection;
 use Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\Entities\Apparel\Apparel;
 use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\People\Body;
 use Dungeon\Entities\Weapons\Melee\MeleeWeapon;

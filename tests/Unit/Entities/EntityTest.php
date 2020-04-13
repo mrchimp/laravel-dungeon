@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Dungeon\Entities;
+namespace Tests\Unit\Entities;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

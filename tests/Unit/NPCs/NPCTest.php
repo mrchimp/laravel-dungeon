@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Dungeon\Entities\NPCs;
+namespace Tests\Unit\NPCs;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
