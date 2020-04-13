@@ -53,7 +53,7 @@
                 class="input"
                 :disabled="sending_input"
                 placeholder="Type your commands here..."
-              >
+              />
             </form>
             <p v-if="sending_input">Sending command...</p>
           </div>
@@ -168,8 +168,8 @@ export default {
     },
 
     leaveRoomChannel() {
-      console.log("Leaving channel", `Room.`.this.current_room);
-      Echo.leaveChannel(`Room.`.this.current_room);
+      console.log("Leaving channel", `Room.${this.current_room}`);
+      Echo.leaveChannel(`Room.${this.current_room}`);
 
       this.room_channel = null;
     },
