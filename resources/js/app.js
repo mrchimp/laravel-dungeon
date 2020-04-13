@@ -4,9 +4,9 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+require("./bootstrap");
 
-window.Vue = require('vue');
+window.Vue = require("vue");
 
 /**
  * The following block of code may be used to automatically register your
@@ -16,16 +16,18 @@ window.Vue = require('vue');
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-const files = require.context('./', true, /\.vue$/i);
-files.keys().map(key =>
-  Vue.component(
-    key
-      .split('/')
-      .pop()
-      .split('.')[0],
-    files(key)
-  )
-);
+import DungeonInterface from "./components/DungeonInterface.vue";
+Vue.component("dungeon-interface", DungeonInterface);
+// const files = require.context('./', true, /\.vue$/i);
+// files.keys().map(key =>
+//   Vue.component(
+//     key
+//       .split('/')
+//       .pop()
+//       .split('.')[0],
+//     files(key)
+//   )
+// );
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -34,5 +36,5 @@ files.keys().map(key =>
  */
 
 const app = new Vue({
-  el: '#app',
+  el: "#app"
 });
