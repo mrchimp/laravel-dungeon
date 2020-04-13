@@ -1,8 +1,8 @@
 <?php
 
-use Dungeon\Apparel\Apparel;
+use Dungeon\Entities\Apparel\Apparel;
 use Dungeon\Entities\Food\Food;
-use Dungeon\Entities\Weapon;
+use Dungeon\Entities\Weapons\Weapon;
 use Dungeon\Room;
 use Illuminate\Database\Seeder;
 
