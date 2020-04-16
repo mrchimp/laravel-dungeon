@@ -25,6 +25,11 @@ class Entity extends Model
         'serialized_data' => 'array',
     ];
 
+    protected $fillable = [
+        'name',
+        'description',
+    ];
+
     /**
      * Which fields are prevented from mass assignment
      *
