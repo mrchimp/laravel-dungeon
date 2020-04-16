@@ -33,9 +33,9 @@ class UnlockCommandTest extends TestCase
         $command = new UnlockCommand('unlock north door with code 1234', $user);
         $command->execute();
 
-        $start_room->refresh();
+        $portal->refresh();
 
-        $this->assertFalse($start_room->north_portal->isLocked());
+        $this->assertFalse($portal->isLocked());
         $this->assertTrue($command->success);
         $this->assertStringContainsString('You unlock the door.', $command->getMessage());
     }

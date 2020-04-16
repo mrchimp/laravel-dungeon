@@ -4,7 +4,7 @@ namespace Dungeon\Commands;
 
 use Dungeon\Direction;
 
-class UnlockCommand extends Command
+class LockCommand extends Command
 {
     /**
      * Patterns that this command handles
@@ -14,7 +14,7 @@ class UnlockCommand extends Command
     public function patterns()
     {
         return [
-            '/^unlock (?<direction>.*) door with (?<access_type>.*) (?<access_name>.*)/'
+            '/^lock (?<direction>.*) door with (?<access_type>.*) (?<access_name>.*)/',
         ];
     }
 
@@ -44,16 +44,16 @@ class UnlockCommand extends Command
         $room = $this->user->body->room;
         $portal = $room->{$direction . '_portal'};
 
-        if (!$portal->isLocked()) {
-            return $this->fail('The door is already unlocked.');
+        if ($portal->isLocked()) {
+            return $this->fail('The door is already locked.');
         }
 
-        $result = $portal->unlockWithCode($code);
+        $result = $portal->lockWithCode($code);
 
         if ($result) {
-            $this->appendMessage('You unlock the door. ');
+            $this->appendMessage('You lock the door. ');
         } else {
-            $this->appendMessage('You fail to unlock the door. ');
+            $this->appendMessage('You can\'t lock the door. ');
         }
     }
 }

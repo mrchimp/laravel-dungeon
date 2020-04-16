@@ -13,13 +13,15 @@ use Dungeon\Commands\HiCommand;
 use Dungeon\Commands\InspectCommand;
 use Dungeon\Commands\InventoryCommand;
 use Dungeon\Commands\KillCommand;
+use Dungeon\Commands\LockCommand;
 use Dungeon\Commands\LookCommand;
 use Dungeon\Commands\RespawnCommand;
 use Dungeon\Commands\SayCommand;
 use Dungeon\Commands\TakeCommand;
+use Dungeon\Commands\UnlockCommand;
 use Dungeon\Commands\WhisperCommand;
 use Dungeon\Exceptions\UnknownCommandException;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class CommandRunner
 {
@@ -34,11 +36,13 @@ class CommandRunner
         InspectCommand::class,
         InventoryCommand::class,
         KillCommand::class,
+        LockCommand::class,
         LookCommand::class,
         TakeCommand::class,
         RespawnCommand::class,
         GiveCommand::class,
         SayCommand::class,
+        UnlockCommand::class,
         WhisperCommand::class,
     ];
 
@@ -49,8 +53,6 @@ class CommandRunner
      */
     public static function run($input, $user = null)
     {
-        $chunks = explode(' ', $input);
-
         foreach (self::$commands as $command) {
             $command = new $command($input, $user);
 
