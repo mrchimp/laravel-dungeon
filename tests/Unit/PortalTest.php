@@ -3,10 +3,14 @@
 namespace Tests\Unit;
 
 use Dungeon\Portal;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class PortalTest extends TestCase
 {
+    use DatabaseMigrations, DatabaseTransactions;
+
     /** @test */
     public function a_portal_can_have_a_description()
     {

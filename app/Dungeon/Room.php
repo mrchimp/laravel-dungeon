@@ -40,51 +40,64 @@ class Room extends Model
         return $this->hasMany(Entity::class, 'room_id');
     }
 
-    public function exits()
-    {
-        // @todo - this is half finished...
-        return $this->belongsToMany(Portal::class);
-    }
-
     public function getDescription()
     {
         return $this->description;
     }
 
-    public function getExits()
-    {
-        return $this->exits;
-    }
-
     public function northExits()
     {
-        return $this->belongsToMany(Room::class, 'portals', 'south_room_id', 'north_room_id')
-            ->using(Portal::class)
-            ->withPivot('description', 'locked', 'code')
+        return $this->belongsToMany(Room::class, 'portal_room_room', 'south_room_id', 'north_room_id')
+            ->withPivot('description', 'portal_id')
             ->as('portal');
     }
 
     public function southExits()
     {
-        return $this->belongsToMany(Room::class, 'portals', 'north_room_id', 'south_room_id')
-            ->using(Portal::class)
-            ->withPivot('description', 'locked', 'code')
+        return $this->belongsToMany(Room::class, 'portal_room_room', 'north_room_id', 'south_room_id')
+            ->withPivot('description', 'portal_id')
             ->as('portal');
     }
 
     public function westExits()
     {
-        return $this->belongsToMany(Room::class, 'portals', 'east_room_id', 'west_room_id')
-            ->using(Portal::class)
-            ->withPivot('description', 'locked', 'code')
+        return $this->belongsToMany(Room::class, 'portal_room_room', 'east_room_id', 'west_room_id')
+            ->withPivot('description', 'portal_id')
             ->as('portal');
     }
 
     public function eastExits()
     {
-        return $this->belongsToMany(Room::class, 'portals', 'east_room_id', 'west_room_id')
-            ->using(Portal::class)
-            ->withPivot('description', 'locked', 'code')
+        return $this->belongsToMany(Room::class, 'portal_room_room', 'west_room_id', 'east_room_id')
+            ->withPivot('description', 'portal_id')
+            ->as('portal');
+    }
+
+    public function northPortals()
+    {
+        return $this->belongsToMany(Portal::class, 'portal_room_room', 'south_room_id', 'portal_id')
+            ->withPivot('description', 'south_room_id')
+            ->as('portal');
+    }
+
+    public function southPortals()
+    {
+        return $this->belongsToMany(Portal::class, 'portal_room_room', 'north_room_id', 'portal_id')
+            ->withPivot('description', 'north_room_id')
+            ->as('portal');
+    }
+
+    public function eastPortals()
+    {
+        return $this->belongsToMany(Portal::class, 'portal_room_room', 'west_room_id', 'portal_id')
+            ->withPivot('description', 'west_room_id')
+            ->as('portal');
+    }
+
+    public function westPortals()
+    {
+        return $this->belongsToMany(Portal::class, 'portal_room_room', 'east_room_id', 'portal_id')
+            ->withPivot('description', 'east_room_id')
             ->as('portal');
     }
 
@@ -134,6 +147,26 @@ class Room extends Model
     public function getEastExitAttribute()
     {
         return $this->eastExits->first();
+    }
+
+    public function getNorthPortalAttribute()
+    {
+        return $this->northPortals->first();
+    }
+
+    public function getSouthPortalAttribute()
+    {
+        return $this->southPortals->first();
+    }
+
+    public function getEastPortalAttribute()
+    {
+        return $this->eastPortals->first();
+    }
+
+    public function getWestPortalAttribute()
+    {
+        return $this->westPortals->first();
     }
 
     public function toArray()

@@ -1,10 +1,10 @@
 <?php
 
-namespace Dungeon;
+namespace Dungeon\Doors;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Portal extends Model
+class Door extends Model
 {
     protected $fillable = [
         'description',
@@ -44,7 +44,6 @@ class Portal extends Model
 
         if ($this->code === $code) {
             $this->locked = false;
-            $this->save();
             return true;
         }
 
@@ -66,7 +65,6 @@ class Portal extends Model
 
         $this->locked = true;
         $this->code = $code;
-        $this->save();
 
         return true;
     }

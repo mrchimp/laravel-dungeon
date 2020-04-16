@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePortalsTable extends Migration
 {
@@ -14,13 +14,10 @@ class CreatePortalsTable extends Migration
     public function up()
     {
         Schema::create('portals', function (Blueprint $table) {
-            $table->increments('id');
-            $table->uuid('uuid')->nullable();
-            $table->integer('north_room_id')->nullable();
-            $table->integer('south_room_id')->nullable();
-            $table->integer('west_room_id')->nullable();
-            $table->integer('east_room_id')->nullable();
-            $table->string('description')->nullable();
+            $table->id();
+            $table->string('code')->nullable();
+            $table->boolean('locked')->default(0);
+            $table->string('class');
             $table->timestamps();
         });
     }

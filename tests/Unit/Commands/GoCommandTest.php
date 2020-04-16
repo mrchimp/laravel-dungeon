@@ -3,6 +3,7 @@
 namespace Tests\Unit\Commands;
 
 use Dungeon\Commands\GoCommand;
+use Dungeon\Portal;
 use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -33,7 +34,7 @@ class GoCommandTest extends TestCase
         $command->execute();
 
         $this->assertFalse($command->success);
-        $this->assertEquals('I don\'t know which way that is.', $command->getMessage());
+        $this->assertEquals('Go where?', $command->getMessage());
     }
 
     /** @test */
@@ -81,13 +82,15 @@ class GoCommandTest extends TestCase
         $start_room = $this->makeRoom();
         $other_room = $this->makeRoom();
 
-        $start_room->setNorthExit($other_room);
-        $user = $this->makeUser([], 100, $start_room);
-
-        $portal = $start_room->north_exit->portal;
-
+        $portal = factory(Portal::class)->create();
         $portal->lockWithCode('1234');
         $portal->save();
+
+        $start_room->setNorthExit($other_room, [
+            'portal_id' => $portal->id,
+        ]);
+
+        $user = $this->makeUser([], 100, $start_room);
 
         $command = new GoCommand('go north', $user);
         $command->execute();

@@ -196,11 +196,26 @@ abstract class Command
      * Set the message that will be sent to the user
      *
      * @param string $message
+     *
      * @return self
      */
     protected function setMessage($message)
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * Append some message output
+     *
+     * @param string $message
+     *
+     * @return self
+     */
+    protected function appendMessage($message)
+    {
+        $this->message .= $message;
 
         return $this;
     }

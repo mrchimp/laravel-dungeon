@@ -2,6 +2,8 @@
 
 namespace Dungeon\Commands;
 
+use Dungeon\Direction;
+
 class GoCommand extends Command
 {
     /**
@@ -36,24 +38,21 @@ class GoCommand extends Command
      */
     protected function run()
     {
-        $direction = $this->inputPart('direction');
+        $direction = Direction::sanitize($this->inputPart('direction'));
 
         if (!$direction) {
             return $this->fail('Go where?');
         }
 
-        if (!in_array($direction, $this->directions)) {
-            return $this->fail('I don\'t know which way that is.');
-        }
-
-        $exit = $direction . 'Exit';
-        $destination = $this->user->getRoom()->$exit;
+        $destination = $this->user->getRoom()->{$direction . 'Exit'};
 
         if (!$destination) {
             return $this->fail('I can\'t go that way.');
         }
 
-        if ($destination->portal->isLocked()) {
+        $portal = $this->user->getRoom()->{$direction . '_portal'};
+
+        if ($portal && $portal->isLocked()) {
             return $this->fail('The door is locked.');
         }
 
