@@ -10,7 +10,13 @@ class Weapon extends Entity implements WeaponInterface
 {
     use CanBeUsedAsWeapon;
 
-    public function getVerbs()
+    protected $fillable = [
+        'name',
+        'description',
+        'damage_types',
+    ];
+
+    public function getVerbs(): array
     {
         $verbs = parent::getVerbs();
 
@@ -24,12 +30,12 @@ class Weapon extends Entity implements WeaponInterface
      *
      * @return array
      */
-    public function getSerializable()
+    public function getSerializable(): array
     {
         return array_merge(
             parent::getSerializable(),
             [
-                'damage_types' => 50,
+                'damage_types' => [],
             ]
         );
     }

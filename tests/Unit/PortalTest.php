@@ -27,12 +27,13 @@ class PortalTest extends TestCase
     {
         $portal = factory(Portal::class)->make([
             'locked' => false,
+            'code' => 1234,
         ]);
 
         $this->assertFalse($portal->isLocked());
-        $this->assertTrue($portal->lockWithCode('1234'));
+        $this->assertTrue($portal->lockWithCode(1234));
         $this->assertTrue($portal->isLocked());
-        $this->assertTrue($portal->unlockWithCode('1234'));
+        $this->assertTrue($portal->unlockWithCode(1234));
         $this->assertFalse($portal->isLocked());
     }
 
@@ -72,6 +73,18 @@ class PortalTest extends TestCase
 
         $this->assertEquals($good_key->id, $portal->whichKeyFits($collection)->id);
         $this->assertNull($other_portal->whichKeyFits($collection));
+    }
+
+    /** @test */
+    public function portal_cannot_be_locked_with_a_code_if_it_doesnt_have_a_code()
+    {
+        $portal = factory(Portal::class)->make([
+            'locked' => false,
+            'code' => null,
+        ]);
+
+        $this->assertFalse($portal->lockWithCode(1234));
+        $this->assertFalse($portal->isLocked());
     }
 
     /** @test */

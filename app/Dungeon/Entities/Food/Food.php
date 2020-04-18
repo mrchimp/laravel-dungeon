@@ -15,31 +15,31 @@ class Food extends Entity
         'healing',
     ];
 
-    public function getSerializable()
+    public function getSerializable(): array
     {
         return array_merge(parent::getSerializable(), [
             'healing' => 25,
         ]);
     }
 
-    public function eat(User $consumer)
+    public function eat(User $consumer): void
     {
         $consumer->heal($this->healing);
     }
 
-    public function setHealing($amount)
+    public function setHealing($amount): self
     {
         $this->healing = $amount;
 
         return $this;
     }
 
-    public function getHealing()
+    public function getHealing(): int
     {
         return $this->healing;
     }
 
-    public function getVerbs()
+    public function getVerbs(): array
     {
         $verbs = parent::getVerbs();
 

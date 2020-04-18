@@ -3,15 +3,14 @@
 namespace Dungeon\Traits;
 
 use Dungeon\DamageTypes\MeleeDamage;
+use Illuminate\Support\Arr;
 
 trait CanBeUsedAsWeapon
 {
     /**
      * Attack a target with this weapon
-     *
-     * @return
      */
-    public function attack($target)
+    public function attack($target): array
     {
         $damages = [];
 
@@ -30,13 +29,18 @@ trait CanBeUsedAsWeapon
 
     /**
      * The type of damage this weapon deals
-     *
-     * @return array
      */
-    public function damageTypes()
+    public function damageTypes(): array
     {
-        return [
-            MeleeDamage::class => 10,
-        ];
+        // dump($this->damage_types, $this);
+        return $this->damage_types ? $this->damage_types : [];
+    }
+
+    /**
+     * The amount of a given damage type this weapon deals
+     */
+    public function damageType(string $type): int
+    {
+        return Arr::get($this->damageTypes(), $type, 0);
     }
 }

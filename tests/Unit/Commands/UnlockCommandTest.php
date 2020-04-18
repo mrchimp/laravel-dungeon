@@ -21,9 +21,10 @@ class UnlockCommandTest extends TestCase
             'description' => 'This is the second room',
         ]);
 
-        $portal = factory(Portal::class)->create();
-        $portal->lockWithCode('1234');
-        $portal->save();
+        $portal = factory(Portal::class)->create([
+            'locked' => true,
+            'code' => 1234,
+        ]);
 
         $start_room->setNorthExit($other_room, [
             'portal_id' => $portal->id,
@@ -54,11 +55,14 @@ class UnlockCommandTest extends TestCase
     /** @test */
     public function if_access_type_is_invalid_command_fails()
     {
-        $user = $this->makeUser();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
+
         $command = new UnlockCommand('unlock north door with blah 1234', $user);
         $command->execute();
 
         $this->assertFalse($command->success);
+        $this->assertEquals('Doors can only be unlocked with a code or a key.', $command->getMessage());
     }
 
     /** @test */

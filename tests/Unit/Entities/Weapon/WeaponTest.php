@@ -24,14 +24,14 @@ class WeaponTest extends TestCase
             ],
         ]);
 
-        $this->assertIsArray($weapon->damage_types);
-        $this->assertEquals(50, $weapon->damage_types[MeleeDamage::class]);
+        $this->assertIsArray($weapon->damageTypes());
+        $this->assertEquals(50, $weapon->damageType(MeleeDamage::class));
 
         // After restoring the weapon from the database it should still
         // have the serializable attributes applied
         $weapon = Weapon::where('name', 'Rock')->first();
 
-        $this->assertEquals(50, $weapon->damage_types[MeleeDamage::class]);
+        $this->assertEquals(50, $weapon->damageType(MeleeDamage::class));
     }
 
     /** @test */
@@ -46,8 +46,8 @@ class WeaponTest extends TestCase
             ],
         ]);
 
-        $this->assertIsArray($weapon->damage_types);
-        $this->assertEquals(50, $weapon->damage_types[MeleeDamage::class]);
+        $this->assertIsArray($weapon->damageTypes());
+        $this->assertEquals(50, $weapon->damageType(MeleeDamage::class));
 
         $weapon->save();
 
@@ -55,7 +55,7 @@ class WeaponTest extends TestCase
         // have the serializable attributes applied
         $weapon = Weapon::where('name', 'Rock')->first();
 
-        $this->assertEquals(50, $weapon->damage_types[MeleeDamage::class]);
+        $this->assertEquals(50, $weapon->damageType(MeleeDamage::class));
     }
 
     /** @test */

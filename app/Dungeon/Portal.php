@@ -69,8 +69,11 @@ class Portal extends Model
             return false;
         }
 
+        if (!$this->code) {
+            return false;
+        }
+
         $this->locked = true;
-        $this->code = $code;
         $this->save();
 
         return true;

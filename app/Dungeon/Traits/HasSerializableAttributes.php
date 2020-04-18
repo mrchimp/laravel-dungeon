@@ -5,42 +5,34 @@ namespace Dungeon\Traits;
 trait HasSerializableAttributes
 {
     /**
-     * Name of the JSON columnt that the serialized data
+     * Name of the JSON column that the serialized data
      * will be stored in
-     *
-     * @return string
      */
-    public function serializedDataColumnName()
+    public function serializedDataColumnName(): string
     {
         return 'serialized_data';
     }
 
     /**
      * Get the attributes to be serialized
-     *
-     * @return array
      */
-    public function getSerializable()
+    public function getSerializable(): array
     {
         return [];
     }
 
     /**
      * Get the names of attributes to be serialized
-     *
-     * @return array
      */
-    public function getSerializableAttributes()
+    public function getSerializableAttributes(): array
     {
         return array_keys($this->getSerializable());
     }
 
     /**
      * Take attributes and put them in the data array
-     *
-     * @return void
      */
-    public function serializeAttributes()
+    public function serializeAttributes(): void
     {
         // If we try modifying $this->serialized_data directly, we get an
         // error "ErrorException: Indirect modification of
@@ -58,10 +50,8 @@ trait HasSerializableAttributes
 
     /**
      * Take the attributes from the data array and make them attributes
-     *
-     * @return void
      */
-    public function deserializeAttributes()
+    public function deserializeAttributes(): void
     {
         foreach ($this->getSerializableAttributes() as $field_name) {
             if (isset($this->{$this->serializedDataColumnName()}[$field_name])) {
@@ -75,13 +65,12 @@ trait HasSerializableAttributes
     /**
      * Take attributes from the defaults array and apply
      * them as attributes
-     *
-     * @return void
      */
-    public function applyDefaultSerializableAttributes()
+    public function applyDefaultSerializableAttributes(): void
     {
         foreach ($this->getSerializableAttributes() as $field_name) {
-            if (array_key_exists($field_name, $this->getSerializable())
+            if (
+                array_key_exists($field_name, $this->getSerializable())
                 && !isset($this->$field_name)
             ) {
                 $this->$field_name = $this->getSerializable()[$field_name];

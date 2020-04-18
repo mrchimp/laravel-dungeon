@@ -15,6 +15,8 @@ class LockCommand extends Command
     {
         return [
             '/^lock (?<direction>.*) door with (?<access_type>.*) (?<access_name>.*)/',
+            '/^lock (?<direction>.*) door with (?<access_type>.*)/',
+            '/^lock (?<direction>.*) door$/',
         ];
     }
 
@@ -29,12 +31,16 @@ class LockCommand extends Command
         $access_type = $this->inputPart('access_type');
         $code = $this->inputPart('access_name');
 
+        if (!$access_type) {
+            $access_type = 'key';
+        }
+
         if (!Direction::isValid($direction)) {
             return $this->fail('Which door? North, South, East or West?');
         }
 
-        if (!in_array($access_type, ['code'])) {
-            return $this->fail('Doors can only be unlocked with a code.');
+        if (!in_array($access_type, ['code', 'key'])) {
+            return $this->fail('Doors can only be locked with a code or a key.');
         }
 
         if ($access_type === 'code' && !$code) {
@@ -48,12 +54,26 @@ class LockCommand extends Command
             return $this->fail('The door is already locked.');
         }
 
-        $result = $portal->lockWithCode($code);
+        if ($access_type === 'code') {
+            if (!$portal->code) {
+                return $this->fail('You can\'t lock that door with a code.');
+            }
+
+            $result = $portal->lockWithCode($code);
+        } elseif ($access_type === 'key') {
+            $key = $portal->whichKeyFits($this->user->getInventory());
+
+            if (!$key) {
+                return $this->fail('Nothing fits!');
+            }
+
+            $result = $portal->lockWithKey($key);
+        }
 
         if ($result) {
-            $this->appendMessage('You lock the door. ');
+            $this->setMessage('You lock the door.');
         } else {
-            $this->appendMessage('You can\'t lock the door. ');
+            $this->setMessage('You can\'t lock the door.');
         }
     }
 }

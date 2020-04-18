@@ -12,6 +12,8 @@ use Dungeon\Traits\HasUuid;
 use Dungeon\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Entity extends Model
 {
@@ -48,19 +50,28 @@ class Entity extends Model
         self::observe(new HasOwnClassObserver);
     }
 
-    public function getSerializable()
+    /**
+     * Get the attributes to be serialized
+     */
+    public function getSerializable(): array
     {
         return [
             'can_be_taken' => true,
         ];
     }
 
-    public function isEquipable()
+    /**
+     * Can this entity be equipped as apparel
+     */
+    public function isEquipable(): bool
     {
         return false;
     }
 
-    public function getVerbs()
+    /**
+     * Verbs that this entity can be used for
+     */
+    public function getVerbs(): array
     {
         return [
             'take',
@@ -70,7 +81,10 @@ class Entity extends Model
         ];
     }
 
-    public function supportsVerb($verb)
+    /**
+     * Does this entity support a given verb
+     */
+    public function supportsVerb(string $verb): bool
     {
         return in_array($verb, $this->getVerbs());
     }
@@ -79,10 +93,8 @@ class Entity extends Model
      * Take a given Entity and return a new instance of whatever
      * class is stored in the `class` attribute with the model's
      * attributes applied to it
-     *
-     * @return mixed
      */
-    public static function replaceClass($model)
+    public static function replaceClass(Model $model): Model
     {
         $attributes = $model->getAttributes();
         $serialized_data = $model->serialized_data;
@@ -107,42 +119,38 @@ class Entity extends Model
 
     /**
      * Create a new Eloquent Collection instance
-     *
-     * @param array $models
-     *
-     * @return Collection
      */
-    public function newCollection(array $models = [])
+    public function newCollection(array $models = []): Collection
     {
         return new EntityCollection($models);
     }
 
-    public function owner()
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function container()
+    public function container(): BelongsTo
     {
         return $this->belongsTo(Entity::class);
     }
 
-    public function contents()
+    public function contents(): HasMany
     {
         return $this->hasMany(Entity::class, 'container_id');
     }
 
-    public function room()
+    public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
     }
 
-    public function npc()
+    public function npc(): BelongsTo
     {
         return $this->belongsTo(NPC::class);
     }
 
-    public function moveToRoom(Room $room = null)
+    public function moveToRoom(Room $room = null): self
     {
         $this->moveToVoid();
 
@@ -151,7 +159,7 @@ class Entity extends Model
         return $this;
     }
 
-    public function giveToUser(User $user = null)
+    public function giveToUser(User $user = null): self
     {
         if (is_null($user)) {
             $this->moveToVoid();
@@ -167,7 +175,7 @@ class Entity extends Model
         return $this;
     }
 
-    public function moveToContainer(Entity $container = null)
+    public function moveToContainer(Entity $container = null): self
     {
         $this->moveToVoid();
         $this->container()->associate($container);
@@ -176,12 +184,12 @@ class Entity extends Model
         return $this;
     }
 
-    public function giveToNPC(NPC $npc = null)
+    public function giveToNPC(NPC $npc = null): ?self
     {
         $this->moveToVoid();
 
         if (!$npc->hasBody()) {
-            return;
+            return null;
         }
 
         $this->moveToContainer($npc->body);
@@ -189,7 +197,7 @@ class Entity extends Model
         return $this;
     }
 
-    public function moveToVoid()
+    public function moveToVoid(): self
     {
         $this->owner()->dissociate();
         $this->room()->dissociate();
@@ -199,42 +207,44 @@ class Entity extends Model
         return $this;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function findContents($query)
+    public function findContents(string $query): ?Entity
     {
         return $this->contents->first(function ($entity) use ($query) {
             return $entity->nameMatchesQuery($query);
         });
     }
 
-    public function ownedBy(User $user)
+    public function ownedBy(User $user): bool
     {
         if ($this->container instanceof Body) {
             return (int) $this->container->owner_id === (int) $user->id;
         }
+
+        return (int) $this->owner_id === (int) $user->id;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         $array = parent::toArray();
 
-        foreach ($this->getSerializable() as $serializable) {
+        foreach ($this->getSerializable() as $serializable => $value) {
             $array[$serializable] = $this->$serializable;
         }
 
         return $array;
     }
 
-    public function getRoom()
+    public function getRoom(): ?Room
     {
         if (!$this->room) {
             return null;
@@ -243,12 +253,12 @@ class Entity extends Model
         return $this->room;
     }
 
-    public function canBeTaken()
+    public function canBeTaken(): bool
     {
         return $this->can_be_taken;
     }
 
-    public function canBeAttacked()
+    public function canBeAttacked(): bool
     {
         return false;
     }

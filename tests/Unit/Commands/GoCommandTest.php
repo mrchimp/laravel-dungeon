@@ -82,9 +82,10 @@ class GoCommandTest extends TestCase
         $start_room = $this->makeRoom();
         $other_room = $this->makeRoom();
 
-        $portal = factory(Portal::class)->create();
-        $portal->lockWithCode('1234');
-        $portal->save();
+        $portal = factory(Portal::class)->create([
+            'locked' => true,
+            'code' => 1234,
+        ]);
 
         $start_room->setNorthExit($other_room, [
             'portal_id' => $portal->id,
