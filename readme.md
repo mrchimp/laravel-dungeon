@@ -55,8 +55,8 @@ Password: secretpassword
   - ✗ Apparel
   - ✗ Inventory
 - ✗ Locked doors
-  - ✗ Keys
-  - ✗ Buttons ?
+  - ✓ Keys
+  - ✓ Code
   - ✗ Breakable doors
 - ✗ Levelling
 - ✗ Player Stats
