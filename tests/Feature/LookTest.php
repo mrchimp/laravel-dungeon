@@ -41,7 +41,7 @@ class LookTest extends TestCase
     public function look_command_returns_room_description()
     {
         $response = $this->actingAs($this->user)
-            ->post('/cmd', [
+            ->post('/dungeon/cmd', [
                 'input' => 'look'
             ]);
 

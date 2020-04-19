@@ -14,8 +14,6 @@
 Auth::routes();
 
 Route::get('logout', 'Auth\LoginController@logout');
-Route::get('/', 'HomeController@index');
-
-Route::group(['middleware' => 'auth'], function () {
-    Route::post('cmd', 'CmdController@run');
+Route::get('/', function () {
+    return redirect('dungeon');
 });

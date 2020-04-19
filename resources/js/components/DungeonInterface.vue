@@ -205,7 +205,7 @@ export default {
     runCommand(input) {
       this.sending_input = false;
 
-      return axios.post("cmd", {
+      return axios.post("/dungeon/cmd", {
         input: input
       });
     }

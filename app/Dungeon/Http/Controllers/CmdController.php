@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Dungeon\Http\Controllers;
 
 use Dungeon\CommandRunner;
 use Dungeon\Exceptions\UnknownCommandException;
