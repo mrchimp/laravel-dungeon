@@ -8,10 +8,8 @@ class WhisperCommand extends Command
 {
     /**
      * Patterns that this command matches
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^whisper (?<target>[^ ]*) (?<message>.*)$/',
@@ -19,7 +17,7 @@ class WhisperCommand extends Command
         ];
     }
 
-    public function run()
+    public function run(): self
     {
         $target_name = $this->inputPart('target');
         $message = $this->inputPart('message');
@@ -41,5 +39,7 @@ class WhisperCommand extends Command
         $target->owner->notify(new WhisperToUser($this->user, $message));
 
         $this->setMessage("You whisper to {$target->name}: {$message}");
+
+        return $this;
     }
 }

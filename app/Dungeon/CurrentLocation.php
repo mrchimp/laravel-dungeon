@@ -16,12 +16,12 @@ class CurrentLocation
         $this->room = $this->user->getRoom();
     }
 
-    public function getRoom()
+    public function getRoom(): ?Room
     {
         return $this->room;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         if (is_null($this->room)) {
             return 'You float in an endless void.';
@@ -30,7 +30,7 @@ class CurrentLocation
         return $this->room->getDescription();
     }
 
-    public function getPlayers($refresh = false, $exclude_self = true)
+    public function getPlayers(bool $refresh = false, bool $exclude_self = true): Collection
     {
         if (!$this->room) {
             return new Collection([]);
@@ -46,7 +46,7 @@ class CurrentLocation
             ->values();
     }
 
-    public function getNPCs($refresh = false)
+    public function getNPCs(bool $refresh = false): Collection
     {
         if (!$this->room) {
             return new Collection([]);
@@ -55,7 +55,7 @@ class CurrentLocation
         return $this->room->npcs();
     }
 
-    public function getItems($refresh = false)
+    public function getItems(bool $refresh = false): Collection
     {
         if (!$this->user->getRoom()) {
             return new Collection([]);
@@ -68,7 +68,7 @@ class CurrentLocation
         return $this->room->items();
     }
 
-    public function getExits($refresh = false)
+    public function getExits(bool $refresh = false): Collection
     {
         if (is_null($this->user->getRoom())) {
             return new Collection([]);

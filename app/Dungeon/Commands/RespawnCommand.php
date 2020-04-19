@@ -8,10 +8,8 @@ class RespawnCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^respawn$/',
@@ -21,10 +19,8 @@ class RespawnCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         $target_name = $this->inputPart('target');
 
@@ -41,5 +37,7 @@ class RespawnCommand extends Command
         $target->respawn()->save();
 
         $this->setMessage('User has respawned.');
+
+        return $this;
     }
 }

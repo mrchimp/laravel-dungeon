@@ -9,10 +9,8 @@ class EquipCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^equip$/',
@@ -22,10 +20,8 @@ class EquipCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         if (!$this->user->getRoom()) {
             return $this->fail('You float in an endless void.');
@@ -55,5 +51,7 @@ class EquipCommand extends Command
         }
 
         $entity->save();
+
+        return $this;
     }
 }

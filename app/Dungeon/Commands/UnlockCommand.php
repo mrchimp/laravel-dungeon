@@ -9,10 +9,8 @@ class UnlockCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^unlock (?<direction>.*) door with (?<access_type>.*) (?<access_name>.*)$/',
@@ -23,10 +21,8 @@ class UnlockCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         $direction = $this->inputPart('direction');
         $access_type = $this->inputPart('access_type');
@@ -75,21 +71,12 @@ class UnlockCommand extends Command
             $result = $portal->unlockWithKey($key);
         }
 
-
         if ($result) {
             $this->appendMessage('You unlock the door. ');
         } else {
             $this->appendMessage('You fail to unlock the door. ');
         }
-    }
 
-    /**
-     * Unlock the door with a given key
-     *
-     * @param KeyInterface $key
-     * @return void
-     */
-    protected function unlockWithKey(KeyInterface $key)
-    {
+        return $this;
     }
 }

@@ -6,10 +6,8 @@ class GiveCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^give$/',
@@ -19,10 +17,8 @@ class GiveCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         if (!$this->user->room) {
             return $this->fail('There is nobody else in the void.');
@@ -47,9 +43,16 @@ class GiveCommand extends Command
             return $this->fail('Give to who now?');
         }
 
-        $item->giveToUser($target);
+        // @todo need to test this - maybe place item on body instead?
+        if (!$target->owner) {
+            return $this->fail('I think they might be dead.');
+        }
+
+        $item->giveToUser($target->owner);
         $item->save();
 
         $this->setMessage('You give it away.');
+
+        return $this;
     }
 }

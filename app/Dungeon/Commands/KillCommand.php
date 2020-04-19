@@ -6,10 +6,8 @@ class KillCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^kill$/',
@@ -19,10 +17,8 @@ class KillCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return void
      */
-    protected function run()
+    protected function run(): self
     {
         $target_name = $this->inputPart('target');
 
@@ -44,5 +40,7 @@ class KillCommand extends Command
         $user->setHealth(0)->save();
 
         $this->setMessage('Deaded.');
+
+        return $this;
     }
 }

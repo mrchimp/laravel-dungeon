@@ -2,72 +2,57 @@
 
 namespace Dungeon\Commands;
 
-use Auth;
 use Dungeon\CurrentLocation;
 use Dungeon\EntityFinder;
+use Dungeon\Room;
 use Dungeon\User;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 abstract class Command
 {
     /**
      * The user running this command
-     *
-     * @var User
      */
-    protected $user;
+    protected User $user;
 
     /**
      * The input string given by the user
-     *
-     * @var string
      */
-    protected $input = '';
+    protected string $input = '';
 
     /**
      * The input string exploded on spaces
-     *
-     * @var array
      */
-    protected $input_array = [];
+    protected array $input_array = [];
 
     /**
      * The matched parts of the query.
      *
      * E.g. with the pattern '/look at (?<target>.*)/' and the input
      * 'look at thing', this array would include 'target' => 'thing'
-     *
-     * @var array
      */
-    protected $matches = [];
+    protected array $matches = [];
 
     /**
      * Whether this command matched the given input
-     *
-     * @var boolean
      */
-    public $matched = false;
+    public bool $matched = false;
 
     /**
      * The output data to be sent in the response to the user
-     *
-     * @var array
      */
-    protected $output = [];
+    protected array $output = [];
 
     /**
      * The text response to send to the user
-     *
-     * @var string
      */
-    protected $message = '';
+    protected string $message = '';
 
     /**
      * The Room that the user is currently in
-     *
-     * @var App/Room
      */
-    protected $current_location;
+    protected CurrentLocation $current_location;
 
     /**
      * Whether the command succeeded.
@@ -75,24 +60,18 @@ abstract class Command
      * If there is any issue such as the user trying to interact with an
      * item that doesn't exist or a program error such as the database
      * not being accessible, this should be false.
-     *
-     * @var boolean
      */
-    public $success = true;
+    public bool $success = true;
 
     /**
      * EntityFinder for finding entities in the vicinity
-     *
-     * @var EntityFinder
      */
-    public $entityFinder;
+    public EntityFinder $entityFinder;
 
     /**
      * Create a new Command
-     *
-     * @param User $user the user running this command
      */
-    public function __construct($input, User $user = null)
+    public function __construct(string $input, User $user = null)
     {
         $this->input = $input;
         $this->matched = $this->matches($input);
@@ -113,10 +92,8 @@ abstract class Command
 
     /**
      * Regex patterns that match this command
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [];
     }
@@ -125,20 +102,16 @@ abstract class Command
      * Perform the inner workings of this command. This is the part
      * that will vary from command to command. The objective of
      * this method is to populate the output array.
-     *
-     * @return void
      */
-    abstract protected function run();
+    abstract protected function run(): self;
 
     /**
      * Run the command
      *
      * This sets up the command and then calls the 'run' method
      * which does the interesting bits.
-     *
-     * @return void
      */
-    public function execute()
+    public function execute(): void
     {
         $this->run();
 
@@ -153,11 +126,8 @@ abstract class Command
     /**
      * Test the given input agains this command's patterns and
      * populate the matches array
-     *
-     * @param string $input
-     * @return boolean
      */
-    public function matches($input = null)
+    public function matches(string $input = null): bool
     {
         if (is_null($input)) {
             $input = $this->input;
@@ -174,32 +144,24 @@ abstract class Command
 
     /**
      * Get the array of input matches
-     *
-     * @return array
      */
-    public function matchesArray()
+    public function matchesArray(): array
     {
         return $this->matches;
     }
 
     /**
      * Get a input match by name
-     *
-     * @return string
      */
-    public function inputPart($key)
+    public function inputPart(string $key): ?string
     {
         return Arr::get($this->matches, $key);
     }
 
     /**
      * Set the message that will be sent to the user
-     *
-     * @param string $message
-     *
-     * @return self
      */
-    protected function setMessage($message)
+    protected function setMessage(string $message): self
     {
         $this->message = $message;
 
@@ -208,12 +170,8 @@ abstract class Command
 
     /**
      * Append some message output
-     *
-     * @param string $message
-     *
-     * @return self
      */
-    protected function appendMessage($message)
+    protected function appendMessage(string $message): self
     {
         $this->message .= $message;
 
@@ -222,22 +180,16 @@ abstract class Command
 
     /**
      * Get the message to be sent to the user
-     *
-     * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
     /**
      * Set an item in the array that wil be sent to the user
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return self
      */
-    protected function setOutputItem($key, $value)
+    protected function setOutputItem(string $key, $value): self
     {
         $this->output[$key] = $value;
 
@@ -246,21 +198,16 @@ abstract class Command
 
     /**
      * Get an item from the array that will be sent to the user
-     *
-     * @param string $key
-     * @return mixed
      */
-    public function getOutputItem($key)
+    public function getOutputItem(string $key)
     {
         return Arr::get($this->output, $key);
     }
 
     /**
      * Get the array that will be sent to the user
-     *
-     * @return array
      */
-    public function getOutputArray()
+    public function getOutputArray(): array
     {
         return $this->output;
     }
@@ -269,11 +216,8 @@ abstract class Command
      * Set the array that will be sent to the user.
      *
      * You probably want to use setOutputItem instead
-     *
-     * @param array $output
-     * @return self
      */
-    protected function setOutputArray($output)
+    protected function setOutputArray(array $output): self
     {
         $this->output = $output;
 
@@ -284,10 +228,8 @@ abstract class Command
      * Convert this command to an array
      *
      * Actually just returns the output array
-     *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->output;
     }
@@ -297,11 +239,8 @@ abstract class Command
      *
      * Sets the success status to false and sets a message
      * to send to the user.
-     *
-     * @param string $message
-     * @return self
      */
-    public function fail($message)
+    public function fail(string $message): self
     {
         $this->setMessage($message);
 

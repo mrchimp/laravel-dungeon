@@ -12,7 +12,7 @@ class AttackCommand extends Command
      *
      * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^attack$/',
@@ -22,10 +22,8 @@ class AttackCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         if (!$this->user->getRoom()) {
             return $this->fail('You cannot attack the void.');
@@ -61,5 +59,7 @@ class AttackCommand extends Command
 
         $this->success = true;
         $this->setMessage('You hit for a total ' . $result['total'] . ' damage.');
+
+        return $this;
     }
 }

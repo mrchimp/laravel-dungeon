@@ -9,10 +9,8 @@ class LookCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^look$/',
@@ -22,10 +20,8 @@ class LookCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         if (is_null($this->user->getRoom())) {
             return $this->fail($this->current_location->getDescription());
@@ -44,5 +40,7 @@ class LookCommand extends Command
         }
 
         $this->setMessage($this->current_location->getDescription());
+
+        return $this;
     }
 }

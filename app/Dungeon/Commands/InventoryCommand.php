@@ -6,10 +6,8 @@ class InventoryCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^inventory$/',
@@ -18,16 +16,15 @@ class InventoryCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         $entities = $this->user->getInventory();
 
         if (count($entities) === 0) {
             $this->setMessage('You don\'t have anything.');
-            return;
+
+            return $this;
         }
 
         $this->setMessage('You have: <br>' .
@@ -36,5 +33,7 @@ class InventoryCommand extends Command
                 return e($entity->getName());
             })
             ->implode('<br>'));
+
+        return $this;
     }
 }

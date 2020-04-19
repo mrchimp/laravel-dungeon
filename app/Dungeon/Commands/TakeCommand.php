@@ -6,10 +6,8 @@ class TakeCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^take$/',
@@ -19,10 +17,8 @@ class TakeCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         // $query = implode(' ', array_slice($this->input_array, 1));
         $query = $this->inputPart('target');
@@ -44,5 +40,7 @@ class TakeCommand extends Command
         $entity->save();
 
         $this->setMessage('You take the ' . e($entity->getName()) . '.');
+
+        return $this;
     }
 }

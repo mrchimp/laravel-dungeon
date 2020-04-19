@@ -6,10 +6,8 @@ class EatCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^eat (?<target>.*)$/',
@@ -23,10 +21,8 @@ class EatCommand extends Command
      * may still be loaded as a relationship. You
      * will need to reload the relationship in
      * order for it to be removed.
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         $entity = $this->entityFinder->find($this->inputPart('target'), $this->user);
 
@@ -42,12 +38,14 @@ class EatCommand extends Command
         $this->user->save();
         $this->user->body->save();
 
-        $message = 'You eat the ' . e($entity->getName()) . '. '.
+        $message = 'You eat the ' . e($entity->getName()) . '. ' .
             'It heals you for ' . $entity->getHealing() . '. ' .
             'Your health is now ' . $this->user->getHealth();
 
         $entity->delete();
 
         $this->setMessage($message);
+
+        return $this;
     }
 }

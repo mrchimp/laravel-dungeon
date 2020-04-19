@@ -6,10 +6,8 @@ class DropCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^drop (?<target>.*)$/',
@@ -18,10 +16,8 @@ class DropCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         $query = $this->inputPart('target');
         $entity = $this->entityFinder->findInInventory($query, $this->user);
@@ -34,5 +30,7 @@ class DropCommand extends Command
         $entity->save();
 
         $this->setMessage('You drop the ' . e($entity->getName()) . '.');
+
+        return $this;
     }
 }

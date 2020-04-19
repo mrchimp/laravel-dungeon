@@ -8,10 +8,8 @@ class LockCommand extends Command
 {
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^lock (?<direction>.*) door with (?<access_type>.*) (?<access_name>.*)/',
@@ -22,10 +20,8 @@ class LockCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         $direction = $this->inputPart('direction');
         $access_type = $this->inputPart('access_type');
@@ -75,5 +71,7 @@ class LockCommand extends Command
         } else {
             $this->setMessage('You can\'t lock the door.');
         }
+
+        return $this;
     }
 }

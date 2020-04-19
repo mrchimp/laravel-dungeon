@@ -8,10 +8,8 @@ class GoCommand extends Command
 {
     /**
      * Allowed directions
-     *
-     * @var array
      */
-    protected $directions = [
+    protected array $directions = [
         'north',
         'south',
         'west',
@@ -20,10 +18,8 @@ class GoCommand extends Command
 
     /**
      * Patterns that this command handles
-     *
-     * @return array
      */
-    public function patterns()
+    public function patterns(): array
     {
         return [
             '/^go$/',
@@ -33,10 +29,8 @@ class GoCommand extends Command
 
     /**
      * Run the command
-     *
-     * @return null
      */
-    protected function run()
+    protected function run(): self
     {
         $direction = Direction::sanitize($this->inputPart('direction'));
 
@@ -61,5 +55,7 @@ class GoCommand extends Command
             ->save();
 
         $this->setMessage('You go ' . $direction . '. ' . $destination->getDescription());
+
+        return $this;
     }
 }
