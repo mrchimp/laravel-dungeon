@@ -2,6 +2,8 @@
 
 namespace Dungeon;
 
+use Illuminate\Support\Arr;
+
 class Direction
 {
     const NORTH = 'north';
@@ -23,31 +25,26 @@ class Direction
         self::WEST => 'West',
     ];
 
-    public static function name($direction)
+    /**
+     * Get the name of a direction
+     */
+    public static function name(string $direction): ?string
     {
-        return self::NAMES[strtolower($direction)];
+        return Arr::get(self::NAMES, strtolower($direction));
     }
 
     /**
      * Check if a direction string is valid
-     *
-     * @param string $direction
-     *
-     * @return boolean
      */
-    public static function isValid($direction)
+    public static function isValid(?string $direction): bool
     {
         return in_array(strtolower($direction), self::ALL);
     }
 
     /**
      * Get an nice version of $direction
-     *
-     * @param string $direction
-     *
-     * @return null|string
      */
-    public static function sanitize($direction)
+    public static function sanitize(?string $direction): ?string
     {
         if (!self::isValid($direction)) {
             return null;

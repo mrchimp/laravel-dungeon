@@ -3,6 +3,7 @@
 namespace Dungeon;
 
 use Dungeon\Commands\AttackCommand;
+use Dungeon\Commands\Command;
 use Dungeon\Commands\DropCommand;
 use Dungeon\Commands\EatCommand;
 use Dungeon\Commands\EquipCommand;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Log;
 
 class CommandRunner
 {
-    protected static $commands = [
+    protected static array $commands = [
         AttackCommand::class,
         DropCommand::class,
         EatCommand::class,
@@ -48,10 +49,8 @@ class CommandRunner
 
     /**
      * Take an input string and run the appropriate command
-     *
-     * @return void
      */
-    public static function run($input, $user = null)
+    public static function run(string $input, User $user = null): ?Command
     {
         foreach (self::$commands as $command) {
             $command = new $command($input, $user);

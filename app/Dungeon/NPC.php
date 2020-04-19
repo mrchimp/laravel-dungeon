@@ -11,6 +11,9 @@ use Dungeon\Traits\HasHealth;
 use Dungeon\Traits\HasInventory;
 use Dungeon\Traits\HasSerializableAttributes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class NPC extends Model
 {
@@ -38,27 +41,27 @@ class NPC extends Model
         self::observe(new SerializableObserver);
     }
 
-    public function room()
+    public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
     }
 
-    public function body()
+    public function body(): HasOne
     {
         return $this->hasOne(Body::class, 'npc_id');
     }
 
-    public function inventory()
+    public function inventory(): HasMany
     {
         return $this->hasMany(Entity::class, 'npc_id');
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }

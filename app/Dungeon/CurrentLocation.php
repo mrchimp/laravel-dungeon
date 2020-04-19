@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CurrentLocation
 {
-    protected $user;
+    protected ?User $user;
 
-    protected $room;
+    protected ?Room $room;
 
-    public function __construct($user)
+    public function __construct(user $user)
     {
         $this->user = $user;
         $this->room = $this->user->getRoom();

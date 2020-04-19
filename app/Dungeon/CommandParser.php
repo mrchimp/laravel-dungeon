@@ -52,17 +52,17 @@ class CommandParser
         throw new \Exception('Failed to parse input.');
     }
 
-    public function getCommandName()
+    public function getCommandName(): string
     {
         return $this->command_name;
     }
 
-    public function getSubjects()
+    public function getSubjects(): array
     {
         return $this->subjects;
     }
 
-    public function getObjects()
+    public function getObjects(): array
     {
         return $this->objects;
     }

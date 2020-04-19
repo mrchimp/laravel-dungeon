@@ -9,6 +9,7 @@ use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasBody;
 use Dungeon\Traits\HasSerializableAttributes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -56,12 +57,12 @@ class User extends Authenticatable
         self::observe(new SerializableObserver);
     }
 
-    public function isEquipable()
+    public function isEquipable(): bool
     {
         return false;
     }
 
-    public function getSerializable()
+    public function getSerializable(): array
     {
         return [
             'health' => 100,
@@ -69,12 +70,12 @@ class User extends Authenticatable
         ];
     }
 
-    public function body()
+    public function body(): HasOne
     {
         return $this->hasOne(Body::class, 'owner_id');
     }
 
-    public function getRoom()
+    public function getRoom(): ?Room
     {
         if (!$this->hasBody()) {
             return null;
@@ -88,29 +89,10 @@ class User extends Authenticatable
         throw new \Exception('Dont use user-room relationship - go through body instead');
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
-
-    /**
-     * @todo remove - go through bdy instead
-     *
-     * @param boolean $refresh
-     * @return void
-     */
-    // public function getInventory($refresh = false)
-    // {
-    //     if (!$this->body) {
-    //         return null;
-    //     }
-
-    //     if ($refresh) {
-    //         $this->body->load('contents');
-    //     }
-
-    //     return $this->body->content;
-    // }
 
     /**
      * @todo
@@ -123,12 +105,17 @@ class User extends Authenticatable
         throw new \Exception('Shouldnt be using finder on users any more');
     }
 
+    /**
+     * Kill a user
+     *
+     * @throws \Exception
+     */
     public function kill()
     {
         throw new \Exception('refactor User::kill');
     }
 
-    public function respawn()
+    public function respawn(): self
     {
         $room = Room::first();
 
@@ -141,7 +128,10 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function hurt($amount)
+    /**
+     * @todo need to add an interface for hurtable things
+     */
+    public function hurt(int $amount)
     {
         if ($this->hasBody()) {
             return $this->body->hurt($amount);
@@ -150,7 +140,10 @@ class User extends Authenticatable
         return null;
     }
 
-    public function heal($amount)
+    /**
+     * @todo need to add an interface for healable things
+     */
+    public function heal(int $amount)
     {
         if ($this->hasBody()) {
             return $this->body->heal($amount);
@@ -186,7 +179,7 @@ class User extends Authenticatable
         return true;
     }
 
-    public function canBeAttacked()
+    public function canBeAttacked(): bool
     {
         return $this->can_be_attacked;
     }
