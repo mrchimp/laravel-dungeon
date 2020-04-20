@@ -71,7 +71,7 @@ class RoomTest extends TestCase
         $south_room = $this->makeRoom();
         $north_room = $this->makeRoom();
 
-        $portal = factory(Portal::class)->create();
+        $portal = $this->makePortal();
 
         $north_room->setSouthExit($south_room, [
             'portal_id' => $portal->id,

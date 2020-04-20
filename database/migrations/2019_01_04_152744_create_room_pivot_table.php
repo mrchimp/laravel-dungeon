@@ -21,7 +21,6 @@ class CreateRoomPivotTable extends Migration
             $table->integer('west_room_id')->nullable()->index();
             $table->integer('east_room_id')->nullable()->index();
             $table->integer('portal_id')->nullable()->index();
-            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

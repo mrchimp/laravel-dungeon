@@ -2,7 +2,6 @@
 
 namespace Dungeon\Commands;
 
-use Dungeon\Contracts\KeyInterface;
 use Dungeon\Direction;
 
 class UnlockCommand extends Command
@@ -72,9 +71,9 @@ class UnlockCommand extends Command
         }
 
         if ($result) {
-            $this->appendMessage('You unlock the door. ');
+            $this->setMessage('You unlock the door.');
         } else {
-            $this->appendMessage('You fail to unlock the door. ');
+            $this->setMessage('You fail to unlock the door.');
         }
 
         return $this;

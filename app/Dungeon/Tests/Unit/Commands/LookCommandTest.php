@@ -95,9 +95,7 @@ class LookCommandTest extends TestCase
 
         $user = $this->makeUser([], 100, $north_room);
 
-        $north_room->setSouthExit($south_room, [
-            'description' => 'A wooden door.',
-        ]);
+        $north_room->setSouthExit($south_room);
 
         $command = new LookCommand('look', $user);
 
@@ -105,7 +103,12 @@ class LookCommandTest extends TestCase
         $exits = $command->getOutputItem('exits');
 
         $this->assertIsCollection($exits);
-        $this->assertCount(1, $exits);
+        $this->assertCount(4, $exits);
+        $this->assertEquals('A way out', $exits->get('south')->name);
+        $this->assertEquals('Looks like you can go that way.', $exits->get('south')->description);
+        $this->assertNull($exits->get('north'));
+        $this->assertNull($exits->get('east'));
+        $this->assertNull($exits->get('west'));
     }
 
     /** @test */
@@ -119,9 +122,7 @@ class LookCommandTest extends TestCase
             'name' => 'Player 2',
         ], 100, $north_room);
 
-        $north_room->setSouthExit($south_room, [
-            'description' => 'A wooden door.',
-        ]);
+        $north_room->setSouthExit($south_room);
 
         $command = new LookCommand('look', $user);
         $command->execute();

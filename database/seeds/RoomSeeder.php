@@ -30,17 +30,21 @@ class RoomSeeder extends Seeder
             'description' => 'Yet more rooms. This one has green wallpaper.',
         ]);
 
-        $north_south_portal = factory(Portal::class)->create();
+        $north_south_portal = Portal::create([
+            'name' => 'Wooden door',
+            'description' => 'A wooden door. It\'s unlocked.',
+        ]);
 
         $north_room->setSouthExit(
             $south_room,
             [
-                'description' => 'A wooden door. It\'s unlocked.',
                 'portal_id' => $north_south_portal->id
             ]
         );
 
-        $south_east_portal = factory(Portal::class)->create([
+        $south_east_portal = Portal::createWithSerializable([
+            'name' => 'Metal door',
+            'description' => 'A sturdy door with a code lock. It\'s locked. Maybe you can guess the code.',
             'locked' => true,
             'code' => 1234,
         ]);
@@ -48,13 +52,14 @@ class RoomSeeder extends Seeder
         $south_room->setEastExit(
             $east_room,
             [
-                'description' => 'A sturdy door with a code lock. It\'s locked. Maybe you can guess the code.',
                 'portal_id' => $south_east_portal->id,
             ]
         );
 
-        $south_west_portal = factory(Portal::class)->create([
+        $south_west_portal = Portal::createWithSerializable([
             'locked' => true,
+            'name' => 'Metal door',
+            'description' => 'A metal door with a key hole in it.',
         ]);
 
         $west_room_key = Key::create([
@@ -68,7 +73,6 @@ class RoomSeeder extends Seeder
         $south_room->setWestExit(
             $west_room,
             [
-                'description' => 'A metal door with a key hole in it.',
                 'portal_id' => $south_west_portal->id,
             ]
         );

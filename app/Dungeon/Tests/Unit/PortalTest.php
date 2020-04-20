@@ -15,7 +15,7 @@ class PortalTest extends TestCase
     /** @test */
     public function a_portal_can_have_a_description()
     {
-        $portal = factory(Portal::class)->make([
+        $portal = $this->makePortal([
             'description' => 'This is a portal',
         ]);
 
@@ -25,7 +25,7 @@ class PortalTest extends TestCase
     /** @test */
     public function portal_can_be_locked_and_unlocked_with_a_code()
     {
-        $portal = factory(Portal::class)->make([
+        $portal = $this->makePortal([
             'locked' => false,
             'code' => 1234,
         ]);
@@ -40,7 +40,7 @@ class PortalTest extends TestCase
     /** @test */
     public function portal_can_have_a_key_that_fits()
     {
-        $portal = factory(Portal::class)->create();
+        $portal = $this->makePortal();
         $good_key = factory(Key::class)->create();
         $bad_key = factory(Key::class)->create();
 
@@ -55,8 +55,8 @@ class PortalTest extends TestCase
     /** @test */
     public function you_can_test_multiple_keys_at_once()
     {
-        $portal = factory(Portal::class)->create();
-        $other_portal = factory(Portal::class)->create();
+        $portal = $this->makePortal();
+        $other_portal = $this->makePortal();
         $good_key = factory(Key::class)->create();
         $bad_key = factory(Key::class)->create();
         $potato = $this->makePotato();
@@ -78,7 +78,7 @@ class PortalTest extends TestCase
     /** @test */
     public function portal_cannot_be_locked_with_a_code_if_it_doesnt_have_a_code()
     {
-        $portal = factory(Portal::class)->make([
+        $portal = $this->makePortal([
             'locked' => false,
             'code' => null,
         ]);
@@ -90,7 +90,7 @@ class PortalTest extends TestCase
     /** @test */
     public function portal_can_be_locked_and_unlocked_with_a_key()
     {
-        $portal = factory(Portal::class)->create([
+        $portal = $this->makePortal([
             'locked' => false,
         ]);
 

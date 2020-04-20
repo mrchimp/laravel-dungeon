@@ -4,6 +4,14 @@ namespace Dungeon;
 
 use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * The location of the current user.
+ *
+ * Used as a convienience feature to get to other information.
+ * It is also provided as sometimes (e.g. when the player is dead)
+ * they won't be in a room so having this provides a buffer when
+ * otherwise null would be returned.
+ */
 class CurrentLocation
 {
     protected ?User $user;
@@ -74,15 +82,21 @@ class CurrentLocation
             return new Collection([]);
         }
 
-        if ($refresh) {
-            $this->room->load('northExits', 'southExits', 'westExits', 'eastExits');
-        }
+        // @todo find out why this fails completely D:
+        // if ($refresh) {
+        //     $this->room->load([
+        //         'northPortals',
+        //         'southPortals',
+        //         'westPortals',
+        //         'eastPortals',
+        //     ]);
+        // }
 
-        return (new Collection([
-            'north' => $this->room->northExit,
-            'south' => $this->room->southExit,
-            'west' => $this->room->westExit,
-            'east' => $this->room->eastExit,
-        ]))->filter();
+        return new Collection([
+            'north' => $this->room->northPortal,
+            'south' => $this->room->southPortal,
+            'west' => $this->room->westPortal,
+            'east' => $this->room->eastPortal,
+        ]);
     }
 }

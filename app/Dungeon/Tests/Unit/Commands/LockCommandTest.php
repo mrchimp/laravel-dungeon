@@ -19,7 +19,7 @@ class LockCommandTest extends TestCase
         $start_room = $this->makeRoom();
         $other_room = $this->makeRoom();
 
-        $portal = factory(Portal::class)->create([
+        $portal = $this->makePortal([
             'locked' => false,
             'code' => 1234,
         ]);
@@ -46,7 +46,7 @@ class LockCommandTest extends TestCase
         $start_room = $this->makeRoom();
         $other_room = $this->makeRoom();
 
-        $portal = factory(Portal::class)->create([
+        $portal = $this->makePortal([
             'locked' => false,
             'code' => null,
         ]);
@@ -72,7 +72,7 @@ class LockCommandTest extends TestCase
     {
         $start_room = $this->makeRoom();
         $other_room = $this->makeRoom();
-        $portal = factory(Portal::class)->create([
+        $portal = $this->makePortal([
             'locked' => false,
             'code' => null,
         ]);
@@ -99,7 +99,7 @@ class LockCommandTest extends TestCase
     {
         $start_room = $this->makeRoom();
         $other_room = $this->makeRoom();
-        $portal = factory(Portal::class)->create([
+        $portal = $this->makePortal([
             'locked' => false,
             'code' => null,
         ]);
@@ -125,7 +125,7 @@ class LockCommandTest extends TestCase
     {
         $start_room = $this->makeRoom();
         $other_room = $this->makeRoom();
-        $portal = factory(Portal::class)->create([
+        $portal = $this->makePortal([
             'locked' => false,
             'code' => 1234,
         ]);

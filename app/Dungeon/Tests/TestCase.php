@@ -10,6 +10,7 @@ use Dungeon\Entities\People\Body;
 use Dungeon\Entities\Weapons\Melee\MeleeWeapon;
 use Dungeon\Entity;
 use Dungeon\NPC;
+use Dungeon\Portal;
 use Dungeon\Room;
 use Dungeon\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -139,5 +140,15 @@ abstract class TestCase extends BaseTestCase
         $npc->fresh();
 
         return $npc;
+    }
+
+    protected function makePortal(array $attributes = [])
+    {
+        return Portal::createWithSerializable(
+            array_merge([
+                'name' => 'Test door',
+                'description' => 'A simple door for testing purposes.',
+            ], $attributes)
+        );
     }
 }

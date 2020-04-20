@@ -4,7 +4,6 @@ namespace Tests\Unit\Commands;
 
 use Dungeon\Commands\UnlockCommand;
 use Dungeon\Entities\Locks\Key;
-use Dungeon\Portal;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -21,7 +20,7 @@ class UnlockCommandTest extends TestCase
             'description' => 'This is the second room',
         ]);
 
-        $portal = factory(Portal::class)->create([
+        $portal = $this->makePortal([
             'locked' => true,
             'code' => 1234,
         ]);
@@ -70,7 +69,7 @@ class UnlockCommandTest extends TestCase
     {
         $start_room = $this->makeRoom();
         $other_room = $this->makeRoom();
-        $portal = factory(Portal::class)->create([
+        $portal = $this->makePortal([
             'locked' => true,
         ]);
         $key = factory(Key::class)->create();

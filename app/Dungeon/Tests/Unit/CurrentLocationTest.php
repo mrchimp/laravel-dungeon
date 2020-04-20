@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Dungeon\CurrentLocation;
+use Dungeon\Portal;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -69,20 +70,43 @@ class CurrentLocationTest extends TestCase
     /** @test */
     public function gets_exits_in_room()
     {
-        $north_room = $this->makeRoom();
-        $south_room = $this->makeRoom([
-            'description' => 'This is the south room.',
+        $north_room = $this->makeRoom([
+            'description' => 'The North room'
         ]);
-        $user = $this->makeUser([], 100, $north_room);
+        $south_room = $this->makeRoom([
+            'description' => 'The South room.',
+        ]);
+        $west_room = $this->makeRoom([
+            'description' => 'The West room.',
+        ]);
 
-        $north_room->setSouthExit($south_room)->save();
+        // Door between south and west rooms
+        $south_west_portal = $this->makePortal([
+            'name' => 'Metal door',
+            'description' => 'A big metal door with a keyhole.',
+        ]);
+
+        $south_room->setNorthExit($north_room)->save();
+
+        $south_room->setWestExit($west_room, [
+            'portal_id' => $south_west_portal->id
+        ])->save();
+
+        $south_room->refresh();
+
+        $user = $this->makeUser([], 100, $south_room);
 
         $location = new CurrentLocation($user);
 
         $exits = $location->getExits();
 
         $this->assertIsCollection($exits);
-        $this->assertCount(1, $exits);
-        $this->assertEquals('This is the south room.', $exits->first()->getDescription());
+        $this->assertCount(4, $exits);
+        $this->assertEquals('A big metal door with a keyhole.', $exits->get('west')->getDescription());
+        $this->assertEquals('Metal door', $exits->get('west')->getName());
+        $this->assertEquals('Looks like you can go that way.', $exits->get('north')->getDescription());
+        $this->assertEquals('A way out', $exits->get('north')->getName());
+        $this->assertNull($exits->get('south'));
+        $this->assertNull($exits->get('east'));
     }
 }

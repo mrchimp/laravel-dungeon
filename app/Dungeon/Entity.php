@@ -56,7 +56,7 @@ class Entity extends Model
     public function getSerializable(): array
     {
         return [
-            'can_be_taken' => true,
+            'can_be_taken' => $this->can_be_taken,
         ];
     }
 
@@ -261,5 +261,26 @@ class Entity extends Model
     public function canBeAttacked(): bool
     {
         return false;
+    }
+
+    /**
+     * Like create() but allows passing in serializable
+     * attributes. It would be nice to override create()
+     * instead but that looks like a hassle. Maybe later.
+     *
+     * @return self
+     */
+    public static function createWithSerializable($attributes)
+    {
+        $serializable = (new static)->getSerializable();
+
+        $serializable_attributes = array_intersect_key($attributes, $serializable);
+        $non_serializable_attributes = array_diff_key($attributes, $serializable);
+
+        $model = self::create($non_serializable_attributes);
+
+        $model->fill($serializable_attributes)->save();
+
+        return $model;
     }
 }

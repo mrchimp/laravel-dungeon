@@ -24,6 +24,10 @@ use Dungeon\Commands\WhisperCommand;
 use Dungeon\Exceptions\UnknownCommandException;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Take a given input string, find the appropriate
+ * command, run the command and return it.
+ */
 class CommandRunner
 {
     protected static array $commands = [
@@ -49,6 +53,8 @@ class CommandRunner
 
     /**
      * Take an input string and run the appropriate command
+     *
+     * @throws UnknownCommandException
      */
     public static function run(string $input, User $user = null): ?Command
     {

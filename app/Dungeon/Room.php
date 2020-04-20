@@ -51,57 +51,49 @@ class Room extends Model
     public function northExits(): BelongsToMany
     {
         return $this->belongsToMany(Room::class, 'portal_room_room', 'south_room_id', 'north_room_id')
-            ->withPivot('description', 'portal_id')
-            ->as('portal');
+            ->withPivot('portal_id');
     }
 
     public function southExits(): BelongsToMany
     {
         return $this->belongsToMany(Room::class, 'portal_room_room', 'north_room_id', 'south_room_id')
-            ->withPivot('description', 'portal_id')
-            ->as('portal');
+            ->withPivot('portal_id');
     }
 
     public function westExits(): BelongsToMany
     {
         return $this->belongsToMany(Room::class, 'portal_room_room', 'east_room_id', 'west_room_id')
-            ->withPivot('description', 'portal_id')
-            ->as('portal');
+            ->withPivot('portal_id');
     }
 
     public function eastExits(): BelongsToMany
     {
         return $this->belongsToMany(Room::class, 'portal_room_room', 'west_room_id', 'east_room_id')
-            ->withPivot('description', 'portal_id')
-            ->as('portal');
+            ->withPivot('portal_id');
     }
 
     public function northPortals(): BelongsToMany
     {
-        return $this->belongsToMany(Portal::class, 'portal_room_room', 'south_room_id', 'portal_id')
-            ->withPivot('description', 'south_room_id')
-            ->as('portal');
+        return $this->belongsToMany(Entity::class, 'portal_room_room', 'south_room_id', 'portal_id')
+            ->withPivot('south_room_id');
     }
 
     public function southPortals(): BelongsToMany
     {
-        return $this->belongsToMany(Portal::class, 'portal_room_room', 'north_room_id', 'portal_id')
-            ->withPivot('description', 'north_room_id')
-            ->as('portal');
+        return $this->belongsToMany(Entity::class, 'portal_room_room', 'north_room_id', 'portal_id')
+            ->withPivot('north_room_id');
     }
 
     public function eastPortals(): BelongsToMany
     {
-        return $this->belongsToMany(Portal::class, 'portal_room_room', 'west_room_id', 'portal_id')
-            ->withPivot('description', 'west_room_id')
-            ->as('portal');
+        return $this->belongsToMany(Entity::class, 'portal_room_room', 'west_room_id', 'portal_id')
+            ->withPivot('west_room_id');
     }
 
     public function westPortals(): BelongsToMany
     {
-        return $this->belongsToMany(Portal::class, 'portal_room_room', 'east_room_id', 'portal_id')
-            ->withPivot('description', 'east_room_id')
-            ->as('portal');
+        return $this->belongsToMany(Entity::class, 'portal_room_room', 'east_room_id', 'portal_id')
+            ->withPivot('east_room_id');
     }
 
     public function setNorthExit(Room $room, array $data = []): self
@@ -154,22 +146,54 @@ class Room extends Model
 
     public function getNorthPortalAttribute(): ?Portal
     {
-        return $this->northPortals->first();
+        if (!$this->northExit) {
+            return null;
+        }
+
+        if ($this->northPortals->isEmpty()) {
+            return Portal::makeGeneric();
+        } else {
+            return $this->northPortals->first();
+        }
     }
 
     public function getSouthPortalAttribute(): ?Portal
     {
-        return $this->southPortals->first();
+        if (!$this->southExit) {
+            return null;
+        }
+
+        if ($this->southPortals->isEmpty()) {
+            return Portal::makeGeneric();
+        } else {
+            return $this->southPortals->first();
+        }
     }
 
     public function getEastPortalAttribute(): ?Portal
     {
-        return $this->eastPortals->first();
+        if (!$this->eastExit) {
+            return null;
+        }
+
+        if ($this->eastPortals->isEmpty()) {
+            return Portal::makeGeneric();
+        } else {
+            return $this->eastPortals->first();
+        }
     }
 
     public function getWestPortalAttribute(): ?Portal
     {
-        return $this->westPortals->first();
+        if (!$this->westExit) {
+            return null;
+        }
+
+        if ($this->westPortals->isEmpty()) {
+            return Portal::makeGeneric();
+        } else {
+            return $this->westPortals->first();
+        }
     }
 
     public function toArray(): array

@@ -3,17 +3,21 @@
 namespace Dungeon;
 
 use Dungeon\Contracts\KeyInterface;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
-class Portal extends Model
+class Portal extends Entity
 {
     protected $fillable = [
+        'name',
         'description',
         'code',
         'locked',
     ];
+
+    public $can_be_taken = false;
+
+    protected $table = 'entities';
 
     /**
      * Keys that fit this door
@@ -51,7 +55,7 @@ class Portal extends Model
             return true;
         }
 
-        if ($this->code === $code) {
+        if ((string) $this->code === (string) $code) {
             $this->locked = false;
             $this->save();
             return true;
@@ -141,5 +145,43 @@ class Portal extends Model
 
             return $this->keyFits($item);
         });
+    }
+
+    /**
+     * Get the attributes to be serialized
+     */
+    public function getSerializable(): array
+    {
+        return array_merge(parent::getSerializable(), [
+            'code' => null,
+            'locked' => false,
+        ]);
+    }
+
+    /**
+     * Creates a generic portal between rooms.
+     *
+     * This is designed to be used as a null object
+     * and not persisted to the database.
+     */
+    public static function makeGeneric($attributes = []): Portal
+    {
+        return static::make(array_merge([
+            'name' => 'A way out',
+            'description' => 'Looks like you can go that way.',
+        ], $attributes));
+    }
+
+    /**
+     * Convert Portal to an array
+     */
+    public function toArray(): array
+    {
+        return $this->only([
+            'name',
+            'description',
+            'locked',
+            'uuid',
+        ]);
     }
 }
