@@ -1,14 +1,19 @@
+@import "tailwindcss/base";
 
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import "tailwindcss/components";
 
-// Variables
-@import 'variables';
+@import "tailwindcss/utilities";
 
-// Bulma
-@import '~bulma/bulma';
+// // Fonts
+// @import url('https://fonts.googleapis.com/css?family=Nunito');
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}
+// // Variables
+// @import 'variables';
+
+// // Bulma
+// @import '~bulma/bulma';
+
+// .navbar-laravel {
+//   background-color: #fff;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+// }

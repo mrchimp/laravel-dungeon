@@ -1,64 +1,103 @@
 <template>
-  <div class="tile is-ancestor dungeon">
-    <div class="tile is-parent is-3">
-      <div class="tile is-child notification is-grey-light dungeon-inventory">
-        <h3 class="title is-5">Inventory</h3>
-        <ul>
-          <li v-for="item in inventory" :key="item.uuid" :title="item.description">
-            {{ item.name }}
-            <button
-              class="button is-default is-small"
-              @click.prevent="run('drop ' + item.name)"
-            >Drop</button>
-            <template v-if="item.type === 'apparel'">
-              <button
-                class="button is-default is-small"
-                @click.prevent="run('equip ' + item.name)"
-              >{{ item.equiped ? 'Unequip' : 'Equip' }}</button>
-            </template>
-          </li>
-        </ul>
+  <div class="relative">
+    <div class="grid grid-rows-maininterface fullheight">
+      <div class="bg-red-400 overflow-y-scroll p-1">
+        <p v-for="(message, index) in output" :key="index">{{message}}</p>
+      </div>
+
+      <div class="flex p-1 bg-blue-400">
+        <form @submit.prevent="submitInput" class="flex-1 flex bg-blue-400">
+          <input
+            class="flex-1 p-1"
+            type="text"
+            v-model="input"
+            :disabled="sending_input"
+            placeholder="Type your commands here..."
+          />
+        </form>
+        <p v-if="sending_input" class="flex-1 bg-blue-400">Sending command...</p>
+      </div>
+
+      <div class="bg-green-400 grid grid-rows-3 grid-cols-3">
+        <div class="flex justify-center items-center"></div>
+        <div class="flex justify-center items-center">
+          <button type="button" @click.prevent="run('go north')">N</button>
+        </div>
+        <div class="flex justify-center items-center"></div>
+
+        <div class="flex justify-center items-center">
+          <button type="button" @click.prevent="run('go west')">W</button>
+        </div>
+        <div class="flex justify-center items-center">
+          <button type="button" @click.prevent="run('look')">Look</button>
+        </div>
+        <div class="flex justify-center items-center">
+          <button type="button" @click.prevent="run('go east')">E</button>
+        </div>
+
+        <div class="flex justify-center items-center"></div>
+        <div class="flex justify-center items-center">
+          <button type="button" @click.prevent="run('go south')">S</button>
+        </div>
+        <div class="flex justify-center items-center"></div>
+      </div>
+
+      <div class="bg-yellow-400 flex justify-center">
+        <button
+          type="button"
+          class="flex justify-center items-center px-1"
+          @click.prevent="show_inventory = !show_inventory"
+        >Inv</button>
+        <button
+          type="button"
+          class="flex justify-center items-center px-1"
+          @click.prevent="show_players = !show_players"
+        >Players</button>
+        <button
+          type="button"
+          class="flex justify-center items-center px-1"
+          @click.prevent="show_items = !show_items"
+        >Items</button>
       </div>
     </div>
-    <div class="tile is-vertical">
-      <div class="tile is-parent">
-        <div class="tile is-child notification is-grey-light dungeon-people">
-          <h3 class="title is-5">Players</h3>
-          <ul>
-            <li v-for="player in players" :key="player.uuid">{{ player.name }}</li>
-          </ul>
-        </div>
-        <div class="tile is-child notification is-grey-light dungeon-items">
-          <h3 class="title is-5">Items</h3>
-          <ul>
-            <li v-for="item in items" :key="item.uuid" :title="item.description">
-              {{ item.name }}
-              <button
-                class="button is-default is-small"
-                @click.prevent="run('take ' + item.name)"
-              >Take</button>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="tile">
-        <div class="tile is-parent">
-          <div class="tile is-child notification is-grey-light dungeon-output">
-            <h3 class="title is-5">Output</h3>
-            <p v-for="(message, index) in output" :key="index">{{message}}</p>
-            <form @submit.prevent="submitInput">
-              <input
-                type="text"
-                v-model="input"
-                class="input"
-                :disabled="sending_input"
-                placeholder="Type your commands here..."
-              />
-            </form>
-            <p v-if="sending_input">Sending command...</p>
-          </div>
-        </div>
-      </div>
+
+    <div v-if="show_inventory" class="absolute bg-white fullwidth fullheight top-0 left-0">
+      <button @click.prevent="show_inventory = false">Close</button>
+      <h3>Inventory</h3>
+      <ul>
+        <li v-for="item in inventory" :key="item.uuid" :title="item.description">
+          {{ item.name }}
+          <button @click.prevent="run('drop ' + item.name)">Drop</button>
+          <template v-if="item.type === 'apparel'">
+            <button
+              @click.prevent="run('equip ' + item.name)"
+            >{{ item.equiped ? 'Unequip' : 'Equip' }}</button>
+          </template>
+        </li>
+      </ul>
+    </div>
+
+    <div v-if="show_players" class="absolute bg-white fullwidth fullheight top-0 left-0">
+      <button @click.prevent="show_players = false">Close</button>
+      <h3>Players</h3>
+      <ul>
+        <li v-for="player in players" :key="player.uuid">{{ player.name }}</li>
+      </ul>
+      <h3>NPCs</h3>
+      <ul>
+        <li v-for="npc in npcs" :key="npc.uuid">{{ npc.name }}</li>
+      </ul>
+    </div>
+
+    <div v-if="show_items" class="absolute bg-white fullwidth fullheight top-0 left-0">
+      <button @click.prevent="show_items = false">Close</button>
+      <h3>Items</h3>
+      <ul>
+        <li v-for="item in items" :key="item.uuid" :title="item.description">
+          {{ item.name }}
+          <button @click.prevent="run('take ' + item.name)">Take</button>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -68,42 +107,44 @@ export default {
   data() {
     return {
       sending_input: false,
-      input: "look",
+      input: 'look',
       output: [],
       items: [],
       players: [],
       exits: [],
       inventory: [],
       current_room: null,
-      room_channel: null
+      room_channel: null,
+      show_inventory: false,
+      show_players: false,
+      show_items: false,
+      show_exit: null,
     };
   },
 
   mounted() {
-    this.run("look");
+    this.run('look');
 
-    Echo.private("App.User." + window.user_id).notification(notification => {
+    Echo.private('App.User.' + window.user_id).notification((notification) => {
       switch (notification.type) {
-        case "Dungeon\\Notifications\\WhisperToUser":
-          this.output.push(
-            `${notification.author_name} whispers: ${notification.message}`
-          );
+        case 'Dungeon\\Notifications\\WhisperToUser':
+          this.output.push(`${notification.author_name} whispers: ${notification.message}`);
           break;
         default:
-          console.error("unknown notification type", notification);
+          console.error('unknown notification type', notification);
       }
     });
   },
 
   methods: {
     resetInput() {
-      this.input = "";
+      this.input = '';
     },
 
     submitInput() {
-      if (this.input === "clear") {
-        this.input = "";
-        this.output = "";
+      if (this.input === 'clear') {
+        this.input = '';
+        this.output = '';
         return;
       }
 
@@ -160,7 +201,7 @@ export default {
 
       this.current_room = new_room_id;
 
-      console.log("handleRoomChange", new_room_id);
+      console.log('handleRoomChange', new_room_id);
 
       if (this.current_room) {
         this.joinRoomChannel();
@@ -168,18 +209,18 @@ export default {
     },
 
     leaveRoomChannel() {
-      console.log("Leaving channel", `Room.${this.current_room}`);
+      console.log('Leaving channel', `Room.${this.current_room}`);
       Echo.leaveChannel(`Room.${this.current_room}`);
 
       this.room_channel = null;
     },
 
     joinRoomChannel() {
-      console.log("Joining channel", `Room.${this.current_room}`);
+      console.log('Joining channel', `Room.${this.current_room}`);
       this.room_channel = Echo.private(`Room.${this.current_room}`).listen(
-        "UserSaysToRoom",
-        e => {
-          console.log("UserSaysToRoom", e);
+        'UserSaysToRoom',
+        (e) => {
+          console.log('UserSaysToRoom', e);
           this.output.push(`${e.author_name}: ${e.message}`);
         }
       );
@@ -205,11 +246,11 @@ export default {
     runCommand(input) {
       this.sending_input = false;
 
-      return axios.post("/dungeon/cmd", {
-        input: input
+      return axios.post('/dungeon/cmd', {
+        input: input,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

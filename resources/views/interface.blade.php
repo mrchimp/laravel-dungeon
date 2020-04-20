@@ -4,7 +4,7 @@
   <div id="app">
     <dungeon-interface></dungeon-interface>
   </div>
-
+{{--
   <p>
     Logged in as: {{ Auth::user()->name }} -
     <a href="{{ route('logout') }}"
@@ -16,5 +16,5 @@
 
   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
     @csrf
-  </form>
+  </form> --}}
 @endsection
