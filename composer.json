@@ -51,7 +51,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "Tests\\": "app/Dungeon/Tests/"
     }
   },
   "minimum-stability": "dev",
