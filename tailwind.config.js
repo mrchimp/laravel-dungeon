@@ -2,7 +2,7 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateRows: {
-        maininterface: '2fr 41px 186px',
+        maininterface: '2fr 50px 198px',
       },
     },
     fontFamily: {

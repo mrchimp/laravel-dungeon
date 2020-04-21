@@ -2,6 +2,22 @@
   @apply rounded bg-gray-200 rounded p-2;
 }
 
+.btn:hover {
+  @apply bg-gray-300;
+}
+
+.btn:active {
+  @apply bg-gray-400;
+}
+
 .btn-primary {
   @apply bg-blue-600 text-white;
+}
+
+.btn-primary:hover {
+  @apply bg-blue-700;
+}
+
+.btn-primary:active {
+  @apply bg-blue-800;
 }

@@ -10,7 +10,7 @@
         </template>
       </div>
 
-      <div class="flex px-2 py-1 bg-gray-200">
+      <div class="flex p-2 bg-gray-200">
         <form @submit.prevent="submitInput" class="flex-1 flex">
           <input
             class="flex-1 p-1 text-lg"
@@ -20,96 +20,115 @@
             placeholder="Type your commands here..."
           />
         </form>
-        <p v-if="sending_input" class="flex-1 bg-gray-400 text-gray-600 text-lg">
-          Sending command...
-        </p>
+        <p v-if="sending_input" class="flex-1 bg-gray-400 text-gray-600 text-lg">Sending command...</p>
       </div>
 
-      <div class="flex justify-center items-center">
+      <div v-if="preview_exit_direction !== null" class="p-2 relative">
+        <button @click.prevent="preview_exit_direction = null" class="btn float-right m-1">Close</button>
+
+        <p v-if="preview_exit === null">You can't go that way.</p>
+        <div v-else>
+          <h4 class="font-bold pr-4">{{ preview_exit.name }}</h4>
+          <p class="leading-none pr-4 mb-2">{{ preview_exit.description }}</p>
+          <div v-if="preview_exit.locked">
+            <p>The door is locked.</p>
+            <div class="grid grid-rows-2">
+              <div class="flex my-1">
+                <input
+                  class="border border-gray-200 rounded p-2 rounded-r-none flex-1 min-w-0"
+                  type="text"
+                  name="code"
+                  v-model="door_code"
+                  placeholder="Code"
+                />
+                <button
+                  class="btn mr-2 flex-auto rounded-l-none"
+                  @click.prevent="unlockDoorWithCode"
+                >Use code</button>
+                <button @click.prevent="unlockDoorWithKey" class="btn flex-auto">Use key</button>
+              </div>
+            </div>
+          </div>
+          <p v-else>
+            <p>The door is unlocked.</p>
+            <button
+              @click.prevent="
+                quickRun(`go ${preview_exit_direction}`);
+                preview_exit_direction = null;
+              "
+              class="btn"
+            >Go</button>
+          </p>
+        </div>
+      </div>
+
+      <div v-else class="flex justify-center items-center">
         <div class="grid grid-rows-3 grid-cols-3 w-full max-w-screen-sm">
           <div class="flex justify-center items-center">
             <button
               type="button"
               class="btn text-xl font-bold m-2 w-full"
               @click.prevent="show_inventory = !show_inventory"
-            >
-              Inv
-            </button>
+            >Inv</button>
           </div>
           <div class="flex justify-center items-center">
             <button
               type="button"
-              @click.prevent="quickRun('go north')"
+              @click.prevent="preview_exit_direction = 'north'"
               class="btn text-xl font-bold m-2 w-full"
-            >
-              N
-            </button>
+            >N</button>
           </div>
           <div class="flex justify-center items-center">
             <button
               type="button"
               class="btn text-xl font-bold m-2 w-full"
               @click.prevent="show_players = !show_players"
-            >
-              Ply ({{ players.length + npcs.length }})
-            </button>
+            >Ply ({{ players.length + npcs.length }})</button>
           </div>
 
           <div class="flex justify-center items-center">
             <button
               type="button"
-              @click.prevent="quickRun('go west')"
+              @click.prevent="preview_exit_direction = 'west'"
               class="btn text-xl font-bold m-2 w-full"
-            >
-              W
-            </button>
+            >W</button>
           </div>
           <div class="flex justify-center items-center">
             <button
               type="button"
               @click.prevent="quickRun('look')"
               class="btn text-xl font-bold m-2 w-full"
-            >
-              Look
-            </button>
+            >Look</button>
           </div>
           <div class="flex justify-center items-center">
             <button
               type="button"
-              @click.prevent="quickRun('go east')"
+              @click.prevent="preview_exit_direction = 'east'"
               class="btn text-xl font-bold m-2 w-full"
-            >
-              E
-            </button>
+            >E</button>
           </div>
 
           <div class="flex justify-center items-center"></div>
           <div class="flex justify-center items-center">
             <button
               type="button"
-              @click.prevent="quickRun('go south')"
+              @click.prevent="preview_exit_direction = 'south'"
               class="btn text-xl font-bold m-2 w-full"
-            >
-              S
-            </button>
+            >S</button>
           </div>
           <div class="flex justify-center items-center">
             <button
               type="button"
               class="btn text-xl font-bold m-2 w-full"
               @click.prevent="show_items = !show_items"
-            >
-              Itm ({{ items.length }})
-            </button>
+            >Itm ({{ items.length }})</button>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="show_inventory" class="absolute bg-white w-screen h-screen top-0 left-0 p-2">
-      <button @click.prevent="show_inventory = false" class="btn absolute right-0 top-0 m-1">
-        Close
-      </button>
+    <div v-if="show_inventory" class="modal">
+      <button @click.prevent="show_inventory = false" class="btn absolute right-0 top-0 m-1">Close</button>
       <h3 class="font-bold text-lg">Inventory</h3>
       <ul>
         <li v-for="item in inventory" :key="item.uuid" :title="item.description">
@@ -118,14 +137,13 @@
             <button
               class="btn"
               @click="show_inventory_description = !!show_inventory_description ? null : item.uuid"
-            >
-              ?
-            </button>
+            >?</button>
             <button class="btn" @click.prevent="quickRun('drop ' + item.name)">Drop</button>
             <template v-if="item.type === 'apparel'">
-              <button class="btn" @click.prevent="quickRun('equip ' + item.name)">
-                {{ item.equiped ? 'Unequip' : 'Equip' }}
-              </button>
+              <button
+                class="btn"
+                @click.prevent="quickRun('equip ' + item.name)"
+              >{{ item.equiped ? 'Unequip' : 'Equip' }}</button>
             </template>
           </div>
           <div v-if="show_inventory_description === item.uuid">{{ item.description }}</div>
@@ -133,10 +151,8 @@
       </ul>
     </div>
 
-    <div v-if="show_players" class="absolute bg-white w-screen h-screen top-0 left-0 p-2">
-      <button @click.prevent="show_players = false" class="btn absolute right-0 top-0 m-1">
-        Close
-      </button>
+    <div v-if="show_players" class="modal">
+      <button @click.prevent="show_players = false" class="btn absolute right-0 top-0 m-1">Close</button>
       <h3 class="font-bold text-lg">Players</h3>
       <ul>
         <li v-for="player in players" :key="player.uuid">{{ player.name }}</li>
@@ -147,10 +163,8 @@
       </ul>
     </div>
 
-    <div v-if="show_items" class="absolute bg-white w-screen h-screen top-0 left-0 p-2">
-      <button @click.prevent="show_items = false" class="btn absolute right-0 top-0 m-1">
-        Close
-      </button>
+    <div v-if="show_items" class="modal">
+      <button @click.prevent="show_items = false" class="btn absolute right-0 top-0 m-1">Close</button>
       <h3 class="font-bold text-lg">Items</h3>
       <ul>
         <li v-for="item in items" :key="item.uuid" :title="item.description">
@@ -159,9 +173,7 @@
             <button
               class="btn"
               @click="show_item_description = !!show_item_description ? null : item.uuid"
-            >
-              ?
-            </button>
+            >?</button>
             <button class="btn" @click.prevent="quickRun('take ' + item.name)">Take</button>
           </div>
           <div v-if="show_item_description === item.uuid">{{ item.description }}</div>
@@ -201,10 +213,17 @@ export default {
       show_inventory: false,
       show_players: false,
       show_items: false,
-      show_exit: null,
+      preview_exit_direction: null,
       show_item_description: null,
       show_inventory_description: null,
+      door_code: '',
     };
+  },
+
+  computed: {
+    preview_exit() {
+      return get(this.exits, this.preview_exit_direction, null);
+    },
   },
 
   mounted() {
@@ -333,6 +352,17 @@ export default {
       return axios.post('/dungeon/cmd', {
         input: input,
       });
+    },
+
+    unlockDoorWithCode() {
+      this.quickRun(`unlock ${this.preview_exit_direction} door with code ${this.door_code}`);
+      this.preview_exit_direction = null;
+      this.door_code = '';
+    },
+
+    unlockDoorWithKey() {
+      this.quickRun(`unlock ${this.preview_exit_direction} door`);
+      this.preview_exit_direction = null;
     },
   },
 };
