@@ -28,6 +28,21 @@ class EntityFinderTest extends TestCase
     }
 
     /** @test */
+    public function the_word_the_is_stripped_from_the_start_of_the_query()
+    {
+        $user = $this->makeUser();
+
+        $potato = $this->makePotato()->giveToUser($user);
+        $potato->save();
+
+        $finder = new EntityFinder($user);
+
+        $entity = $finder->find('the potato', $user);
+
+        $this->assertEquals($potato->id, $entity->id);
+    }
+
+    /** @test */
     public function it_finds_entities_in_the_current_room()
     {
         $room = $this->makeRoom();
@@ -98,5 +113,4 @@ class EntityFinderTest extends TestCase
 
         $this->assertEquals($rock->id, $entity->id);
     }
-
 }

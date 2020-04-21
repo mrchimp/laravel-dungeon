@@ -8,9 +8,19 @@ trait Findable
 {
     public function nameMatchesQuery($query)
     {
+        $query = trim($query);
+
+        $matches = [];
+
+        preg_match('/^(?:the )?(.*)$/', $query, $matches);
+
+        if (empty($matches)) {
+            return false;
+        }
+
         return Str::contains(
             strtolower($this->name),
-            strtolower($query)
+            strtolower($matches[1])
         );
     }
 }
