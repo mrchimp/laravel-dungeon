@@ -3,7 +3,7 @@
     <div class="grid grid-rows-maininterface h-screen">
       <div class="overflow-y-scroll p-1 leading-tight">
         <template v-for="(message, index) in output">
-          <input-message v-if="message.type==='input'" :message="message" :key="index" />
+          <input-message v-if="message.type === 'input'" :message="message" :key="index" />
           <output-message v-if="message.type === 'output'" :message="message" :key="index" />
           <error-message v-if="message.type === 'error'" :message="message" :key="index" />
           <whisper-message v-if="message.type === 'whisper'" :message="message" :key="index" />
@@ -20,7 +20,9 @@
             placeholder="Type your commands here..."
           />
         </form>
-        <p v-if="sending_input" class="flex-1 bg-gray-400 text-gray-600 text-lg">Sending command...</p>
+        <p v-if="sending_input" class="flex-1 bg-gray-400 text-gray-600 text-lg">
+          Sending command...
+        </p>
       </div>
 
       <div class="flex justify-center items-center">
@@ -28,45 +30,57 @@
           <div class="flex justify-center items-center">
             <button
               type="button"
-              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+              class="btn text-xl font-bold m-2 w-full"
               @click.prevent="show_inventory = !show_inventory"
-            >Inv</button>
+            >
+              Inv
+            </button>
           </div>
           <div class="flex justify-center items-center">
             <button
               type="button"
               @click.prevent="quickRun('go north')"
-              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
-            >N</button>
+              class="btn text-xl font-bold m-2 w-full"
+            >
+              N
+            </button>
           </div>
           <div class="flex justify-center items-center">
             <button
               type="button"
-              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+              class="btn text-xl font-bold m-2 w-full"
               @click.prevent="show_players = !show_players"
-            >Ply ({{ players.length + npcs.length }})</button>
+            >
+              Ply ({{ players.length + npcs.length }})
+            </button>
           </div>
 
           <div class="flex justify-center items-center">
             <button
               type="button"
               @click.prevent="quickRun('go west')"
-              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
-            >W</button>
+              class="btn text-xl font-bold m-2 w-full"
+            >
+              W
+            </button>
           </div>
           <div class="flex justify-center items-center">
             <button
               type="button"
               @click.prevent="quickRun('look')"
-              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
-            >Look</button>
+              class="btn text-xl font-bold m-2 w-full"
+            >
+              Look
+            </button>
           </div>
           <div class="flex justify-center items-center">
             <button
               type="button"
               @click.prevent="quickRun('go east')"
-              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
-            >E</button>
+              class="btn text-xl font-bold m-2 w-full"
+            >
+              E
+            </button>
           </div>
 
           <div class="flex justify-center items-center"></div>
@@ -74,55 +88,83 @@
             <button
               type="button"
               @click.prevent="quickRun('go south')"
-              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
-            >S</button>
+              class="btn text-xl font-bold m-2 w-full"
+            >
+              S
+            </button>
           </div>
           <div class="flex justify-center items-center">
             <button
               type="button"
-              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+              class="btn text-xl font-bold m-2 w-full"
               @click.prevent="show_items = !show_items"
-            >Itm ({{ items.length }})</button>
+            >
+              Itm ({{ items.length }})
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="show_inventory" class="absolute bg-white w-screen h-screen top-0 left-0">
-      <button @click.prevent="show_inventory = false">Close</button>
-      <h3>Inventory</h3>
+    <div v-if="show_inventory" class="absolute bg-white w-screen h-screen top-0 left-0 p-2">
+      <button @click.prevent="show_inventory = false" class="btn absolute right-0 top-0 m-1">
+        Close
+      </button>
+      <h3 class="font-bold text-lg">Inventory</h3>
       <ul>
         <li v-for="item in inventory" :key="item.uuid" :title="item.description">
-          {{ item.name }}
-          <button @click.prevent="quickRun('drop ' + item.name)">Drop</button>
-          <template v-if="item.type === 'apparel'">
+          <div>
+            {{ item.name }}
             <button
-              @click.prevent="quickRun('equip ' + item.name)"
-            >{{ item.equiped ? 'Unequip' : 'Equip' }}</button>
-          </template>
+              class="btn"
+              @click="show_inventory_description = !!show_inventory_description ? null : item.uuid"
+            >
+              ?
+            </button>
+            <button class="btn" @click.prevent="quickRun('drop ' + item.name)">Drop</button>
+            <template v-if="item.type === 'apparel'">
+              <button class="btn" @click.prevent="quickRun('equip ' + item.name)">
+                {{ item.equiped ? 'Unequip' : 'Equip' }}
+              </button>
+            </template>
+          </div>
+          <div v-if="show_inventory_description === item.uuid">{{ item.description }}</div>
         </li>
       </ul>
     </div>
 
-    <div v-if="show_players" class="absolute bg-white w-screen h-screen top-0 left-0">
-      <button @click.prevent="show_players = false">Close</button>
-      <h3>Players</h3>
+    <div v-if="show_players" class="absolute bg-white w-screen h-screen top-0 left-0 p-2">
+      <button @click.prevent="show_players = false" class="btn absolute right-0 top-0 m-1">
+        Close
+      </button>
+      <h3 class="font-bold text-lg">Players</h3>
       <ul>
         <li v-for="player in players" :key="player.uuid">{{ player.name }}</li>
       </ul>
-      <h3>NPCs</h3>
+      <h3 class="font-bold text-lg mt-4">NPCs</h3>
       <ul>
         <li v-for="npc in npcs" :key="npc.uuid">{{ npc.name }}</li>
       </ul>
     </div>
 
-    <div v-if="show_items" class="absolute bg-white fullwidth fullheight top-0 left-0">
-      <button @click.prevent="show_items = false">Close</button>
-      <h3>Items</h3>
+    <div v-if="show_items" class="absolute bg-white w-screen h-screen top-0 left-0 p-2">
+      <button @click.prevent="show_items = false" class="btn absolute right-0 top-0 m-1">
+        Close
+      </button>
+      <h3 class="font-bold text-lg">Items</h3>
       <ul>
         <li v-for="item in items" :key="item.uuid" :title="item.description">
-          {{ item.name }}
-          <button @click.prevent="quickRun('take ' + item.name)">Take</button>
+          <div>
+            {{ item.name }}
+            <button
+              class="btn"
+              @click="show_item_description = !!show_item_description ? null : item.uuid"
+            >
+              ?
+            </button>
+            <button class="btn" @click.prevent="quickRun('take ' + item.name)">Take</button>
+          </div>
+          <div v-if="show_item_description === item.uuid">{{ item.description }}</div>
         </li>
       </ul>
     </div>
@@ -160,6 +202,8 @@ export default {
       show_players: false,
       show_items: false,
       show_exit: null,
+      show_item_description: null,
+      show_inventory_description: null,
     };
   },
 
