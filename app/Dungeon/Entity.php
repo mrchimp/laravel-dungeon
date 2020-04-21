@@ -9,7 +9,6 @@ use Dungeon\Observers\SerializableObserver;
 use Dungeon\Observers\UuidObserver;
 use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasSerializableAttributes;
-use Dungeon\Traits\HasUuid;
 use Dungeon\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +30,10 @@ class Entity extends Model
     protected $fillable = [
         'name',
         'description',
+    ];
+
+    protected $hidden = [
+        'id',
     ];
 
     /**
