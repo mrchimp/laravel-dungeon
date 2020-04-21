@@ -11,8 +11,10 @@
       </div>
 
       <div class="flex p-1">
-        <form @submit.prevent="submitInput" class="flex-1 flex">
+        <p v-if="sending_input" class="flex-1 bg-gray-400 text-gray-600 text-lg">Sending command...</p>
+        <form v-else @submit.prevent="submitInput" class="flex-1 flex">
           <input
+            ref="input"
             class="flex-1 px-2 py-1 text-lg rounded border border-gray-200"
             type="text"
             v-model="input"
@@ -22,7 +24,6 @@
             @keyup.down="nextCmd"
           />
         </form>
-        <p v-if="sending_input" class="flex-1 bg-gray-400 text-gray-600 text-lg">Sending command...</p>
       </div>
 
       <div v-if="preview_exit_direction !== null" class="p-2 relative">
@@ -256,6 +257,8 @@ export default {
           console.error('unknown notification type', notification);
       }
     });
+
+    this.$refs.input.focus();
   },
 
   methods: {
