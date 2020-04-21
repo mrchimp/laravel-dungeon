@@ -24,6 +24,12 @@ class CurrentLocation
         $this->room = $this->user->getRoom();
     }
 
+    public function refresh(): void
+    {
+        $this->user->refresh();
+        $this->room = $this->user->getRoom();
+    }
+
     public function getRoom(): ?Room
     {
         return $this->room;

@@ -227,8 +227,11 @@ abstract class Command
      */
     public function toArray(): array
     {
+        // Get new current location - User might have moved.
+        $this->current_location->refresh();
+
         return [
-            'room' => [
+            'environment' => [
                 'exits' => $this->current_location->getExits(true)->toArray(),
                 'items' => $this->current_location->getItems(true)->values()->toArray(),
                 'players' => $this->current_location->getPlayers(true)->values()->toArray(),
