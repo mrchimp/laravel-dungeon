@@ -1,6 +1,7 @@
 <?php
 
 use Dungeon\Entities\Locks\Key;
+use Dungeon\Entity;
 use Dungeon\Portal;
 use Dungeon\Room;
 use Illuminate\Database\Seeder;
@@ -76,5 +77,13 @@ class RoomSeeder extends Seeder
                 'portal_id' => $south_west_portal->id,
             ]
         );
+
+        $statue = Entity::createWithSerializable([
+            'name' => 'Statue',
+            'description' => 'A monster of vaguely anthropoid outline, but with an octopus-like head whose face is a mass of feelers, a scaly, rubbery-looking body, prodigious claws on hind and fore feet, and long, narrow wings behind.',
+            'can_be_taken' => false,
+        ]);
+
+        $statue->moveToRoom($north_room)->save();
     }
 }
