@@ -18,6 +18,8 @@
             v-model="input"
             :disabled="sending_input"
             placeholder="Type your commands here..."
+            @keyup.up="prevCmd"
+            @keyup.down="nextCmd"
           />
         </form>
         <p v-if="sending_input" class="flex-1 bg-gray-400 text-gray-600 text-lg">Sending command...</p>
@@ -199,6 +201,7 @@ import ErrorMessage from './ErrorMessage.vue';
 import InputMessage from './InputMessage.vue';
 import OutputMessage from './OutputMessage.vue';
 import ChatMessage from './ChatMessage.vue';
+import CmdStack from '../CmdStack';
 
 export default {
   components: {
@@ -227,6 +230,7 @@ export default {
       show_item_description: null,
       show_inventory_description: null,
       door_code: '',
+      cmd_stack: new CmdStack('history', 100),
     };
   },
 
@@ -256,6 +260,8 @@ export default {
 
   methods: {
     resetInput() {
+      this.cmd_stack.push(this.input);
+      this.cmd_stack.reset();
       this.input = '';
     },
 
@@ -270,25 +276,25 @@ export default {
     },
 
     handleResponse(response) {
-      if (response.data.success === false) {
-        throw response.data.message;
+      if (response.success === false) {
+        throw response.message;
       }
 
-      if (response.data.message) {
+      if (response.message) {
         this.addOutput({
           type: 'output',
-          text: response.data.message,
+          text: response.message,
         });
       }
 
-      this.items = get(response, 'data.data.environment.items', []);
-      this.exits = get(response, 'data.data.environment.exits', []);
-      this.players = get(response, 'data.data.environment.players', []);
-      this.inventory = get(response, 'data.data.environment.inventory', []);
-      this.npcs = get(response, 'data.data.environment.npcs', []);
+      this.items = get(response, 'data.environment.items', []);
+      this.exits = get(response, 'data.environment.exits', []);
+      this.players = get(response, 'data.environment.players', []);
+      this.inventory = get(response, 'data.environment.inventory', []);
+      this.npcs = get(response, 'data.environment.npcs', []);
 
-      if (get(response, 'data.data.environment.room.uuid') !== get(this, 'current_room.uuid')) {
-        this.handleRoomChange(get(response, 'data.data.environment.room'));
+      if (get(response, 'data.environment.room.uuid') !== get(this, 'current_room.uuid')) {
+        this.handleRoomChange(get(response, 'data.environment.room'));
       }
 
       return response;
@@ -360,12 +366,33 @@ export default {
       });
     },
 
-    getResponse(input) {
+    async getResponse(input) {
       this.sending_input = false;
 
-      return axios.post('/dungeon/cmd', {
-        input: input,
+      try {
+        const data = JSON.stringify({
+          input: input,
+        });
+      } catch (e) {
+        console.error('fail?', e);
+      }
+
+      const response = await fetch('/dungeon/cmd', {
+        method: 'POST',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        body: JSON.stringify({
+          input: input,
+        }),
       });
+
+      return response.json();
     },
 
     unlockDoorWithCode() {
@@ -385,6 +412,14 @@ export default {
       if (this.items.length === 0) {
         this.show_items = false;
       }
+    },
+
+    prevCmd() {
+      this.input = this.cmd_stack.prev();
+    },
+
+    nextCmd() {
+      this.input = this.cmd_stack.next();
     },
   },
 };
