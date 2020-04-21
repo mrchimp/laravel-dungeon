@@ -3,6 +3,7 @@
 namespace Dungeon;
 
 use Dungeon\Entities\People\Body;
+use Dungeon\Observers\UuidObserver;
 use Dungeon\Portal;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,13 @@ class Room extends Model
     ];
 
     protected $exits = [];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::observe(new UuidObserver);
+    }
 
     public function people(Body $exclude = null): Collection
     {

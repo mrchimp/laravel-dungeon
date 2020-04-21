@@ -6,6 +6,7 @@ use Dungeon\Collections\EntityCollection;
 use Dungeon\Entities\People\Body;
 use Dungeon\Observers\HasOwnClassObserver;
 use Dungeon\Observers\SerializableObserver;
+use Dungeon\Observers\UuidObserver;
 use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasSerializableAttributes;
 use Dungeon\Traits\HasUuid;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Entity extends Model
 {
-    use HasUuid, HasSerializableAttributes, Findable;
+    use HasSerializableAttributes, Findable;
 
     public $can_be_taken = true;
 
@@ -46,6 +47,7 @@ class Entity extends Model
     {
         parent::boot();
 
+        self::observe(new UuidObserver);
         self::observe(new SerializableObserver);
         self::observe(new HasOwnClassObserver);
     }
