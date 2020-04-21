@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <div class="grid grid-rows-maininterface h-screen">
-      <div class="overflow-y-scroll p-1 leading-tight">
+      <div class="overflow-y-scroll p-1 leading-tight" ref="output">
         <template v-for="(message, index) in output">
           <input-message v-if="message.type === 'input'" :message="message" :key="index" />
           <output-message v-if="message.type === 'output'" :message="message" :key="index" />
@@ -10,10 +10,10 @@
         </template>
       </div>
 
-      <div class="flex p-2 bg-gray-200">
+      <div class="flex p-1">
         <form @submit.prevent="submitInput" class="flex-1 flex">
           <input
-            class="flex-1 p-1 text-lg"
+            class="flex-1 px-2 py-1 text-lg rounded border border-gray-200"
             type="text"
             v-model="input"
             :disabled="sending_input"
@@ -62,64 +62,68 @@
         </div>
       </div>
 
-      <div v-else class="flex justify-center items-center">
+      <div v-else class="flex justify-center">
         <div class="grid grid-rows-3 grid-cols-3 w-full max-w-screen-sm">
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center py-1">
             <button
               type="button"
-              class="btn text-xl font-bold m-2 w-full"
+              class="btn btn-grid"
               @click.prevent="show_inventory = !show_inventory"
             >Inv</button>
           </div>
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center py-1">
             <button
               type="button"
               @click.prevent="preview_exit_direction = 'north'"
-              class="btn text-xl font-bold m-2 w-full"
+              class="btn btn-grid"
+              :class="{'btn-faded': exits.north === null}"
             >N</button>
           </div>
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center py-1">
             <button
               type="button"
-              class="btn text-xl font-bold m-2 w-full"
+              class="btn btn-grid"
               @click.prevent="show_players = !show_players"
             >Ply ({{ players.length + npcs.length }})</button>
           </div>
 
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center py-1">
             <button
               type="button"
               @click.prevent="preview_exit_direction = 'west'"
-              class="btn text-xl font-bold m-2 w-full"
+              class="btn btn-grid"
+              :class="{'btn-faded': exits.west === null}"
             >W</button>
           </div>
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center py-1">
             <button
               type="button"
               @click.prevent="quickRun('look')"
-              class="btn text-xl font-bold m-2 w-full"
+              class="btn btn-grid"
             >Look</button>
           </div>
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center py-1">
             <button
               type="button"
               @click.prevent="preview_exit_direction = 'east'"
-              class="btn text-xl font-bold m-2 w-full"
+              class="btn btn-grid"
+              :class="{'btn-faded': exits.east === null}"
             >E</button>
           </div>
 
-          <div class="flex justify-center items-center"></div>
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center py-1"></div>
+          <div class="flex justify-center items-center py-1">
             <button
               type="button"
               @click.prevent="preview_exit_direction = 'south'"
-              class="btn text-xl font-bold m-2 w-full"
+              class="btn btn-grid"
+              :class="{'btn-faded': exits.south === null}"
             >S</button>
           </div>
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center py-1">
             <button
               type="button"
-              class="btn text-xl font-bold m-2 w-full"
+              class="btn btn-grid"
               @click.prevent="show_items = !show_items"
             >Itm ({{ items.length }})</button>
           </div>
@@ -154,11 +158,17 @@
     <div v-if="show_players" class="modal">
       <button @click.prevent="show_players = false" class="btn absolute right-0 top-0 m-1">Close</button>
       <h3 class="font-bold text-lg">Players</h3>
-      <ul>
+      <p v-if="players.length === 0">
+        There are no players here.
+      </p>
+      <ul v-else>
         <li v-for="player in players" :key="player.uuid">{{ player.name }}</li>
       </ul>
       <h3 class="font-bold text-lg mt-4">NPCs</h3>
-      <ul>
+      <p v-if="npcs.length === 0">
+        There are no NPCs here.
+      </p>
+      <ul v-else>
         <li v-for="npc in npcs" :key="npc.uuid">{{ npc.name }}</li>
       </ul>
     </div>
@@ -167,14 +177,14 @@
       <button @click.prevent="show_items = false" class="btn absolute right-0 top-0 m-1">Close</button>
       <h3 class="font-bold text-lg">Items</h3>
       <ul>
-        <li v-for="item in items" :key="item.uuid" :title="item.description">
+        <li v-for="item in items" :key="item.uuid" :title="item.description" class="mb-2">
           <div>
             {{ item.name }}
             <button
               class="btn"
               @click="show_item_description = !!show_item_description ? null : item.uuid"
             >?</button>
-            <button class="btn" @click.prevent="quickRun('take ' + item.name)">Take</button>
+            <button class="btn" :class="{'btn-faded': !item.can_be_taken}" @click.prevent="take(item)">Take</button>
           </div>
           <div v-if="show_item_description === item.uuid">{{ item.description }}</div>
         </li>
@@ -232,7 +242,7 @@ export default {
     Echo.private('App.User.' + window.user_id).notification((notification) => {
       switch (notification.type) {
         case 'Dungeon\\Notifications\\WhisperToUser':
-          this.output.push({
+          this.addOutput({
             type: 'whisper',
             name: notification.author_name,
             text: `"${notification.message}"`,
@@ -264,13 +274,13 @@ export default {
         throw response.data.message;
       }
 
-      this.output.push({
+      this.addOutput({
         type: 'input',
         text: this.input,
       });
 
       if (response.data.message) {
-        this.output.push({
+        this.addOutput({
           type: 'output',
           text: response.data.message,
         });
@@ -316,7 +326,7 @@ export default {
         'UserSaysToRoom',
         (e) => {
           console.log('UserSaysToRoom', e);
-          this.output.push(`${e.author_name}: ${e.message}`);
+          this.addOutput(`${e.author_name}: ${e.message}`);
         }
       );
 
@@ -340,9 +350,16 @@ export default {
 
     handleError(error) {
       console.error(error);
-      this.output.push({
+      this.addOutput({
         type: 'error',
         text: error,
+      });
+    },
+
+    addOutput(message) {
+      this.output.push(message);
+      this.$nextTick(() => {
+        this.$refs.output.scrollTop = this.$refs.output.scrollHeight;
       });
     },
 
@@ -363,6 +380,14 @@ export default {
     unlockDoorWithKey() {
       this.quickRun(`unlock ${this.preview_exit_direction} door`);
       this.preview_exit_direction = null;
+    },
+
+    take(item) {
+      this.quickRun('take ' + item.name);
+
+      if (this.items.length === 0) {
+        this.show_items = false;
+      }
     },
   },
 };
