@@ -79,6 +79,6 @@ class WeaponTest extends TestCase
         // have the serializable attributes applied
         $weapon = Weapon::where('name', 'Rock')->first();
 
-        $this->assertEquals(50, $weapon->damage_types[MeleeDamage::class]);
+        $this->assertEquals(50, $weapon->damageType(MeleeDamage::class));
     }
 }

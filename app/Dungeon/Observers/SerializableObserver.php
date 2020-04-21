@@ -15,11 +15,17 @@ class SerializableObserver
         $entity->serializeAttributes();
     }
 
+    /**
+     * After saving, deserialize attributes
+     */
     public function saved(Model $entity)
     {
         $entity->deserializeAttributes();
     }
 
+    /**
+     * Retrieved from database, extract attributes
+     */
     public function retrieved(Model $entity)
     {
         $entity->deserializeAttributes();

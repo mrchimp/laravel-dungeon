@@ -56,8 +56,6 @@ trait HasSerializableAttributes
         foreach ($this->getSerializableAttributes() as $field_name) {
             if (isset($this->{$this->serializedDataColumnName()}[$field_name])) {
                 $this->$field_name = $this->{$this->serializedDataColumnName()}[$field_name];
-            } elseif (isset($this->{$this->serializedDataColumnName()}[$field_name])) {
-                $this->$field_name = $this->{$this->serializedDataColumnName()}[$field_name];
             }
         }
     }
@@ -69,10 +67,7 @@ trait HasSerializableAttributes
     public function applyDefaultSerializableAttributes(): void
     {
         foreach ($this->getSerializableAttributes() as $field_name) {
-            if (
-                array_key_exists($field_name, $this->getSerializable())
-                && !isset($this->$field_name)
-            ) {
+            if (!isset($this->$field_name)) {
                 $this->$field_name = $this->getSerializable()[$field_name];
             }
         }
