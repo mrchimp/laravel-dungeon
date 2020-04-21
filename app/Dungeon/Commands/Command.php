@@ -4,9 +4,9 @@ namespace Dungeon\Commands;
 
 use Dungeon\CurrentLocation;
 use Dungeon\EntityFinder;
-use Dungeon\Room;
 use Dungeon\User;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 abstract class Command
@@ -40,9 +40,9 @@ abstract class Command
     public bool $matched = false;
 
     /**
-     * The output data to be sent in the response to the user
+     * Any extra data to be sent in the response to the user
      */
-    protected array $output = [];
+    protected Collection $extra_data;
 
     /**
      * The text response to send to the user
@@ -52,7 +52,7 @@ abstract class Command
     /**
      * The Room that the user is currently in
      */
-    protected CurrentLocation $current_location;
+    public CurrentLocation $current_location;
 
     /**
      * Whether the command succeeded.
@@ -73,6 +73,7 @@ abstract class Command
      */
     public function __construct(string $input, User $user = null)
     {
+        $this->extra_data = new Collection;
         $this->input = $input;
         $this->matched = $this->matches($input);
 
@@ -111,16 +112,11 @@ abstract class Command
      * This sets up the command and then calls the 'run' method
      * which does the interesting bits.
      */
-    public function execute(): void
+    public function execute(): self
     {
         $this->run();
 
-        $this->setOutputItem('exits', $this->current_location->getExits(true));
-        $this->setOutputItem('items', $this->current_location->getItems(true));
-        $this->setOutputItem('players', $this->current_location->getPlayers(true));
-        $this->setOutputItem('npcs', $this->current_location->getNpcs(true));
-        $this->setOutputItem('inventory', $this->user->getInventory(true));
-        $this->setOutputItem('room', $this->current_location->getRoom());
+        return $this;
     }
 
     /**
@@ -187,11 +183,11 @@ abstract class Command
     }
 
     /**
-     * Set an item in the array that wil be sent to the user
+     * Set an item in the array that will be sent to the user
      */
-    protected function setOutputItem(string $key, $value): self
+    protected function setExtraItem(string $key, $value): self
     {
-        $this->output[$key] = $value;
+        $this->extra_data[$key] = $value;
 
         return $this;
     }
@@ -199,17 +195,17 @@ abstract class Command
     /**
      * Get an item from the array that will be sent to the user
      */
-    public function getOutputItem(string $key)
+    public function getExtraItem(string $key)
     {
-        return Arr::get($this->output, $key);
+        return Arr::get($this->extra_data, $key);
     }
 
     /**
      * Get the array that will be sent to the user
      */
-    public function getOutputArray(): array
+    public function getExtraData(): Collection
     {
-        return $this->output;
+        return $this->extra_data;
     }
 
     /**
@@ -217,9 +213,9 @@ abstract class Command
      *
      * You probably want to use setOutputItem instead
      */
-    protected function setOutputArray(array $output): self
+    protected function setExtraData(Collection $extra_data): self
     {
-        $this->output = $output;
+        $this->extra_data = $extra_data;
 
         return $this;
     }
@@ -231,7 +227,19 @@ abstract class Command
      */
     public function toArray(): array
     {
-        return $this->output;
+        return [
+            'room' => [
+                'exits' => $this->current_location->getExits(true)->toArray(),
+                'items' => $this->current_location->getItems(true)->values()->toArray(),
+                'players' => $this->current_location->getPlayers(true)->values()->toArray(),
+                'npcs' => $this->current_location->getNpcs(true)->values()->toArray(),
+                'inventory' => $this->user->getInventory(true)->values()->toArray(),
+                'room' => $this->current_location->getRoom()->toArray(),
+            ],
+            'extra' => [
+                $this->extra_data->toArray(),
+            ]
+        ];
     }
 
     /**

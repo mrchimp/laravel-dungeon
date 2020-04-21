@@ -100,7 +100,7 @@ class LookCommandTest extends TestCase
         $command = new LookCommand('look', $user);
 
         $command->execute();
-        $exits = $command->getOutputItem('exits');
+        $exits = $command->current_location->getExits();
 
         $this->assertIsCollection($exits);
         $this->assertCount(4, $exits);
@@ -127,7 +127,7 @@ class LookCommandTest extends TestCase
         $command = new LookCommand('look', $user);
         $command->execute();
 
-        $players = $command->getOutputItem('players');
+        $players = $command->current_location->getPlayers();
 
         $this->assertEquals(EntityCollection::class, get_class($players));
         $this->assertCount(1, $players);
@@ -146,7 +146,7 @@ class LookCommandTest extends TestCase
         $command = new LookCommand('look', $user);
         $command->execute();
 
-        $npcs = $command->getOutputItem('npcs');
+        $npcs = $command->current_location->getNPCs();
 
         $this->assertEquals(EntityCollection::class, get_class($npcs));
         $this->assertCount(1, $npcs);
@@ -167,7 +167,7 @@ class LookCommandTest extends TestCase
         $command = new LookCommand('look', $user);
         $command->execute();
 
-        $items = $command->getOutputItem('items');
+        $items = $command->current_location->getItems();
 
         $this->assertEquals(EntityCollection::class, get_class($items));
         $this->assertCount(1, $items);

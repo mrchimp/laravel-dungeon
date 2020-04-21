@@ -41,7 +41,7 @@ class GoCommand extends Command
         $destination = $this->user->getRoom()->{$direction . 'Exit'};
 
         if (!$destination) {
-            return $this->fail('I can\'t go that way.');
+            return $this->fail('You can\'t go that way.');
         }
 
         $portal = $this->user->getRoom()->{$direction . '_portal'};

@@ -39,7 +39,7 @@ class InspectCommand extends Command
                 ->implode('<br>');
         }
 
-        $this->setOutputItem('contents', $entity->contents);
+        $this->setExtraItem('contents', $entity->contents);
         $this->setMessage($output);
 
         return $this;

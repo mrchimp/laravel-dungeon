@@ -1,83 +1,110 @@
 <template>
   <div class="relative">
-    <div class="grid grid-rows-maininterface fullheight">
-      <div class="bg-red-400 overflow-y-scroll p-1">
-        <p v-for="(message, index) in output" :key="index">{{message}}</p>
+    <div class="grid grid-rows-maininterface h-screen">
+      <div class="overflow-y-scroll p-1 leading-tight">
+        <template v-for="(message, index) in output">
+          <input-message v-if="message.type==='input'" :message="message" :key="index" />
+          <output-message v-if="message.type === 'output'" :message="message" :key="index" />
+          <error-message v-if="message.type === 'error'" :message="message" :key="index" />
+          <whisper-message v-if="message.type === 'whisper'" :message="message" :key="index" />
+        </template>
       </div>
 
-      <div class="flex p-1 bg-blue-400">
-        <form @submit.prevent="submitInput" class="flex-1 flex bg-blue-400">
+      <div class="flex px-2 py-1 bg-gray-200">
+        <form @submit.prevent="submitInput" class="flex-1 flex">
           <input
-            class="flex-1 p-1"
+            class="flex-1 p-1 text-lg"
             type="text"
             v-model="input"
             :disabled="sending_input"
             placeholder="Type your commands here..."
           />
         </form>
-        <p v-if="sending_input" class="flex-1 bg-blue-400">Sending command...</p>
+        <p v-if="sending_input" class="flex-1 bg-gray-400 text-gray-600 text-lg">Sending command...</p>
       </div>
 
-      <div class="bg-green-400 grid grid-rows-3 grid-cols-3">
-        <div class="flex justify-center items-center"></div>
-        <div class="flex justify-center items-center">
-          <button type="button" @click.prevent="run('go north')">N</button>
-        </div>
-        <div class="flex justify-center items-center"></div>
+      <div class="flex justify-center items-center">
+        <div class="grid grid-rows-3 grid-cols-3 w-full max-w-screen-sm">
+          <div class="flex justify-center items-center">
+            <button
+              type="button"
+              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+              @click.prevent="show_inventory = !show_inventory"
+            >Inv</button>
+          </div>
+          <div class="flex justify-center items-center">
+            <button
+              type="button"
+              @click.prevent="quickRun('go north')"
+              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+            >N</button>
+          </div>
+          <div class="flex justify-center items-center">
+            <button
+              type="button"
+              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+              @click.prevent="show_players = !show_players"
+            >Ply ({{ players.length + npcs.length }})</button>
+          </div>
 
-        <div class="flex justify-center items-center">
-          <button type="button" @click.prevent="run('go west')">W</button>
-        </div>
-        <div class="flex justify-center items-center">
-          <button type="button" @click.prevent="run('look')">Look</button>
-        </div>
-        <div class="flex justify-center items-center">
-          <button type="button" @click.prevent="run('go east')">E</button>
-        </div>
+          <div class="flex justify-center items-center">
+            <button
+              type="button"
+              @click.prevent="quickRun('go west')"
+              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+            >W</button>
+          </div>
+          <div class="flex justify-center items-center">
+            <button
+              type="button"
+              @click.prevent="quickRun('look')"
+              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+            >Look</button>
+          </div>
+          <div class="flex justify-center items-center">
+            <button
+              type="button"
+              @click.prevent="quickRun('go east')"
+              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+            >E</button>
+          </div>
 
-        <div class="flex justify-center items-center"></div>
-        <div class="flex justify-center items-center">
-          <button type="button" @click.prevent="run('go south')">S</button>
+          <div class="flex justify-center items-center"></div>
+          <div class="flex justify-center items-center">
+            <button
+              type="button"
+              @click.prevent="quickRun('go south')"
+              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+            >S</button>
+          </div>
+          <div class="flex justify-center items-center">
+            <button
+              type="button"
+              class="text-xl font-bold bg-gray-200 rounded p-2 m-2 w-full"
+              @click.prevent="show_items = !show_items"
+            >Itm ({{ items.length }})</button>
+          </div>
         </div>
-        <div class="flex justify-center items-center"></div>
-      </div>
-
-      <div class="bg-yellow-400 flex justify-center">
-        <button
-          type="button"
-          class="flex justify-center items-center px-1"
-          @click.prevent="show_inventory = !show_inventory"
-        >Inv</button>
-        <button
-          type="button"
-          class="flex justify-center items-center px-1"
-          @click.prevent="show_players = !show_players"
-        >Players</button>
-        <button
-          type="button"
-          class="flex justify-center items-center px-1"
-          @click.prevent="show_items = !show_items"
-        >Items</button>
       </div>
     </div>
 
-    <div v-if="show_inventory" class="absolute bg-white fullwidth fullheight top-0 left-0">
+    <div v-if="show_inventory" class="absolute bg-white w-screen h-screen top-0 left-0">
       <button @click.prevent="show_inventory = false">Close</button>
       <h3>Inventory</h3>
       <ul>
         <li v-for="item in inventory" :key="item.uuid" :title="item.description">
           {{ item.name }}
-          <button @click.prevent="run('drop ' + item.name)">Drop</button>
+          <button @click.prevent="quickRun('drop ' + item.name)">Drop</button>
           <template v-if="item.type === 'apparel'">
             <button
-              @click.prevent="run('equip ' + item.name)"
+              @click.prevent="quickRun('equip ' + item.name)"
             >{{ item.equiped ? 'Unequip' : 'Equip' }}</button>
           </template>
         </li>
       </ul>
     </div>
 
-    <div v-if="show_players" class="absolute bg-white fullwidth fullheight top-0 left-0">
+    <div v-if="show_players" class="absolute bg-white w-screen h-screen top-0 left-0">
       <button @click.prevent="show_players = false">Close</button>
       <h3>Players</h3>
       <ul>
@@ -95,7 +122,7 @@
       <ul>
         <li v-for="item in items" :key="item.uuid" :title="item.description">
           {{ item.name }}
-          <button @click.prevent="run('take ' + item.name)">Take</button>
+          <button @click.prevent="quickRun('take ' + item.name)">Take</button>
         </li>
       </ul>
     </div>
@@ -103,7 +130,20 @@
 </template>
 
 <script>
+import get from 'lodash/get';
+import ErrorMessage from './ErrorMessage.vue';
+import InputMessage from './InputMessage.vue';
+import OutputMessage from './OutputMessage.vue';
+import WhisperMessage from './WhisperMessage.vue';
+
 export default {
+  components: {
+    ErrorMessage,
+    InputMessage,
+    OutputMessage,
+    WhisperMessage,
+  },
+
   data() {
     return {
       sending_input: false,
@@ -111,6 +151,7 @@ export default {
       output: [],
       items: [],
       players: [],
+      npcs: [],
       exits: [],
       inventory: [],
       current_room: null,
@@ -123,12 +164,16 @@ export default {
   },
 
   mounted() {
-    this.run('look');
+    this.quickRun('look');
 
     Echo.private('App.User.' + window.user_id).notification((notification) => {
       switch (notification.type) {
         case 'Dungeon\\Notifications\\WhisperToUser':
-          this.output.push(`${notification.author_name} whispers: ${notification.message}`);
+          this.output.push({
+            type: 'whisper',
+            name: notification.author_name,
+            text: `"${notification.message}"`,
+          });
           break;
         default:
           console.error('unknown notification type', notification);
@@ -144,17 +189,11 @@ export default {
     submitInput() {
       if (this.input === 'clear') {
         this.input = '';
-        this.output = '';
+        this.output = [];
         return;
       }
 
-      this.runCommand(this.input)
-        .then(this.handleResponse)
-        .then(this.resetInput)
-        .catch(this.handleError)
-        .then(() => {
-          this.sending_input = false;
-        });
+      this.run(this.input);
     },
 
     handleResponse(response) {
@@ -162,34 +201,27 @@ export default {
         throw response.data.message;
       }
 
+      this.output.push({
+        type: 'input',
+        text: this.input,
+      });
+
       if (response.data.message) {
-        // @todo not sure how to handle new lines in output...
-        // Might be best to split response into an array of lines.
-        // This would allow adding styling and stuff too...
-        // response.data.message.replace(/\n/g, '<br>');
+        this.output.push({
+          type: 'output',
+          text: response.data.message,
+        });
       }
 
-      if (response.data.data.items) {
-        this.items = response.data.data.items;
-      }
-
-      if (response.data.data.exits) {
-        this.exits = response.data.data.exits;
-      }
-
-      if (response.data.data.players) {
-        this.players = response.data.data.players;
-      }
-
-      if (response.data.data.inventory) {
-        this.inventory = response.data.data.inventory;
-      }
+      this.items = get(response, 'data.data.room.items', []);
+      this.exits = get(response, 'data.data.room.exits', []);
+      this.players = get(response, 'data.data.room.players', []);
+      this.inventory = get(response, 'data.data.room.inventory', []);
+      this.npcs = get(response, 'data.data.room.npcs', []);
 
       if (response.data.data.room.id !== this.current_room) {
         this.handleRoomChange(response.data.data.room.id);
       }
-
-      this.output.push(response.data.message);
 
       return response;
     },
@@ -228,10 +260,15 @@ export default {
       console.log(this.room_channel);
     },
 
+    quickRun(input) {
+      this.input = input;
+      this.run(this.input);
+    },
+
     run(input) {
-      this.runCommand(input)
+      this.getResponse(input)
         .then(this.handleResponse)
-        .then(this.resetInput())
+        .then(this.resetInput)
         .catch(this.handleError)
         .then(() => {
           this.sending_input = false;
@@ -240,10 +277,13 @@ export default {
 
     handleError(error) {
       console.error(error);
-      this.output.push(error);
+      this.output.push({
+        type: 'error',
+        text: error,
+      });
     },
 
-    runCommand(input) {
+    getResponse(input) {
       this.sending_input = false;
 
       return axios.post('/dungeon/cmd', {
@@ -253,11 +293,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.dungeon {
-  width: 100vw;
-  height: 100vh;
-}
-</style>
-

@@ -56,7 +56,7 @@ class CommandRunner
      *
      * @throws UnknownCommandException
      */
-    public static function run(string $input, User $user = null): ?Command
+    public static function run(string $input, User $user = null): Command
     {
         foreach (self::$commands as $command) {
             $command = new $command($input, $user);
@@ -74,8 +74,6 @@ class CommandRunner
             throw new UnknownCommandException('Unknown command: ' . $input);
         }
 
-        $command->execute();
-
-        return $command;
+        return $command->execute();
     }
 }

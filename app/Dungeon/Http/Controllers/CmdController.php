@@ -24,7 +24,7 @@ class CmdController extends Controller
 
         return response()->json([
             'message' => $response->getMessage(),
-            'data' => $response->getOutputArray(),
+            'data' => $response->toArray(),
             'response' => true
         ]);
     }

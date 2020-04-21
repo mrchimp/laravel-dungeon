@@ -47,7 +47,7 @@ class GoCommandTest extends TestCase
         $command->execute();
 
         $this->assertFalse($command->success);
-        $this->assertEquals('I can\'t go that way.', $command->getMessage());
+        $this->assertEquals('You can\'t go that way.', $command->getMessage());
     }
 
     /** @test */
