@@ -207,7 +207,7 @@ class Room extends Model
     public function toArray(): array
     {
         $output = [
-            'id' => $this->id,
+            'uuid' => $this->uuid,
             'description' => $this->description,
         ];
 

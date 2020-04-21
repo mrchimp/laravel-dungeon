@@ -39,7 +39,7 @@ class UserSaysToRoom implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('Room.' . $this->room->id);
+        return new PrivateChannel('Room.' . $this->room->uuid);
     }
 
     /**

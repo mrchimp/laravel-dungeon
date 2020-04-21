@@ -6,7 +6,7 @@
           <input-message v-if="message.type === 'input'" :message="message" :key="index" />
           <output-message v-if="message.type === 'output'" :message="message" :key="index" />
           <error-message v-if="message.type === 'error'" :message="message" :key="index" />
-          <whisper-message v-if="message.type === 'whisper'" :message="message" :key="index" />
+          <chat-message v-if="message.type === 'chat'" :message="message" :key="index" />
         </template>
       </div>
 
@@ -198,14 +198,14 @@ import get from 'lodash/get';
 import ErrorMessage from './ErrorMessage.vue';
 import InputMessage from './InputMessage.vue';
 import OutputMessage from './OutputMessage.vue';
-import WhisperMessage from './WhisperMessage.vue';
+import ChatMessage from './ChatMessage.vue';
 
 export default {
   components: {
     ErrorMessage,
     InputMessage,
     OutputMessage,
-    WhisperMessage,
+    ChatMessage,
   },
 
   data() {
@@ -243,7 +243,7 @@ export default {
       switch (notification.type) {
         case 'Dungeon\\Notifications\\WhisperToUser':
           this.addOutput({
-            type: 'whisper',
+            type: 'chat',
             name: notification.author_name,
             text: `"${notification.message}"`,
           });
@@ -261,7 +261,7 @@ export default {
 
     submitInput() {
       if (this.input === 'clear') {
-        this.input = '';
+        this.resetInput();
         this.output = [];
         return;
       }
@@ -274,11 +274,6 @@ export default {
         throw response.data.message;
       }
 
-      this.addOutput({
-        type: 'input',
-        text: this.input,
-      });
-
       if (response.data.message) {
         this.addOutput({
           type: 'output',
@@ -286,27 +281,25 @@ export default {
         });
       }
 
-      this.items = get(response, 'data.data.room.items', []);
-      this.exits = get(response, 'data.data.room.exits', []);
-      this.players = get(response, 'data.data.room.players', []);
-      this.inventory = get(response, 'data.data.room.inventory', []);
-      this.npcs = get(response, 'data.data.room.npcs', []);
+      this.items = get(response, 'data.data.environment.items', []);
+      this.exits = get(response, 'data.data.environment.exits', []);
+      this.players = get(response, 'data.data.environment.players', []);
+      this.inventory = get(response, 'data.data.environment.inventory', []);
+      this.npcs = get(response, 'data.data.environment.npcs', []);
 
-      if (response.data.data.room.id !== this.current_room) {
-        this.handleRoomChange(response.data.data.room.id);
+      if (get(response, 'data.data.environment.room.uuid') !== get(this, 'current_room.uuid')) {
+        this.handleRoomChange(get(response, 'data.data.environment.room'));
       }
 
       return response;
     },
 
-    handleRoomChange(new_room_id) {
+    handleRoomChange(new_room) {
       if (this.current_room) {
         this.leaveRoomChannel();
       }
 
-      this.current_room = new_room_id;
-
-      console.log('handleRoomChange', new_room_id);
+      this.current_room = new_room;
 
       if (this.current_room) {
         this.joinRoomChannel();
@@ -314,23 +307,22 @@ export default {
     },
 
     leaveRoomChannel() {
-      console.log('Leaving channel', `Room.${this.current_room}`);
-      Echo.leaveChannel(`Room.${this.current_room}`);
+      Echo.leaveChannel(`Room.${this.current_room.uuid}`);
 
       this.room_channel = null;
     },
 
     joinRoomChannel() {
-      console.log('Joining channel', `Room.${this.current_room}`);
-      this.room_channel = Echo.private(`Room.${this.current_room}`).listen(
+      this.room_channel = Echo.private(`Room.${this.current_room.uuid}`).listen(
         'UserSaysToRoom',
         (e) => {
-          console.log('UserSaysToRoom', e);
-          this.addOutput(`${e.author_name}: ${e.message}`);
+          this.addOutput({
+            type: 'chat',
+            name: e.author_name,
+            text: e.message,
+          });
         }
       );
-
-      console.log(this.room_channel);
     },
 
     quickRun(input) {
@@ -339,9 +331,14 @@ export default {
     },
 
     run(input) {
+      this.addOutput({
+        type: 'input',
+        text: this.input,
+      });
+      this.resetInput();
+
       this.getResponse(input)
         .then(this.handleResponse)
-        .then(this.resetInput)
         .catch(this.handleError)
         .then(() => {
           this.sending_input = false;

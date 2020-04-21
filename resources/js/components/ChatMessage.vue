@@ -1,6 +1,6 @@
 <template>
-  <p>
-    <span v-if="message.name">{{ message.name }}</span>
+  <p class="font-bold">
+    <span v-if="message.name">{{ message.name }}:</span>
     {{ message.text }}
   </p>
 </template>
