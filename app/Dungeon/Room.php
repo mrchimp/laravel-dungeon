@@ -5,6 +5,7 @@ namespace Dungeon;
 use Dungeon\Entities\People\Body;
 use Dungeon\Observers\UuidObserver;
 use Dungeon\Portal;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -23,6 +24,11 @@ class Room extends Model
         parent::boot();
 
         self::observe(new UuidObserver);
+    }
+
+    public function scopeSpawnRoom(Builder $query)
+    {
+        $query->where('is_spawn_room', true);
     }
 
     public function people(Body $exclude = null): Collection

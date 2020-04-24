@@ -86,8 +86,7 @@ class User extends Authenticatable
 
     public function respawn(): self
     {
-        // @todo This is a poor way of choosing a starting room!
-        $room = Room::first();
+        $room = Room::spawnRoom()->inRandomOrder()->first();
 
         // @todo default health should be per-class/race
         $this->setHealth(self::DEFAULT_HEALTH);

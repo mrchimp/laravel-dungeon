@@ -83,4 +83,21 @@ class RoomTest extends TestCase
         $this->assertEquals($portal->id, $south_room->north_portal->id);
         $this->assertEquals($portal->id, $north_room->south_portal->id);
     }
+
+    /** @test */
+    public function spawn_rooms_can_be_filtered()
+    {
+        $spawn_room = $this->makeRoom([
+            'is_spawn_room' => true,
+        ]);
+
+        $non_spawn_room = $this->makeRoom([
+            'is_spawn_room' => false,
+        ]);
+
+        $rooms = Room::spawnRoom()->get();
+
+        $this->assertCount(1, $rooms);
+        $this->assertEquals($spawn_room->id, $rooms->first()->id);
+    }
 }
