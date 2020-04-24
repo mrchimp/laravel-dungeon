@@ -36,7 +36,7 @@ class RespawnCommand extends Command
 
         $target->respawn()->save();
 
-        $this->setMessage('User has respawned.');
+        $this->setMessage('You wake up.');
 
         return $this;
     }

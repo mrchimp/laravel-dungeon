@@ -9,9 +9,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-/**
- * @covers \Dungeon\Entities\People\Body
- */
 class BodyTest extends TestCase
 {
     use DatabaseMigrations,
@@ -108,7 +105,6 @@ class BodyTest extends TestCase
     public function if_alive_cannot_be_looted()
     {
         $this->markTestIncomplete();
-
     }
 
     /** @test */

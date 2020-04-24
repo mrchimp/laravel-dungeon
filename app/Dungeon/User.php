@@ -57,11 +57,6 @@ class User extends Authenticatable
         self::observe(new SerializableObserver);
     }
 
-    public function isEquipable(): bool
-    {
-        return false;
-    }
-
     public function getSerializable(): array
     {
         return [
@@ -84,46 +79,26 @@ class User extends Authenticatable
         return $this->body->getRoom();
     }
 
-    public function room()
-    {
-        throw new \Exception('Dont use user-room relationship - go through body instead');
-    }
-
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @todo
-     * This is needed because the entity finder
-     * tries to replace the class. Need to find a
-     * better way to handle this.
-     */
-    public static function replaceClass($model)
-    {
-        throw new \Exception('Shouldnt be using finder on users any more');
-    }
-
-    /**
-     * Kill a user
-     *
-     * @throws \Exception
-     */
-    public function kill()
-    {
-        throw new \Exception('refactor User::kill');
-    }
-
     public function respawn(): self
     {
+        // @todo This is a poor way of choosing a starting room!
         $room = Room::first();
 
+        // @todo default health should be per-class/race
         $this->setHealth(self::DEFAULT_HEALTH);
-        $this->moveTo($room);
 
-        // @todo create new body
-        throw new \Exception('refactor respawn command');
+        Body::create([
+            'name' => 'Temp name',
+            'description' => 'Body',
+        ])
+            ->moveToRoom($room)
+            ->giveToUser($this)
+            ->save();
 
         return $this;
     }
@@ -177,6 +152,11 @@ class User extends Authenticatable
         }
 
         return true;
+    }
+
+    public function isAlive()
+    {
+        return !$this->isDead();
     }
 
     public function canBeAttacked(): bool

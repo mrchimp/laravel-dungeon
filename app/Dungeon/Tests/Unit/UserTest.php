@@ -9,9 +9,6 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-/**
- * @covers \App\User
- */
 class UserTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
@@ -93,5 +90,34 @@ class UserTest extends TestCase
         $user = User::first();
 
         $this->assertEquals('This is a room.', $user->getRoom()->getDescription());
+    }
+
+    /** @test */
+    public function can_have_a_body()
+    {
+        $body = factory(Body::class)->create();
+        $user = factory(User::class)->create();
+
+        $body->giveToUser($user)->save();
+
+        $this->assertEquals($body->id, $user->body->id);
+    }
+
+    /** @test */
+    public function if_user_doesnt_have_a_body_then_getRoom_returns_null()
+    {
+        $user = factory(User::class)->create();
+
+        $this->assertNull($user->getRoom());
+    }
+
+    /** @test */
+    public function getName_gets_the_name()
+    {
+        $user = factory(User::class)->create([
+            'name' => 'Mr Testman',
+        ]);
+
+        $this->assertEquals('Mr Testman', $user->getName());
     }
 }
