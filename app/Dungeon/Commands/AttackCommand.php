@@ -29,6 +29,10 @@ class AttackCommand extends Command
             return $this->fail('You cannot attack the void.');
         }
 
+        if ($this->user->getRoom()->isSafeRoom()) {
+            return $this->fail('You can\'t attack people in a safe room.');
+        }
+
         $target_name = $this->inputPart('target');
         $target = $this->entityFinder->findUsers($target_name, $this->user->getRoom());
 

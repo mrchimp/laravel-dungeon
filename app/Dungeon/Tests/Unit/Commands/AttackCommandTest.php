@@ -163,11 +163,27 @@ class AttackCommandTest extends TestCase
         $room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
         $this->makeEnemy([], 100, $room);
-        $rock = $this->makeRock(100);
-
-        $rock->giveTOUser($user)->save();
+        $this->makeRock(100)->giveToUser($user)->save();
 
         $command = new AttackCommand('attack enemy with rock', $user);
         $command->execute();
+    }
+
+    /** @test */
+    public function you_cannot_attack_in_a_safe_room()
+    {
+        $room = $this->makeRoom([
+            'is_safe_room' => true,
+        ]);
+
+        $user = $this->makeUser([], 100, $room);
+        $this->makeEnemy([], 100, $room);
+        $this->makeRock()->giveToUser($user)->save();
+
+        $command = new AttackCommand('attack enemy with rock', $user);
+        $command->execute();
+
+        $this->assertEquals('You can\'t attack people in a safe room.', $command->getMessage());
+        $this->assertFalse($command->success);
     }
 }

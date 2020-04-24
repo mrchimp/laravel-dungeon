@@ -31,6 +31,21 @@ class Room extends Model
         $query->where('is_spawn_room', true);
     }
 
+    public function scopeSaferoom(Builder $query)
+    {
+        $query->where('is_safe_room', true);
+    }
+
+    public function isSpawnRoom()
+    {
+        return $this->is_spawn_room;
+    }
+
+    public function isSafeRoom()
+    {
+        return $this->is_safe_room || $this->isSpawnRoom();
+    }
+
     public function people(Body $exclude = null): Collection
     {
         return $this
