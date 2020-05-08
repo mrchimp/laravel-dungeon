@@ -15,6 +15,4 @@ Auth::routes();
 Broadcast::routes();
 
 Route::get('logout', 'Auth\LoginController@logout');
-Route::get('/', function () {
-    return redirect('dungeon');
-});
+Route::get('/', 'HomeController@index');
