@@ -73,6 +73,7 @@
                 type="button"
                 class="btn btn-grid"
                 @click.prevent="show_inventory = !show_inventory"
+                title="Inventory"
               >Inv</button>
             </div>
             <div class="flex justify-center items-center py-1">
@@ -81,6 +82,7 @@
                 @click.prevent="preview_exit_direction = 'north'"
                 class="btn btn-grid"
                 :class="{'btn-faded': exits.north === null}"
+                title="Inspect north exit"
               >N</button>
             </div>
             <div class="flex justify-center items-center py-1">
@@ -88,6 +90,7 @@
                 type="button"
                 class="btn btn-grid"
                 @click.prevent="show_players = !show_players"
+                title="Players"
               >Ply ({{ players.length + npcs.length }})</button>
             </div>
 
@@ -97,6 +100,7 @@
                 @click.prevent="preview_exit_direction = 'west'"
                 class="btn btn-grid"
                 :class="{'btn-faded': exits.west === null}"
+                title="Inspect west exit"
               >W</button>
             </div>
             <div class="flex justify-center items-center py-1">
@@ -104,6 +108,7 @@
                 type="button"
                 @click.prevent="quickRun('look')"
                 class="btn btn-grid"
+                title="Look"
               >Look</button>
             </div>
             <div class="flex justify-center items-center py-1">
@@ -112,6 +117,7 @@
                 @click.prevent="preview_exit_direction = 'east'"
                 class="btn btn-grid"
                 :class="{'btn-faded': exits.east === null}"
+                title="Inspect east exit"
               >E</button>
             </div>
 
@@ -122,6 +128,7 @@
                 @click.prevent="preview_exit_direction = 'south'"
                 class="btn btn-grid"
                 :class="{'btn-faded': exits.south === null}"
+                title="Inspect south exit"
               >S</button>
             </div>
             <div class="flex justify-center items-center py-1">
@@ -129,6 +136,7 @@
                 type="button"
                 class="btn btn-grid"
                 @click.prevent="show_items = !show_items"
+                title="Items"
               >Itm ({{ items.length }})</button>
             </div>
           </div>
