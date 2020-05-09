@@ -6,18 +6,10 @@ A basic dungeon-crawler type game made on the [Laravel](https://laravel.com) PHP
 
 Just getting started making the engine. You can move around different rooms and perform some basic actions. There is no real content yet.
 
-## Requirements
-
-- Docker
-
 ## Installing
 
 ```bash
 bash ./install
-
-# ... do some stuff ...
-
-./vessel stop # Stop the docker containers
 ```
 
 ## Default User

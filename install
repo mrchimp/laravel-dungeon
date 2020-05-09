@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-./vessel init # Set up docker containers etc
-./vessel start # Start the docker containers
-./vessel composer install ## Install Composre dependencies
-./vessel artisan key:generate # Make an application key
-./vessel artisan migrate # Migrate the database
-./vessel artisan db:seed # Seed the database with some basic info
-./vessel yarn install # Install Yarn dependencies
-./vessel yarn run dev # Compile frontend assets
+composer install ## Install Composer dependencies
+php artisan key:generate # Make an application key
+php artisan migrate # Migrate the database
+php artisan db:seed # Seed the database with some basic info
+yarn install # Install Yarn dependencies
+yarn run dev # Compile frontend assets
