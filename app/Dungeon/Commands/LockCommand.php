@@ -39,10 +39,6 @@ class LockCommand extends Command
             return $this->fail('Doors can only be locked with a code or a key.');
         }
 
-        if ($access_type === 'code' && !$code) {
-            return $this->fail('you need to provide a code.');
-        }
-
         $room = $this->user->body->room;
         $portal = $room->{$direction . '_portal'};
 
@@ -50,21 +46,13 @@ class LockCommand extends Command
             return $this->fail('The door is already locked.');
         }
 
-        if ($access_type === 'code') {
-            if (!$portal->code) {
-                return $this->fail('You can\'t lock that door with a code.');
-            }
+        $key = $portal->whichKeyFits($this->user->getInventory());
 
-            $result = $portal->lockWithCode($code);
-        } elseif ($access_type === 'key') {
-            $key = $portal->whichKeyFits($this->user->getInventory());
-
-            if (!$key) {
-                return $this->fail('Nothing fits!');
-            }
-
-            $result = $portal->lockWithKey($key);
+        if (!$key) {
+            return $this->fail('You don\'t have a way to lock that door.');
         }
+
+        $result = $portal->lockWithKey($key);
 
         if ($result) {
             $this->setMessage('You lock the door.');

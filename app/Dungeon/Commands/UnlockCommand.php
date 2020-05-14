@@ -50,25 +50,13 @@ class UnlockCommand extends Command
             return $this->fail('The door is already unlocked.');
         }
 
-        if ($access_type === 'code') {
-            if (!$code) {
-                return $this->fail('You need to provide a code.');
-            }
+        $key = $portal->whichKeyFits($this->user->getInventory());
 
-            if (!$portal->code) {
-                return $this->fail('You can\'t open this door with a code');
-            }
-
-            $result = $portal->unlockWithCode($code);
-        } elseif ($access_type === 'key') {
-            $key = $portal->whichKeyFits($this->user->getInventory());
-
-            if (!$key) {
-                return $this->fail('Nothing fits!');
-            }
-
-            $result = $portal->unlockWithKey($key);
+        if (!$key) {
+            return $this->fail('You don\'t have a way to unlock that door.');
         }
+
+        $result = $portal->unlockWithKey($key);
 
         if ($result) {
             $this->setMessage('You unlock the door.');

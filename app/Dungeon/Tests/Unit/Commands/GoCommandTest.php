@@ -3,7 +3,6 @@
 namespace Tests\Unit\Commands;
 
 use Dungeon\Commands\GoCommand;
-use Dungeon\Portal;
 use Dungeon\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -84,7 +83,6 @@ class GoCommandTest extends TestCase
 
         $portal = $this->makePortal([
             'locked' => true,
-            'code' => 1234,
         ]);
 
         $start_room->setNorthExit($other_room, [

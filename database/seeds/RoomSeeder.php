@@ -1,5 +1,6 @@
 <?php
 
+use Dungeon\Entities\Locks\Code;
 use Dungeon\Entities\Locks\Key;
 use Dungeon\Entity;
 use Dungeon\Portal;
@@ -48,8 +49,16 @@ class RoomSeeder extends Seeder
             'name' => 'Metal door',
             'description' => 'A sturdy door with a code lock. It\'s locked. Maybe you can guess the code.',
             'locked' => true,
-            'code' => 1234,
         ]);
+
+        $south_east_code = Code::create([
+            'name' => 'Code',
+            'description' => 'Can open a lock somewhere',
+            'code' => '1234',
+        ]);
+        $south_east_code->moveToRoom($west_room)->save();
+
+        $south_east_portal->keys()->attach($south_east_code);
 
         $south_room->setEastExit(
             $east_room,

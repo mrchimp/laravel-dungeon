@@ -26,7 +26,9 @@ class RespawnCommandTest extends TestCase
     /** @test */
     public function respawn_command_gives_the_player_a_new_body_returns_them_to_the_start_room_and_makes_them_alive()
     {
-        $room_1 = $this->makeRoom();
+        $room_1 = $this->makeRoom([
+            'is_spawn_room' => true,
+        ]);
         $room_2 = $this->makeRoom();
         $user = $this->makeUser([], 100, $room_2);
         $body_1 = $user->getBody();

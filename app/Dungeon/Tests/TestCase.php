@@ -6,6 +6,7 @@ use Dungeon\Collections\EntityCollection;
 use Dungeon\DamageTypes\MeleeDamage;
 use Dungeon\Entities\Apparel\Apparel;
 use Dungeon\Entities\Food\Food;
+use Dungeon\Entities\Locks\Code;
 use Dungeon\Entities\People\Body;
 use Dungeon\Entities\Weapons\Melee\MeleeWeapon;
 use Dungeon\Entity;
@@ -150,5 +151,12 @@ abstract class TestCase extends BaseTestCase
                 'description' => 'A simple door for testing purposes.',
             ], $attributes)
         );
+    }
+
+    protected function makeCode(int $code)
+    {
+        return factory(Code::class)->create([
+            'code' => $code,
+        ]);
     }
 }

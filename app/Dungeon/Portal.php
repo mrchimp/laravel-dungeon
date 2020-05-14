@@ -11,7 +11,6 @@ class Portal extends Entity
     protected $fillable = [
         'name',
         'description',
-        'code',
         'locked',
     ];
 
@@ -41,46 +40,6 @@ class Portal extends Entity
     public function isLocked(): bool
     {
         return !!$this->locked;
-    }
-
-    /**
-     * Unlock the lock using a code or password
-     *
-     * Returns true if the action was successful
-     * or if the portal was already locked
-     */
-    public function unlockWithCode($code): bool
-    {
-        if (!$this->locked) {
-            return true;
-        }
-
-        if ((string) $this->code === (string) $code) {
-            $this->locked = false;
-            $this->save();
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Lock the door using a new code
-     */
-    public function lockWithCode($code): bool
-    {
-        if ($this->locked) {
-            return false;
-        }
-
-        if (!$this->code) {
-            return false;
-        }
-
-        $this->locked = true;
-        $this->save();
-
-        return true;
     }
 
     /**
@@ -153,7 +112,6 @@ class Portal extends Entity
     public function getSerializable(): array
     {
         return array_merge(parent::getSerializable(), [
-            'code' => null,
             'locked' => false,
         ]);
     }

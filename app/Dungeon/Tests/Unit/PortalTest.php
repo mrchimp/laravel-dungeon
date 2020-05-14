@@ -27,7 +27,6 @@ class PortalTest extends TestCase
     {
         $portal = $this->makePortal([
             'locked' => false,
-            'code' => 1234,
         ]);
 
         $this->assertFalse($portal->isLocked());
@@ -80,7 +79,6 @@ class PortalTest extends TestCase
     {
         $portal = $this->makePortal([
             'locked' => false,
-            'code' => null,
         ]);
 
         $this->assertFalse($portal->lockWithCode(1234));
