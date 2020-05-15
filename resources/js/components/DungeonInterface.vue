@@ -12,7 +12,10 @@
         </div>
 
         <div class="flex p-1">
-          <p v-if="sending_input" class="flex-1 bg-gray-400 text-gray-600 text-lg">Sending command...</p>
+          <p
+            v-if="sending_input"
+            class="flex-1 bg-gray-400 text-gray-600 text-lg"
+          >Sending command...</p>
           <form v-else @submit.prevent="submitInput" class="flex-1 flex">
             <input
               ref="input"
@@ -36,33 +39,18 @@
             <p class="leading-none pr-4 mb-2">{{ preview_exit.description }}</p>
             <div v-if="preview_exit.locked">
               <p>The door is locked.</p>
-              <div class="grid grid-rows-2">
-                <div class="flex my-1">
-                  <input
-                    class="border border-gray-200 rounded p-2 rounded-r-none flex-1 min-w-0"
-                    type="text"
-                    name="code"
-                    v-model="door_code"
-                    placeholder="Code"
-                  />
-                  <button
-                    class="btn mr-2 flex-auto rounded-l-none"
-                    @click.prevent="unlockDoorWithCode"
-                  >Use code</button>
-                  <button @click.prevent="unlockDoorWithKey" class="btn flex-auto">Use key</button>
-                </div>
-              </div>
+              <button @click.prevent="unlockDoorWithKey" class="btn mt-2">Unlock door</button>
             </div>
-            <p v-else>
+            <div v-else>
               <p>The door is unlocked.</p>
               <button
                 @click.prevent="
                   quickRun(`go ${preview_exit_direction}`);
                   preview_exit_direction = null;
                 "
-                class="btn"
+                class="btn mt-2"
               >Go</button>
-            </p>
+            </div>
           </div>
         </div>
 
@@ -170,16 +158,12 @@
       <div v-if="show_players" class="modal">
         <button @click.prevent="show_players = false" class="btn absolute right-0 top-0 m-1">Close</button>
         <h3 class="font-bold text-lg">Players</h3>
-        <p v-if="players.length === 0">
-          There are no players here.
-        </p>
+        <p v-if="players.length === 0">There are no players here.</p>
         <ul v-else>
           <li v-for="player in players" :key="player.uuid">{{ player.name }}</li>
         </ul>
         <h3 class="font-bold text-lg mt-4">NPCs</h3>
-        <p v-if="npcs.length === 0">
-          There are no NPCs here.
-        </p>
+        <p v-if="npcs.length === 0">There are no NPCs here.</p>
         <ul v-else>
           <li v-for="npc in npcs" :key="npc.uuid">{{ npc.name }}</li>
         </ul>
@@ -196,7 +180,11 @@
                 class="btn"
                 @click="show_item_description = !!show_item_description ? null : item.uuid"
               >?</button>
-              <button class="btn" :class="{'btn-faded': !item.can_be_taken}" @click.prevent="take(item)">Take</button>
+              <button
+                class="btn"
+                :class="{'btn-faded': !item.can_be_taken}"
+                @click.prevent="take(item)"
+              >Take</button>
             </div>
             <div v-if="show_item_description === item.uuid">{{ item.description }}</div>
           </li>
@@ -240,7 +228,6 @@ export default {
       preview_exit_direction: null,
       show_item_description: null,
       show_inventory_description: null,
-      door_code: '',
       cmd_stack: new CmdStack('history', 100),
     };
   },
@@ -396,7 +383,7 @@ export default {
         credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         },
@@ -406,12 +393,6 @@ export default {
       });
 
       return response.json();
-    },
-
-    unlockDoorWithCode() {
-      this.quickRun(`unlock ${this.preview_exit_direction} door with code ${this.door_code}`);
-      this.preview_exit_direction = null;
-      this.door_code = '';
     },
 
     unlockDoorWithKey() {
