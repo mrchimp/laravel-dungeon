@@ -2,6 +2,10 @@
 
 namespace Dungeon\Commands;
 
+use Dungeon\Actions\Food\Eat;
+use Dungeon\Exceptions\MissingEntityException;
+use Dungeon\Exceptions\UnsupportedVerbException;
+
 class EatCommand extends Command
 {
     /**
@@ -16,33 +20,26 @@ class EatCommand extends Command
 
     /**
      * Run the command
-     *
-     * Note: after running this command, the model
-     * may still be loaded as a relationship. You
-     * will need to reload the relationship in
-     * order for it to be removed.
      */
     protected function run(): self
     {
         $entity = $this->entityFinder->find($this->inputPart('target'), $this->user);
 
-        if (!$entity) {
+        try {
+            $action = Eat::do($this->user, $entity);
+        } catch (MissingEntityException $e) {
             return $this->fail('Could not find ' . e($this->inputPart('target')) . '.');
-        }
-
-        if (!$entity->supportsVerb('eat')) {
+        } catch (UnsupportedVerbException $e) {
             return $this->fail('You can\'t eat that.');
         }
 
-        $entity->eat($this->user);
-        $this->user->save();
-        $this->user->body->save();
+        if (!$action->succeeded()) {
+            return $this->fail($action->message);
+        }
 
         $message = 'You eat the ' . e($entity->getName()) . '. ' .
             'It heals you for ' . $entity->getHealing() . '. ' .
             'Your health is now ' . $this->user->getHealth();
-
-        $entity->delete();
 
         $this->setMessage($message);
 

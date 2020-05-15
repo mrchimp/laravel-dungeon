@@ -22,10 +22,10 @@ class Food extends Entity
         ]);
     }
 
-    public function eat(User $consumer): void
-    {
-        $consumer->heal($this->healing);
-    }
+    // public function eat(User $consumer): void
+    // {
+    //     $consumer->heal($this->healing);
+    // }
 
     public function setHealing($amount): self
     {
