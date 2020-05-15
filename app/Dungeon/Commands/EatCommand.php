@@ -33,15 +33,11 @@ class EatCommand extends Command
             return $this->fail('You can\'t eat that.');
         }
 
-        if (!$action->succeeded()) {
-            return $this->fail($action->message);
+        if ($action->failed()) {
+            return $this->fail($action->getMessage());
         }
 
-        $message = 'You eat the ' . e($entity->getName()) . '. ' .
-            'It heals you for ' . $entity->getHealing() . '. ' .
-            'Your health is now ' . $this->user->getHealth();
-
-        $this->setMessage($message);
+        $this->setMessage($action->getMessage());
 
         return $this;
     }

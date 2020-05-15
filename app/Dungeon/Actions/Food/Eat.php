@@ -47,6 +47,10 @@ class Eat extends Action
 
         $this->entity->delete();
 
+        $this->message = 'You eat the ' . e($this->entity->getName()) . '. ' .
+            'It heals you for ' . $this->entity->getHealing() . '. ' .
+            'Your health is now ' . $this->user->getHealth();
+
         $this->succeed();
     }
 }

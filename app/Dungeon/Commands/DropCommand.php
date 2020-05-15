@@ -2,6 +2,9 @@
 
 namespace Dungeon\Commands;
 
+use Dungeon\Actions\Entities\Drop;
+use Dungeon\Exceptions\MissingEntityException;
+
 class DropCommand extends Command
 {
     /**
@@ -22,14 +25,17 @@ class DropCommand extends Command
         $query = $this->inputPart('target');
         $entity = $this->entityFinder->findInInventory($query, $this->user);
 
-        if (!$entity) {
+        try {
+            $action = Drop::do($this->user, $entity);
+        } catch (MissingEntityException $e) {
             return $this->fail('You don\'t have a ' . e($query));
         }
 
-        $entity->moveToRoom($this->current_location->getRoom());
-        $entity->save();
+        if ($action->failed()) {
+            return $this->fail($action->getMessage());
+        }
 
-        $this->setMessage('You drop the ' . e($entity->getName()) . '.');
+        $this->setMessage($action->getMessage());
 
         return $this;
     }

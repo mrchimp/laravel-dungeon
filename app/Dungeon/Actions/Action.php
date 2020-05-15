@@ -41,6 +41,19 @@ abstract class Action
     }
 
     /**
+     * True if action failed
+     */
+    public function failed(): bool
+    {
+        return !$this->succeeded();
+    }
+
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
      * Mark the action as successful
      */
     protected function succeed(): void
