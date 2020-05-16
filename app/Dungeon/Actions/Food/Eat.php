@@ -30,6 +30,7 @@ class Eat extends Action
      * Perform the action
      *
      * @throws MissingEntityException
+     * @throws UnsupportedVerbException
      */
     public function perform()
     {
@@ -46,11 +47,5 @@ class Eat extends Action
         $this->user->body->save();
 
         $this->entity->delete();
-
-        $this->message = 'You eat the ' . e($this->entity->getName()) . '. ' .
-            'It heals you for ' . $this->entity->getHealing() . '. ' .
-            'Your health is now ' . $this->user->getHealth();
-
-        $this->succeed();
     }
 }

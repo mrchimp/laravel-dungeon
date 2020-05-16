@@ -1,14 +1,16 @@
 <?php
 
-namespace Dungeon\Actions\Entities;
+namespace Dungeon\Actions\Apparel;
 
 use Dungeon\Actions\Action;
+use Dungeon\Contracts\ApparelInterface;
 use Dungeon\Entity;
+use Dungeon\Exceptions\EntityNotEquipableException;
 use Dungeon\Exceptions\EntityNotPossessedException;
 use Dungeon\Exceptions\MissingEntityException;
 use Dungeon\User;
 
-class Drop extends Action
+class Equip extends Action
 {
     /**
      * @var User
@@ -41,7 +43,16 @@ class Drop extends Action
             throw new EntityNotPossessedException;
         }
 
-        $this->entity->moveToRoom($this->user->getRoom());
+        if (!($this->entity instanceof ApparelInterface)) {
+            throw new EntityNotEquipableException;
+        }
+
+        if ($this->entity->isEquiped()) {
+            $this->entity->unequip();
+        } else {
+            $this->entity->equip();
+        }
+
         $this->entity->save();
     }
 }

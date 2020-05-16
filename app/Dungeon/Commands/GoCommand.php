@@ -2,7 +2,10 @@
 
 namespace Dungeon\Commands;
 
-use Dungeon\Direction;
+use Dungeon\Actions\Users\Go;
+use Dungeon\Exceptions\ExitUnavailableException;
+use Dungeon\Exceptions\InvalidDirectionException;
+use Dungeon\Exceptions\PortalLockedException;
 
 class GoCommand extends Command
 {
@@ -32,29 +35,17 @@ class GoCommand extends Command
      */
     protected function run(): self
     {
-        $direction = Direction::sanitize($this->inputPart('direction'));
-
-        if (!$direction) {
+        try {
+            $action = Go::do($this->user, $this->inputPart('direction'));
+        } catch (InvalidDirectionException $e) {
             return $this->fail('Go where?');
-        }
-
-        $destination = $this->user->getRoom()->{$direction . 'Exit'};
-
-        if (!$destination) {
+        } catch (ExitUnavailableException $e) {
             return $this->fail('You can\'t go that way.');
-        }
-
-        $portal = $this->user->getRoom()->{$direction . '_portal'};
-
-        if ($portal && $portal->isLocked()) {
+        } catch (PortalLockedException $e) {
             return $this->fail('The door is locked.');
         }
 
-        $this->user
-            ->moveTo($destination)
-            ->save();
-
-        $this->setMessage('You go ' . $direction . '. ' . $destination->getDescription());
+        $this->setMessage('You go ' . $action->direction . '. ' . $action->destination->getDescription());
 
         return $this;
     }

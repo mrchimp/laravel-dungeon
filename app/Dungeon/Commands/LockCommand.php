@@ -25,7 +25,6 @@ class LockCommand extends Command
     {
         $direction = $this->inputPart('direction');
         $access_type = $this->inputPart('access_type');
-        $code = $this->inputPart('access_name');
 
         if (!$access_type) {
             $access_type = 'key';

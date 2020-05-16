@@ -2,8 +2,10 @@
 
 namespace Dungeon\Commands;
 
-use Dungeon\Contracts\ApparelInterface;
-use Dungeon\Traits\IsEquipable;
+use Dungeon\Actions\Apparel\Equip;
+use Dungeon\Exceptions\EntityNotEquipableException;
+use Dungeon\Exceptions\EntityNotPossessedException;
+use Dungeon\Exceptions\MissingEntityException;
 
 class EquipCommand extends Command
 {
@@ -30,27 +32,21 @@ class EquipCommand extends Command
         $query = $this->inputPart('target');
         $entity = $this->entityFinder->find($query, $this->user);
 
-        if (!$entity) {
+        try {
+            Equip::do($this->user, $entity);
+        } catch (MissingEntityException $e) {
             return $this->fail('Equip what?');
-        }
-
-        if (!$entity->ownedBy($this->user)) {
+        } catch (EntityNotPossessedException $e) {
             return $this->fail('You don\'t have that.');
-        }
-
-        if (!($entity instanceof ApparelInterface)) {
+        } catch (EntityNotEquipableException $e) {
             return $this->fail('You can\'t equip that.');
         }
 
         if ($entity->isEquiped()) {
-            $entity->unequip();
-            $this->setMessage('Unequipped.');
+            $this->setMessage('Equiped.');
         } else {
-            $entity->equip();
-            $this->setMessage('Equipped.');
+            $this->setMessage('Unequipped.');
         }
-
-        $entity->save();
 
         return $this;
     }

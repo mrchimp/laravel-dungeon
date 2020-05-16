@@ -2,6 +2,12 @@
 
 namespace Dungeon\Commands;
 
+use Dungeon\Actions\Entities\Give;
+use Dungeon\Exceptions\EntityNotPossessedException;
+use Dungeon\Exceptions\MissingEntityException;
+use Dungeon\Exceptions\TargetUserIsDeadException;
+use Dungeon\Exceptions\TargetUserNotProvidedException;
+
 class GiveCommand extends Command
 {
     /**
@@ -32,24 +38,19 @@ class GiveCommand extends Command
         }
 
         $item = $this->entityFinder->findInInventory($item_name, $this->user);
-
-        if (!$item) {
-            return $this->fail('You don\'t have that to give.');
-        }
-
         $target = $this->entityFinder->findUsers($target_name, $this->user->room);
 
-        if (!$target) {
+        try {
+            Give::do($this->user, $item, $target);
+        } catch (MissingEntityException $e) {
+            return $this->fail('You don\'t have that to give.');
+        } catch (TargetUserNotProvidedException $e) {
             return $this->fail('Give to who now?');
-        }
-
-        // @todo need to test this - maybe place item on body instead?
-        if (!$target->owner) {
+        } catch (EntityNotPossessedException $e) {
+            return $this->fail('You don\'t have that to give.');
+        } catch (TargetUserIsDeadException $e) {
             return $this->fail('I think they might be dead.');
         }
-
-        $item->giveToUser($target->owner);
-        $item->save();
 
         $this->setMessage('You give it away.');
 

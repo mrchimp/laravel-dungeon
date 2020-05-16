@@ -26,16 +26,12 @@ class DropCommand extends Command
         $entity = $this->entityFinder->findInInventory($query, $this->user);
 
         try {
-            $action = Drop::do($this->user, $entity);
+            Drop::do($this->user, $entity);
         } catch (MissingEntityException $e) {
             return $this->fail('You don\'t have a ' . e($query));
         }
 
-        if ($action->failed()) {
-            return $this->fail($action->getMessage());
-        }
-
-        $this->setMessage($action->getMessage());
+        $this->setMessage('You drop the ' . e($entity->getName()) . '.');
 
         return $this;
     }

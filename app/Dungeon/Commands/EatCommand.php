@@ -26,18 +26,16 @@ class EatCommand extends Command
         $entity = $this->entityFinder->find($this->inputPart('target'), $this->user);
 
         try {
-            $action = Eat::do($this->user, $entity);
+            Eat::do($this->user, $entity);
         } catch (MissingEntityException $e) {
             return $this->fail('Could not find ' . e($this->inputPart('target')) . '.');
         } catch (UnsupportedVerbException $e) {
             return $this->fail('You can\'t eat that.');
         }
 
-        if ($action->failed()) {
-            return $this->fail($action->getMessage());
-        }
-
-        $this->setMessage($action->getMessage());
+        $this->message = 'You eat the ' . e($entity->getName()) . '. ' .
+            'It heals you for ' . $entity->getHealing() . '. ' .
+            'Your health is now ' . $this->user->getHealth();
 
         return $this;
     }
