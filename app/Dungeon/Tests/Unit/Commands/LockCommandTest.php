@@ -4,7 +4,6 @@ namespace Tests\Unit\Commands;
 
 use Dungeon\Commands\LockCommand;
 use Dungeon\Entities\Locks\Key;
-use Dungeon\Portal;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -34,7 +33,7 @@ class LockCommandTest extends TestCase
         $user = $this->makeUser([], 100, $start_room);
         $code->giveToUser($user)->save();
 
-        $command = new LockCommand('lock north door with code', $user);
+        $command = new LockCommand('lock north door', $user);
         $command->execute();
 
         $portal->refresh();
@@ -60,7 +59,7 @@ class LockCommandTest extends TestCase
         $user = $this->makeUser([], 100, $start_room);
         $key->giveToUser($user)->save();
 
-        $command = new LockCommand('lock north door with key', $user);
+        $command = new LockCommand('lock north door', $user);
         $command->execute();
 
         $portal->refresh();
@@ -85,7 +84,7 @@ class LockCommandTest extends TestCase
         ]);
         $user = $this->makeUser([], 100, $start_room);
 
-        $command = new LockCommand('lock north door with key', $user);
+        $command = new LockCommand('lock north door', $user);
         $command->execute();
 
         $portal->refresh();

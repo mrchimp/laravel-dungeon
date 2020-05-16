@@ -2,6 +2,8 @@
 
 namespace Dungeon\Commands;
 
+use Dungeon\Actions\Users\Respawn;
+use Dungeon\Exceptions\UserIsAliveException;
 use Dungeon\User;
 
 class RespawnCommand extends Command
@@ -30,11 +32,11 @@ class RespawnCommand extends Command
             $target = User::where('name', 'like', '%' . $target_name . '%')->first();
         }
 
-        if (!$target->isDead()) {
+        try {
+            Respawn::do($target);
+        } catch (UserIsAliveException $e) {
             return $this->fail('Player isn\'t dead.');
         }
-
-        $target->respawn()->save();
 
         $this->setMessage('You wake up.');
 

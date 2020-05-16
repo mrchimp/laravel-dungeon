@@ -128,7 +128,6 @@ abstract class Command
         if (is_null($input)) {
             $input = $this->input;
         }
-
         foreach ($this->patterns() as $pattern) {
             if (preg_match($pattern, $input, $this->matches)) {
                 return true;

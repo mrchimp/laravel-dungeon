@@ -36,7 +36,7 @@ class UnlockCommandTest extends TestCase
 
         $code->giveToUser($user)->save();
 
-        $command = new UnlockCommand('unlock north door with code 1234', $user);
+        $command = new UnlockCommand('unlock north door', $user);
         $command->execute();
 
         $portal->refresh();
@@ -50,23 +50,10 @@ class UnlockCommandTest extends TestCase
     public function if_direction_is_not_a_cardinal_direction_command_fails()
     {
         $user = $this->makeUser();
-        $command = new UnlockCommand('unlock blah door with code 1234', $user);
+        $command = new UnlockCommand('unlock blah door', $user);
         $command->execute();
 
         $this->assertFalse($command->success);
-    }
-
-    /** @test */
-    public function if_access_type_is_invalid_command_fails()
-    {
-        $room = $this->makeRoom();
-        $user = $this->makeUser([], 100, $room);
-
-        $command = new UnlockCommand('unlock north door with blah 1234', $user);
-        $command->execute();
-
-        $this->assertFalse($command->success);
-        $this->assertEquals('Doors can only be unlocked with a code or a key.', $command->getMessage());
     }
 
     /** @test */
@@ -85,7 +72,7 @@ class UnlockCommandTest extends TestCase
         $user = $this->makeUser([], 100, $start_room);
         $key->giveToUser($user)->save();
 
-        $command = new UnlockCommand('unlock north door with key', $user);
+        $command = new UnlockCommand('unlock north door', $user);
         $command->execute();
 
         $portal->refresh();
@@ -113,7 +100,7 @@ class UnlockCommandTest extends TestCase
         $user = $this->makeUser([], 100, $start_room);
         $code->giveToUser($user)->save();
 
-        $command = new UnlockCommand('unlock north door with key', $user);
+        $command = new UnlockCommand('unlock north door', $user);
         $command->execute();
 
         $portal->refresh();

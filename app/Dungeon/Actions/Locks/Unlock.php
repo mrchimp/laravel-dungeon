@@ -1,16 +1,18 @@
 <?php
 
-namespace Dungeon\Actions\Users;
+namespace Dungeon\Actions\Locks;
 
 use Dungeon\Actions\Action;
 use Dungeon\Direction;
 use Dungeon\Entity;
+use Dungeon\Exceptions\ActionFailedException;
 use Dungeon\Exceptions\ExitUnavailableException;
 use Dungeon\Exceptions\InvalidDirectionException;
-use Dungeon\Exceptions\PortalLockedException;
+use Dungeon\Exceptions\NoKeyAvailableException;
+use Dungeon\Exceptions\PortalUnlockedException;
 use Dungeon\User;
 
-class Go extends Action
+class Unlock extends Action
 {
     /**
      * @var User
@@ -42,8 +44,9 @@ class Go extends Action
      * Perform the action
      *
      * @throws InvalidDirectionException
-     * @throws ExitUnavailableException
-     * @throws PortalLockedException
+     * @throws NoKeyAvailableException
+     * @throws PortalUnlockedException
+     * @throws ActionFailedException
      */
     public function perform()
     {
@@ -53,21 +56,23 @@ class Go extends Action
             throw new InvalidDirectionException;
         }
 
-        $this->destination = $this->user->getRoom()->{$direction . 'Exit'};
+        $room = $this->user->body->room;
+        $portal = $room->{$direction . '_portal'};
 
-        if (!$this->destination) {
-            throw new ExitUnavailableException;
+        if (!$portal->isLocked()) {
+            throw new PortalUnlockedException;
         }
 
-        $portal = $this->user->getRoom()->{$direction . '_portal'};
+        $key = $portal->whichKeyFits($this->user->getInventory());
 
-
-        if ($portal && $portal->isLocked()) {
-            throw new PortalLockedException;
+        if (!$key) {
+            throw new NoKeyAvailableException;
         }
 
-        $this->user
-            ->moveTo($this->destination)
-            ->save();
+        $result = $portal->unlockWithKey($key);
+
+        if (!$result) {
+            throw new ActionFailedException;
+        }
     }
 }

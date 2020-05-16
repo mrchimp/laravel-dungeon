@@ -2,7 +2,11 @@
 
 namespace Dungeon\Commands;
 
-use Dungeon\Direction;
+use Dungeon\Actions\Locks\Lock;
+use Dungeon\Exceptions\ActionFailedException;
+use Dungeon\Exceptions\InvalidDirectionException;
+use Dungeon\Exceptions\NoKeyAvailableException;
+use Dungeon\Exceptions\PortalLockedException;
 
 class LockCommand extends Command
 {
@@ -12,8 +16,6 @@ class LockCommand extends Command
     public function patterns(): array
     {
         return [
-            '/^lock (?<direction>.*) door with (?<access_type>.*) (?<access_name>.*)/',
-            '/^lock (?<direction>.*) door with (?<access_type>.*)/',
             '/^lock (?<direction>.*) door$/',
         ];
     }
@@ -24,40 +26,20 @@ class LockCommand extends Command
     protected function run(): self
     {
         $direction = $this->inputPart('direction');
-        $access_type = $this->inputPart('access_type');
 
-        if (!$access_type) {
-            $access_type = 'key';
-        }
-
-        if (!Direction::isValid($direction)) {
+        try {
+            Lock::do($this->user, $direction);
+        } catch (InvalidDirectionException $e) {
             return $this->fail('Which door? North, South, East or West?');
-        }
-
-        if (!in_array($access_type, ['code', 'key'])) {
-            return $this->fail('Doors can only be locked with a code or a key.');
-        }
-
-        $room = $this->user->body->room;
-        $portal = $room->{$direction . '_portal'};
-
-        if ($portal->isLocked()) {
+        } catch (PortalLockedException $e) {
             return $this->fail('The door is already locked.');
-        }
-
-        $key = $portal->whichKeyFits($this->user->getInventory());
-
-        if (!$key) {
+        } catch (NoKeyAvailableException $e) {
             return $this->fail('You don\'t have a way to lock that door.');
+        } catch (ActionFailedException $e) {
+            return $this->fail('You can\'t lock the door.');
         }
 
-        $result = $portal->lockWithKey($key);
-
-        if ($result) {
-            $this->setMessage('You lock the door.');
-        } else {
-            $this->setMessage('You can\'t lock the door.');
-        }
+        $this->setMessage('You lock the door.');
 
         return $this;
     }
