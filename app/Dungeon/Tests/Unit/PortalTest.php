@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use Dungeon\Entities\Locks\Key;
-use Dungeon\Portal;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -20,20 +19,6 @@ class PortalTest extends TestCase
         ]);
 
         $this->assertEquals('This is a portal', $portal->getDescription());
-    }
-
-    /** @test */
-    public function portal_can_be_locked_and_unlocked_with_a_code()
-    {
-        $portal = $this->makePortal([
-            'locked' => false,
-        ]);
-
-        $this->assertFalse($portal->isLocked());
-        $this->assertTrue($portal->lockWithCode(1234));
-        $this->assertTrue($portal->isLocked());
-        $this->assertTrue($portal->unlockWithCode(1234));
-        $this->assertFalse($portal->isLocked());
     }
 
     /** @test */
@@ -72,17 +57,6 @@ class PortalTest extends TestCase
 
         $this->assertEquals($good_key->id, $portal->whichKeyFits($collection)->id);
         $this->assertNull($other_portal->whichKeyFits($collection));
-    }
-
-    /** @test */
-    public function portal_cannot_be_locked_with_a_code_if_it_doesnt_have_a_code()
-    {
-        $portal = $this->makePortal([
-            'locked' => false,
-        ]);
-
-        $this->assertFalse($portal->lockWithCode(1234));
-        $this->assertFalse($portal->isLocked());
     }
 
     /** @test */

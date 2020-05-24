@@ -35,7 +35,7 @@ class EatCommand extends Command
 
         $this->message = 'You eat the ' . e($entity->getName()) . '. ' .
             'It heals you for ' . $entity->getHealing() . '. ' .
-            'Your health is now ' . $this->user->getHealth();
+            'Your health is now ' . $this->user->body->getHealth();
 
         return $this;
     }

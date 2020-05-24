@@ -19,6 +19,7 @@ class RoomSeeder extends Seeder
         $north_room = factory(Room::class)->create([
             'is_safe_room' => true,
             'description' => 'You are in the start room. There is not a lot here.',
+            'is_spawn_room' => true,
         ]);
 
         $south_room = factory(Room::class)->create([

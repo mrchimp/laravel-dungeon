@@ -31,7 +31,7 @@ class Respawn extends Action
      */
     public function perform()
     {
-        if (!$this->user->isDead()) {
+        if ($this->user->isAlive()) {
             throw new UserIsAliveException;
         }
 

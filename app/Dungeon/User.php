@@ -88,69 +88,31 @@ class User extends Authenticatable
     {
         $room = Room::spawnRoom()->inRandomOrder()->first();
 
-        // @todo default health should be per-class/race
-        $this->setHealth(self::DEFAULT_HEALTH);
-
-        Body::create([
+        $body = Body::create([
             'name' => 'Temp name',
             'description' => 'Body',
-        ])
-            ->moveToRoom($room)
+        ]);
+
+        $body->moveToRoom($room)
             ->giveToUser($this)
+            // @todo default health should be per-class/race
+            ->setHealth(self::DEFAULT_HEALTH)
             ->save();
 
         return $this;
     }
 
-    /**
-     * @todo need to add an interface for hurtable things
-     */
-    public function hurt(int $amount)
-    {
-        if ($this->hasBody()) {
-            return $this->body->hurt($amount);
-        }
-
-        return null;
-    }
-
-    /**
-     * @todo need to add an interface for healable things
-     */
-    public function heal(int $amount)
-    {
-        if ($this->hasBody()) {
-            return $this->body->heal($amount);
-        }
-
-        return null;
-    }
-
-    public function setHealth($amount)
-    {
-        if ($this->hasBody()) {
-            return $this->body->setHealth($amount);
-        }
-
-        return null;
-    }
-
-    public function getHealth()
-    {
-        if ($this->hasBody()) {
-            return $this->body->getHealth();
-        }
-
-        return null;
-    }
-
     public function isDead()
     {
-        if ($this->hasBody()) {
-            return $this->body->isDead();
+        if (!$this->hasBody()) {
+            return true;
         }
 
-        return true;
+        if ($this->body->isDead()) {
+            return true;
+        }
+
+        return !$this->body->room;
     }
 
     public function isAlive()

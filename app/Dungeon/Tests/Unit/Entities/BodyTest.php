@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Entities;
 
+use Dungeon\DamageTypes\MeleeDamage;
 use Dungeon\Entities\People\Body;
 use Dungeon\NPC;
 use Dungeon\User;
@@ -68,7 +69,7 @@ class BodyTest extends TestCase
 
         $this->body->setHealth(100);
 
-        $this->body->hurt(50);
+        $this->body->hurt(50, MeleeDamage::class);
 
         $this->assertEquals(50, $this->body->getHealth());
     }
@@ -80,7 +81,7 @@ class BodyTest extends TestCase
 
         $this->assertEquals(true, $this->body->isAlive());
 
-        $this->body->hurt(100);
+        $this->body->hurt(100, MeleeDamage::class);
 
         $this->assertEquals(false, $this->body->isAlive());
     }
@@ -94,7 +95,7 @@ class BodyTest extends TestCase
 
         $this->body->setHealth(100);
         $this->body->giveToUser($user)->save();
-        $this->body->hurt(100);
+        $this->body->hurt(100, MeleeDamage::class);
 
         $body = Body::first();
 

@@ -2,7 +2,10 @@
 
 namespace Dungeon\Tests\Unit\Commands;
 
+use Dungeon\Actions\Entities\Hurt;
 use Dungeon\Commands\RespawnCommand;
+use Dungeon\DamageTypes\MeleeDamage;
+use Dungeon\Entities\People\Body;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -14,12 +17,13 @@ class RespawnCommandTest extends TestCase
     /** @test */
     public function respawn_command_fails_if_user_is_alive()
     {
-        $user = $this->makeUser();
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
 
         $command = new RespawnCommand('respawn', $user);
         $command->execute();
 
-        $this->assertEquals('Player isn\'t dead.', $command->getMessage());
+        $this->assertEquals('You\'re already alive!', $command->getMessage());
         $this->assertFalse($command->success);
     }
 
@@ -33,7 +37,11 @@ class RespawnCommandTest extends TestCase
         $user = $this->makeUser([], 100, $room_2);
         $body_1 = $user->getBody();
 
-        $user->hurt(999999); // That should do it.
+        Hurt::do($user->body, 99999, MeleeDamage::class); // That should do it.
+
+        $user->refresh();
+
+        $this->assertTrue($user->isDead());
 
         $command = new RespawnCommand('respawn', $user);
         $command->execute();
@@ -43,6 +51,7 @@ class RespawnCommandTest extends TestCase
         $this->assertEquals('You wake up.', $command->getMessage());
         $this->assertTrue($command->success);
         $this->assertNotNull($user->getBody());
+        $this->assertInstanceOf(Body::class, $user->getBody());
         $this->assertNotEquals($body_1->id, $user->getBody()->id);
         $this->assertEquals($user->getRoom()->id, $room_1->id);
         $this->assertTrue($user->isAlive());

@@ -62,6 +62,7 @@
                 class="btn btn-grid"
                 @click.prevent="show_inventory = !show_inventory"
                 title="Inventory"
+                :disabled="!user_is_alive"
               >Inv</button>
             </div>
             <div class="flex justify-center items-center py-1">
@@ -71,6 +72,7 @@
                 class="btn btn-grid"
                 :class="{'btn-faded': exits.north === null}"
                 title="Inspect north exit"
+                :disabled="!user_is_alive"
               >N</button>
             </div>
             <div class="flex justify-center items-center py-1">
@@ -79,6 +81,7 @@
                 class="btn btn-grid"
                 @click.prevent="show_players = !show_players"
                 title="Players"
+                :disabled="!user_is_alive"
               >Ply ({{ players.length + npcs.length }})</button>
             </div>
 
@@ -89,15 +92,24 @@
                 class="btn btn-grid"
                 :class="{'btn-faded': exits.west === null}"
                 title="Inspect west exit"
+                :disabled="!user_is_alive"
               >W</button>
             </div>
             <div class="flex justify-center items-center py-1">
               <button
+                v-if="user_is_alive"
                 type="button"
                 @click.prevent="quickRun('look')"
                 class="btn btn-grid"
                 title="Look"
               >Look</button>
+              <button
+                v-else
+                type="button"
+                @click="quickRun('respawn')"
+                class="btn btn-grid"
+                title="Respawn"
+              >Respawn</button>
             </div>
             <div class="flex justify-center items-center py-1">
               <button
@@ -106,6 +118,7 @@
                 class="btn btn-grid"
                 :class="{'btn-faded': exits.east === null}"
                 title="Inspect east exit"
+                :disabled="!user_is_alive"
               >E</button>
             </div>
 
@@ -117,6 +130,7 @@
                 class="btn btn-grid"
                 :class="{'btn-faded': exits.south === null}"
                 title="Inspect south exit"
+                :disabled="!user_is_alive"
               >S</button>
             </div>
             <div class="flex justify-center items-center py-1">
@@ -125,6 +139,7 @@
                 class="btn btn-grid"
                 @click.prevent="show_items = !show_items"
                 title="Items"
+                :disabled="!user_is_alive"
               >Itm ({{ items.length }})</button>
             </div>
           </div>
@@ -229,6 +244,7 @@ export default {
       show_item_description: null,
       show_inventory_description: null,
       cmd_stack: new CmdStack('history', 100),
+      user_is_alive: true,
     };
   },
 
@@ -292,6 +308,7 @@ export default {
       this.players = get(response, 'data.environment.players', []);
       this.inventory = get(response, 'data.environment.inventory', []);
       this.npcs = get(response, 'data.environment.npcs', []);
+      this.user_is_alive = get(response, 'data.environment.user_is_alive', []);
 
       if (get(response, 'data.environment.room.uuid') !== get(this, 'current_room.uuid')) {
         this.handleRoomChange(get(response, 'data.environment.room'));

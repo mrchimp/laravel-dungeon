@@ -2,15 +2,16 @@
 
 namespace Dungeon\Entities\People;
 
+use Dungeon\Actions\Users\Expire;
+use Dungeon\Contracts\Damageable;
 use Dungeon\Entity;
 use Dungeon\NPC;
-use Dungeon\Room;
 use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasHealth;
 use Dungeon\Traits\HasInventory;
 use Dungeon\User;
 
-class Body extends Entity
+class Body extends Entity implements Damageable
 {
     use HasHealth,
         HasInventory,
@@ -45,15 +46,15 @@ class Body extends Entity
 
     public function giveToUser(User $user = null): Body
     {
-        $this->npc()->dissociate();
-
         if (is_null($user)) {
             $this->owner()->dissociate();
+            $this->npc()->dissociate();
             return $this;
         }
 
         $this->name = $user->name;
 
+        $this->npc()->dissociate();
         $this->owner()->associate($user);
 
         return $this;
@@ -61,32 +62,18 @@ class Body extends Entity
 
     public function giveToNPC(NPC $npc = null): Body
     {
-        $this->owner()->dissociate();
-
         if (is_null($npc)) {
             $this->npc()->dissociate();
+            $this->owner()->dissociate();
             return $this;
         }
 
         $this->name = $npc->name;
 
+        $this->owner()->dissociate();
         $this->npc()->associate($npc);
 
         return $this;
-    }
-
-    public function moveToRoom(Room $room = null): Body
-    {
-        $this->room()->associate($room);
-
-        return $this;
-    }
-
-    public function kill(): void
-    {
-        $this->room_id = null;
-        $this->giveToUser(null);
-        $this->save();
     }
 
     public function canBeAttacked(): bool
@@ -102,13 +89,8 @@ class Body extends Entity
         return true;
     }
 
-    /**
-     * Determine if the body is alive
-     *
-     * @return boolean
-     */
-    public function isAlive(): bool
+    public function onDeath(): void
     {
-        return $this->health > 0;
+        Expire::do($this);
     }
 }

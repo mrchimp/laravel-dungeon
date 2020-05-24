@@ -42,7 +42,7 @@ class EatCommandTest extends TestCase
         $command = new EatCommand('eat potato', $user);
         $command->execute();
 
-        $this->assertEquals(100, User::first()->getHealth());
+        $this->assertEquals(100, User::first()->body->getHealth());
     }
 
     /** @test */

@@ -33,7 +33,7 @@ trait HasBody
     public function getInventory(bool $refresh = false): Collection
     {
         if (!$this->body) {
-            return null;
+            return collect([]);
         }
 
         if ($refresh) {

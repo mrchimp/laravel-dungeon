@@ -35,7 +35,7 @@ class RespawnCommand extends Command
         try {
             Respawn::do($target);
         } catch (UserIsAliveException $e) {
-            return $this->fail('Player isn\'t dead.');
+            return $this->fail('You\'re already alive!');
         }
 
         $this->setMessage('You wake up.');

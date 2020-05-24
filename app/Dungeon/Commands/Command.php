@@ -228,6 +228,7 @@ abstract class Command
     {
         // Get new current location - User might have moved.
         $this->current_location->refresh();
+        $room = $this->current_location->getRoom();
 
         return [
             'environment' => [
@@ -236,7 +237,8 @@ abstract class Command
                 'players' => $this->current_location->getPlayers(true)->values()->toArray(),
                 'npcs' => $this->current_location->getNpcs(true)->values()->toArray(),
                 'inventory' => $this->user->getInventory(true)->values()->toArray(),
-                'room' => $this->current_location->getRoom()->toArray(),
+                'room' => $room ? $room->toArray() : null,
+                'user_is_alive' => $this->user->isAlive(),
             ],
             'extra' => [
                 $this->extra_data->toArray(),

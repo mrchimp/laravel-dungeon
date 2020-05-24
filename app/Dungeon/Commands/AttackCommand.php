@@ -2,8 +2,11 @@
 
 namespace Dungeon\Commands;
 
+use Dungeon\Actions\Weapons\Attack;
 use Dungeon\Events\AfterAttack;
 use Dungeon\Events\BeforeAttack;
+use Dungeon\Exceptions\EntityCannotBeDamagedException;
+use Dungeon\Exceptions\InvalidEntityException;
 
 class AttackCommand extends Command
 {
@@ -57,12 +60,18 @@ class AttackCommand extends Command
             'can_be_attacked' => false,
         ]);
 
-        $result = $weapon->attack($target);
+        try {
+            $action = Attack::do($this->user, $weapon, $target);
+        } catch (InvalidEntityException $e) {
+            return $this->fail('Can\'t use that as a weapon.');
+        } catch (EntityCannotBeDamagedException $e) {
+            return $this->fail('You can\'t attack that.');
+        }
 
         event(new AfterAttack($this->user, $target, $weapon));
 
         $this->success = true;
-        $this->setMessage('You hit for a total ' . $result['total'] . ' damage.');
+        $this->setMessage('You hit for a total ' . $action->total_damage . ' damage.');
 
         return $this;
     }

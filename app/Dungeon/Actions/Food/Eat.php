@@ -6,6 +6,7 @@ use Dungeon\Actions\Action;
 use Dungeon\Entity;
 use Dungeon\Exceptions\MissingEntityException;
 use Dungeon\Exceptions\UnsupportedVerbException;
+use Dungeon\Exceptions\UserIsDeadException;
 use Dungeon\User;
 
 class Eat extends Action
@@ -42,9 +43,13 @@ class Eat extends Action
             throw new UnsupportedVerbException('Eat verb is not supported by ' . static::class);
         }
 
-        $this->user->heal($this->entity->healing);
-        $this->user->save();
+        if ($this->user->isDead()) {
+            throw new UserIsDeadException;
+        }
+
+        $this->user->body->heal($this->entity->healing);
         $this->user->body->save();
+        $this->user->save();
 
         $this->entity->delete();
     }

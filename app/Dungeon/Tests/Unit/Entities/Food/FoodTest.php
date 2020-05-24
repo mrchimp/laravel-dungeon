@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Entities\Food;
 
+use Dungeon\Actions\Food\Eat;
 use Dungeon\Entities\Food\Food;
 use Dungeon\EntityFinder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -15,12 +16,13 @@ class FoodTest extends TestCase
     /** @test */
     public function eating_heals_consumer()
     {
-        $user = $this->makeUser([], 50);
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 50, $room);
         $potato = $this->makePotato([], 50);
 
-        $potato->eat($user);
+        Eat::do($user, $potato);
 
-        $this->assertEquals(100, $user->getHealth());
+        $this->assertEquals(100, $user->body->getHealth());
     }
 
     /** @test */

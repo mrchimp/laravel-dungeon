@@ -3,6 +3,7 @@
 namespace Tests\Unit\Commands;
 
 use Dungeon\Commands\AttackCommand;
+use Dungeon\Entities\People\Body;
 use Dungeon\Events\AfterAttack;
 use Dungeon\Events\BeforeAttack;
 use Dungeon\User;
@@ -76,21 +77,19 @@ class AttackCommandTest extends TestCase
     {
         $room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
-        $enemy = $this->makeEnemy([
-            'can_be_attacked' => false,
-        ], 100, $room);
-        $enemy->body->kill();
-        $rock = $this->makeRock();
+        $body = factory(Body::class)->create([
+            'name' => 'Enemy',
+            'description' => 'A dead body',
+        ]);
 
-        $rock->giveToUser($user)->save();
+        $body->moveToRoom($room)->save();
+
+        $this->makeRock()->giveToUser($user)->save();
 
         $command = new AttackCommand('attack enemy with rock', $user);
         $command->execute();
 
-        $enemy = User::where('name', 'Enemy')->with('body')->first();
-
         $this->assertFalse($command->success);
-        $this->assertNull($enemy->body);
     }
 
     /** @test */
@@ -135,6 +134,7 @@ class AttackCommandTest extends TestCase
 
         $enemy = User::where('name', 'Enemy')->with('body')->first();
 
+        $this->assertTrue($command->success);
         $this->assertTrue($enemy->isDead());
         $this->assertNull($enemy->body);
     }

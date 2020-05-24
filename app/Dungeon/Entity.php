@@ -157,9 +157,13 @@ class Entity extends Model
 
     public function moveToRoom(Room $room = null): self
     {
-        $this->moveToVoid();
+        if ($room) {
+            $this->room()->associate($room);
+        } else {
+            $this->room()->dissociate();
+        }
 
-        $this->room()->associate($room);
+        $this->save();
 
         return $this;
     }
@@ -167,7 +171,9 @@ class Entity extends Model
     public function giveToUser(User $user = null): self
     {
         if (is_null($user)) {
-            $this->moveToVoid();
+            $this->owner()->dissociate();
+            $this->npc()->dissociate();
+
             return $this;
         }
 
@@ -175,6 +181,7 @@ class Entity extends Model
             return $this;
         }
 
+        $this->npc()->dissociate();
         $this->moveToContainer($user->body);
 
         return $this;
@@ -182,8 +189,12 @@ class Entity extends Model
 
     public function moveToContainer(Entity $container = null): self
     {
-        $this->moveToVoid();
-        $this->container()->associate($container);
+        if ($container) {
+            $this->container()->associate($container);
+        } else {
+            $this->container()->dissociate();
+        }
+
         $this->save();
 
         return $this;
@@ -191,8 +202,6 @@ class Entity extends Model
 
     public function giveToNPC(NPC $npc = null): ?self
     {
-        $this->moveToVoid();
-
         if (!$npc->hasBody()) {
             return null;
         }
