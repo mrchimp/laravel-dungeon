@@ -199,6 +199,7 @@
                 class="btn"
                 :class="{'btn-faded': !item.can_be_taken}"
                 @click.prevent="take(item)"
+                :disabled="!item.can_be_taken"
               >Take</button>
             </div>
             <div v-if="show_item_description === item.uuid">{{ item.description }}</div>
