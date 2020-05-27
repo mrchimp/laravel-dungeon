@@ -70,9 +70,9 @@
                 type="button"
                 @click.prevent="preview_exit_direction = 'north'"
                 class="btn btn-grid"
-                :class="{'btn-faded': exits.north === null}"
+                :class="{'btn-faded': !user_is_alive || exits.north === null}"
                 title="Inspect north exit"
-                :disabled="!user_is_alive"
+                :disabled="!user_is_alive || exits.north === null"
               >N</button>
             </div>
             <div class="flex justify-center items-center py-1">
@@ -90,9 +90,9 @@
                 type="button"
                 @click.prevent="preview_exit_direction = 'west'"
                 class="btn btn-grid"
-                :class="{'btn-faded': exits.west === null}"
+                :class="{'btn-faded': !user_is_alive || exits.west === null}"
                 title="Inspect west exit"
-                :disabled="!user_is_alive"
+                :disabled="!user_is_alive || exits.west === null"
               >W</button>
             </div>
             <div class="flex justify-center items-center py-1">
@@ -116,9 +116,9 @@
                 type="button"
                 @click.prevent="preview_exit_direction = 'east'"
                 class="btn btn-grid"
-                :class="{'btn-faded': exits.east === null}"
+                :class="{'btn-faded': !user_is_alive || exits.east === null}"
                 title="Inspect east exit"
-                :disabled="!user_is_alive"
+                :disabled="!user_is_alive || exits.east === null"
               >E</button>
             </div>
 
@@ -128,9 +128,9 @@
                 type="button"
                 @click.prevent="preview_exit_direction = 'south'"
                 class="btn btn-grid"
-                :class="{'btn-faded': exits.south === null}"
+                :class="{'btn-faded': !user_is_alive || exits.south === null}"
                 title="Inspect south exit"
-                :disabled="!user_is_alive"
+                :disabled="!user_is_alive || exits.south === null"
               >S</button>
             </div>
             <div class="flex justify-center items-center py-1">
