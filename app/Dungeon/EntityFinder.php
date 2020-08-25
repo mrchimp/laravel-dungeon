@@ -2,11 +2,13 @@
 
 namespace Dungeon;
 
+use Dungeon\Contracts\ContainsItems;
 use Dungeon\Contracts\WeaponInterface;
 use Dungeon\Entities\People\Body;
 use Dungeon\Entities\Weapons\Weapon;
 use Dungeon\Room;
 use Dungeon\User;
+use Mockery\Matcher\Contains;
 
 class EntityFinder
 {
@@ -91,6 +93,10 @@ class EntityFinder
         }
 
         foreach ($room->contents as $container) {
+            if (!$container instanceof ContainsItems) {
+                continue;
+            }
+
             $entity = $container->findContents($query);
 
             if ($entity) {

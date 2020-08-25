@@ -2,10 +2,7 @@
 
 namespace Dungeon\Entities\Containers;
 
-use Dungeon\Entity;
-use Dungeon\Traits\HasInventory;
-
-class Corpse extends Entity
+class Corpse extends Box
 {
-    use HasInventory;
+    //
 }

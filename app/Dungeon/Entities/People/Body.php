@@ -3,6 +3,7 @@
 namespace Dungeon\Entities\People;
 
 use Dungeon\Actions\Users\Expire;
+use Dungeon\Contracts\ContainsItems;
 use Dungeon\Contracts\Damageable;
 use Dungeon\Entity;
 use Dungeon\NPC;
@@ -11,7 +12,7 @@ use Dungeon\Traits\HasHealth;
 use Dungeon\Traits\HasInventory;
 use Dungeon\User;
 
-class Body extends Entity implements Damageable
+class Body extends Entity implements Damageable, ContainsItems
 {
     use HasHealth,
         HasInventory,
@@ -92,5 +93,10 @@ class Body extends Entity implements Damageable
     public function onDeath(): void
     {
         Expire::do($this);
+    }
+
+    public function canBeLooted(): bool
+    {
+        return $this->isDead();
     }
 }

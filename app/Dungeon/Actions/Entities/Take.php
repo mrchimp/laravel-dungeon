@@ -7,6 +7,7 @@ use Dungeon\Entity;
 use Dungeon\Exceptions\EntityPossessedException;
 use Dungeon\Exceptions\MissingEntityException;
 use Dungeon\Exceptions\UntakeableEntityException;
+use Dungeon\Exceptions\UserIsDeadException;
 use Dungeon\User;
 
 class Take extends Action
@@ -21,10 +22,16 @@ class Take extends Action
      */
     protected $entity;
 
-    public function __construct(User $user, ?Entity $entity)
+    /**
+     * @var Entity
+     */
+    protected $container;
+
+    public function __construct(User $user, ?Entity $entity, ?Entity $container)
     {
         $this->user = $user;
         $this->entity = $entity;
+        $this->container = $container;
     }
 
     /**
@@ -44,7 +51,11 @@ class Take extends Action
             throw new UntakeableEntityException;
         }
 
-        $this->entity->giveToUser($this->user);
+        if (!$this->user->body) {
+            throw new UserIsDeadException;
+        }
+
+        $this->entity->moveToContainer($this->user->body);
         $this->entity->save();
     }
 }

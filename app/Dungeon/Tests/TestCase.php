@@ -5,6 +5,7 @@ namespace Tests;
 use Dungeon\Collections\EntityCollection;
 use Dungeon\DamageTypes\MeleeDamage;
 use Dungeon\Entities\Apparel\Apparel;
+use Dungeon\Entities\Containers\Box;
 use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\Locks\Code;
 use Dungeon\Entities\People\Body;
@@ -109,7 +110,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function makeBox(array $attributes = [])
     {
-        return factory(Entity::class)->create(array_merge([
+        return factory(Box::class)->create(array_merge([
             'name' => 'Box',
             'description' => 'You can put things in it.',
             'class' => Entity::class,

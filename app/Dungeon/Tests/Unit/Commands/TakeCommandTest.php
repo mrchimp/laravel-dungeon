@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Commands;
 
+use Dungeon\Actions\Entities\Hurt;
 use Dungeon\Commands\TakeCommand;
+use Dungeon\DamageTypes\MeleeDamage;
 use Dungeon\Entity;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -83,11 +85,39 @@ class TakeCommandTest extends TestCase
     /** @test */
     public function you_cant_take_things_that_dont_exist()
     {
-       $user = $this->makeUser();
+        $user = $this->makeUser();
 
         $command = new TakeCommand('take avocado', $user);
         $command->execute();
 
         $this->assertEquals('Take what?', $command->getMessage());
+    }
+
+    /** @test */
+    public function you_can_loot_dead_bodies()
+    {
+        $room = $this->makeRoom();
+        $user = $this->makeUser([], 100, $room);
+        $enemy = $this->makeUser([
+            'name' => 'dave',
+        ], 100, $room);
+        $potato = $this->makePotato();
+        $potato->giveToUser($enemy)->save();
+
+        Hurt::do($enemy->body, 99999, MeleeDamage::class);
+
+        $command = new TakeCommand('take potato from dave', $user);
+        $command->execute();
+
+        $potato->refresh();
+
+        $this->assertTrue($command->success);
+        $this->assertEquals($user->body->id, $potato->container->id);
+    }
+
+    /** @test */
+    public function you_cant_loot_living_bodies()
+    {
+        $this->markTestIncomplete();
     }
 }

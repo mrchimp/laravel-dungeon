@@ -58,7 +58,7 @@ class EntityFinderTest extends TestCase
     }
 
     /** @test */
-    public function it_find_entities_in_containers_that_are_in_the_current_room()
+    public function it_finds_entities_in_containers_that_are_in_the_current_room()
     {
         $room = $this->makeRoom();
         $user = $this->makeUser([], 100, $room);
