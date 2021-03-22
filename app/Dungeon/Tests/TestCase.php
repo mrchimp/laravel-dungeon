@@ -78,21 +78,29 @@ abstract class TestCase extends BaseTestCase
 
     protected function makeRock(int $damage = 10)
     {
-        return factory(MeleeWeapon::class)->create([
-            'name' => 'Rock',
-            'description' => 'You can hit people with it.',
-            'damage_types' => [
-                MeleeDamage::class => $damage,
-            ],
-        ]);
+        return factory(Entity::class)
+            ->create([
+                'name' => 'Rock',
+                'description' => 'You can hit people with it.',
+            ])
+            ->makeTakeable([
+                'weight' => 10,
+            ])
+            ->makeWeapon([
+                'blunt' => $damage,
+            ]);
     }
 
     protected function makePotato(array $attributes = [], int $healing = 50)
     {
-        $potato = factory(Food::class)->create(array_merge([
-            'name' => 'Potato',
-            'description' => 'A potato.',
-        ], $attributes));
+        $potato = factory(Food::class)
+            ->create(array_merge([
+                'name' => 'Potato',
+                'description' => 'A potato.',
+            ], $attributes))
+            ->makeTakeable([
+                'weight' => 1,
+            ]);
 
         $potato->setHealing($healing)->save();
 
@@ -101,11 +109,21 @@ abstract class TestCase extends BaseTestCase
 
     protected function makeHat(array $attributes = [])
     {
-        return factory(Apparel::class)->create(array_merge([
-            'name' => 'Hat',
-            'description' => 'Headwear',
-            'equiped' => false,
-        ], $attributes));
+        return factory(Entity::class)
+            ->create(array_merge([
+                'name' => 'Hat',
+                'description' => 'Headwear',
+            ], $attributes))
+            ->makeEquipable([])
+            ->makeTakeable([
+                'weight' => 1
+            ])
+            ->makeProtects([
+                'blunt' => 10,
+                'stab' => 10,
+                'projectile' => 0,
+                'fire' => 10,
+            ]);
     }
 
     protected function makeBox(array $attributes = [])

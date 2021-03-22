@@ -42,7 +42,7 @@ class EquipCommand extends Command
             return $this->fail('You can\'t equip that.');
         }
 
-        if ($entity->isEquiped()) {
+        if ($entity->equipable->isEquiped()) {
             $this->setMessage('Equiped.');
         } else {
             $this->setMessage('Unequipped.');

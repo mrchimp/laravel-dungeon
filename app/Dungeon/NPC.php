@@ -10,6 +10,7 @@ use Dungeon\Traits\HasBody;
 use Dungeon\Traits\HasHealth;
 use Dungeon\Traits\HasInventory;
 use Dungeon\Traits\HasSerializableAttributes;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -64,5 +65,16 @@ class NPC extends Model
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function getEquiped(): Collection
+    {
+        return $this
+            ->body
+            ->contents()
+            ->whereHas('equipable', function ($query) {
+                $query->where('is_equiped', true);
+            })
+            ->get();
     }
 }

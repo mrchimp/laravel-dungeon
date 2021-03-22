@@ -9,6 +9,7 @@ use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasBody;
 use Dungeon\Traits\HasSerializableAttributes;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -123,5 +124,16 @@ class User extends Authenticatable
     public function canBeAttacked(): bool
     {
         return $this->can_be_attacked;
+    }
+
+    public function getEquiped(): Collection
+    {
+        return $this
+            ->body
+            ->contents()
+            ->whereHas('equipable', function ($query) {
+                $query->where('is_equiped', true);
+            })
+            ->get();
     }
 }

@@ -6,7 +6,7 @@ use Dungeon\Actions\Action;
 use Dungeon\Actions\Entities\Hurt;
 use Dungeon\Contracts\Damageable;
 use Dungeon\Contracts\WeaponInterface;
-use Dungeon\Entities\Weapons\Weapon;
+use Dungeon\Entity;
 use Dungeon\Exceptions\EntityCannotBeDamagedException;
 use Dungeon\Exceptions\InvalidEntityException;
 use Dungeon\User;
@@ -19,12 +19,12 @@ class Attack extends Action
     protected $attacker;
 
     /**
-     * @var Weapon
+     * @var Entity
      */
     protected $weapon;
 
     /**
-     * @var Damageable
+     * @var Entity
      */
     protected $target;
 
@@ -42,7 +42,7 @@ class Attack extends Action
      */
     public $total_damage = 0;
 
-    public function __construct(User $attacker, Weapon $weapon, Damageable $target)
+    public function __construct(User $attacker, Entity $weapon, Damageable $target)
     {
         $this->attacker = $attacker;
         $this->weapon = $weapon;
@@ -51,18 +51,32 @@ class Attack extends Action
 
     public function perform()
     {
-        if (!($this->weapon instanceof WeaponInterface)) {
-
+        if (!$this->weapon->isWeapon()) {
             throw new InvalidEntityException;
         }
 
-        if (!($this->target instanceof Damageable)) {
+        if (!$this->target->isAttackable()) {
             throw new EntityCannotBeDamagedException;
         }
 
-        foreach ($this->weapon->damageTypes() as $damage_type => $damage_amount) {
-            $action = Hurt::do($this->target, $damage_amount, $damage_type);
-            $this->damages[$damage_type] = $action->damage_dealt;
+        if ($this->weapon->weapon->blunt > 0) {
+            $action = Hurt::do($this->target, $this->weapon->weapon->blunt, 'blunt');
+            $this->damages['blunt'] = $action->damage_dealt;
+        }
+
+        if ($this->weapon->weapon->stab > 0) {
+            $action = Hurt::do($this->target, $this->weapon->weapon->stab, 'stab');
+            $this->damages['stab'] = $action->damage_dealt;
+        }
+
+        if ($this->weapon->weapon->projectile > 0) {
+            $action = Hurt::do($this->target, $this->weapon->weapon->projectile, 'projectile');
+            $this->damages['projectile'] = $action->damage_dealt;
+        }
+
+        if ($this->weapon->weapon->fire > 0) {
+            $action = Hurt::do($this->target, $this->weapon->weapon->fire, 'fire');
+            $this->damages['fire'] = $action->damage_dealt;
         }
 
         $this->total_damage = array_sum($this->damages);

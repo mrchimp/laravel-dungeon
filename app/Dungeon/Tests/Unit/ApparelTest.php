@@ -16,12 +16,13 @@ class ApparelTest extends TestCase
     public function users_can_wear_apparel()
     {
         $user = $this->makeUser();
-        $hat = $this->makeHat()->giveToUser($user)->wear();
+        $hat = $this->makeHat()->giveToUser($user);
+        $hat->equipable->equip()->save();
         $hat->save();
 
         $user = User::first();
 
-        $hat = $user->getApparel()->first();
+        $hat = $user->getEquiped()->first();
 
         $this->assertEquals('Hat', $hat->getName());
     }
@@ -30,12 +31,14 @@ class ApparelTest extends TestCase
     public function npcs_can_wear_apparel()
     {
         $npc = $this->makeNPC();
-        $hat = $this->makeHat()->giveToNPC($npc)->wear();
+        $hat = $this->makeHat()->giveToNPC($npc);
+        $hat->equipable->equip()->save();
         $hat->save();
         $npc->body->load('inventory');
         $npc = NPC::first();
 
-        $hat = $npc->getApparel()->first();
+        $hat = $npc->getEquiped()->first();
+
         $this->assertEquals('Hat', $hat->getName());
     }
 }

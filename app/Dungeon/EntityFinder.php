@@ -38,7 +38,11 @@ class EntityFinder
             return null;
         }
 
-        return $entity::replaceClass($entity);
+        $entity = $entity::replaceClass($entity);
+
+        $entity->loadComponents();
+
+        return $entity;
     }
 
     /**
@@ -58,14 +62,14 @@ class EntityFinder
     /**
      * Find a weapon in an inventory
      */
-    public function findWeaponInInventory(string $query, User $user): ?Weapon
+    public function findWeaponInInventory(string $query, User $user): ?Entity
     {
         if (!$user->hasBody()) {
             return null;
         }
 
-        return $user->body->inventory->first(function ($entity) use ($query) {
-            return $entity->nameMatchesQuery($query) && $entity instanceof WeaponInterface;
+        return $user->body->inventory()->whereHas('weapon')->get()->first(function ($entity) use ($query) {
+            return $entity->nameMatchesQuery($query);
         });
     }
 

@@ -43,16 +43,16 @@ class Equip extends Action
             throw new EntityNotPossessedException;
         }
 
-        if (!($this->entity instanceof ApparelInterface)) {
+        if (!($this->entity->isEquipable())) {
             throw new EntityNotEquipableException;
         }
 
-        if ($this->entity->isEquiped()) {
-            $this->entity->unequip();
+        if ($this->entity->equipable->isEquiped()) {
+            $this->entity->equipable->unequip();
         } else {
-            $this->entity->equip();
+            $this->entity->equipable->equip();
         }
 
-        $this->entity->save();
+        $this->entity->equipable->save();
     }
 }

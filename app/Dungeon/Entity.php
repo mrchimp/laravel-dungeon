@@ -3,6 +3,10 @@
 namespace Dungeon;
 
 use Dungeon\Collections\EntityCollection;
+use Dungeon\Components\Equipable;
+use Dungeon\Components\Protects;
+use Dungeon\Components\Takeable;
+use Dungeon\Components\Weapon;
 use Dungeon\Entities\People\Body;
 use Dungeon\Observers\HasOwnClassObserver;
 use Dungeon\Observers\SerializableObserver;
@@ -14,6 +18,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Entity extends Model
 {
@@ -30,6 +35,9 @@ class Entity extends Model
     protected $fillable = [
         'name',
         'description',
+        'equipable_id',
+        'takeable_id',
+        'protects_id',
     ];
 
     protected $hidden = [
@@ -62,6 +70,7 @@ class Entity extends Model
     {
         return [
             'can_be_taken' => $this->can_be_taken,
+            'is_equiped' => $this->is_equiped,
         ];
     }
 
@@ -70,7 +79,27 @@ class Entity extends Model
      */
     public function isEquipable(): bool
     {
-        return false;
+        return !!$this->equipable;
+    }
+
+    public function isTakeable(): bool
+    {
+        return !!$this->takeable;
+    }
+
+    public function isProtects(): bool
+    {
+        return !!$this->protects;
+    }
+
+    public function isWeapon(): bool
+    {
+        return !!$this->weapon;
+    }
+
+    public function isAttackable(): bool
+    {
+        return true; // @todo
     }
 
     /**
@@ -153,6 +182,36 @@ class Entity extends Model
     public function npc(): BelongsTo
     {
         return $this->belongsTo(NPC::class);
+    }
+
+    public function equipable(): HasOne
+    {
+        return $this->hasOne(Equipable::class, 'entity_id');
+    }
+
+    public function takeable(): HasOne
+    {
+        return $this->hasOne(Takeable::class, 'entity_id');
+    }
+
+    public function protects(): HasOne
+    {
+        return $this->hasOne(Protects::class, 'entity_id');
+    }
+
+    public function weapon(): HasOne
+    {
+        return $this->hasOne(Weapon::class, 'entity_id');
+    }
+
+    public function loadComponents()
+    {
+        $this->load([
+            'equipable',
+            'takeable',
+            'protects',
+            'weapon',
+        ]);
     }
 
     public function moveToRoom(Room $room = null): self
@@ -278,6 +337,40 @@ class Entity extends Model
     }
 
     /**
+     * Create an Equipable and attach it to $this
+     *
+     * @param array $attributes
+     * @return self
+     */
+    public function makeEquipable(array $attributes = [])
+    {
+        $this->equipable()->create($attributes);
+
+        return $this;
+    }
+
+    public function makeTakeable(array $attributes = [])
+    {
+        $this->takeable()->create($attributes);
+
+        return $this;
+    }
+
+    public function makeProtects(array $attributes = [])
+    {
+        $this->protects()->create($attributes);
+
+        return $this;
+    }
+
+    public function makeWeapon(array $attributes = [])
+    {
+        $this->weapon()->create($attributes);
+
+        return $this;
+    }
+
+    /**
      * Like create() but allows passing in serializable
      * attributes. It would be nice to override create()
      * instead but that looks like a hassle. Maybe later.
@@ -296,5 +389,19 @@ class Entity extends Model
         $model->fill($serializable_attributes)->save();
 
         return $model;
+    }
+
+    public function damageTypes()
+    {
+        if (!$this->isWeapon()) {
+            return [];
+        }
+
+        return $this->weapon->only([
+            'blunt',
+            'stab',
+            'projectile',
+            'fire',
+        ]);
     }
 }

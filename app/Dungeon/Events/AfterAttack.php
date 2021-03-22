@@ -2,9 +2,9 @@
 
 namespace Dungeon\Events;
 
-use Dungeon\Contracts\WeaponInterface;
 use Dungeon\Entities\People\Body;
 use Dungeon\Entities\Weapon;
+use Dungeon\Entity;
 use Dungeon\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -40,7 +40,7 @@ class AfterAttack
      *
      * @return void
      */
-    public function __construct(User $attacker, Body $target, WeaponInterface $weapon)
+    public function __construct(User $attacker, Body $target, Entity $weapon)
     {
         $this->attacker = $attacker;
         $this->target = $target;
