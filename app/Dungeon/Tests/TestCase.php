@@ -3,13 +3,9 @@
 namespace Tests;
 
 use Dungeon\Collections\EntityCollection;
-use Dungeon\DamageTypes\MeleeDamage;
-use Dungeon\Entities\Apparel\Apparel;
 use Dungeon\Entities\Containers\Box;
-use Dungeon\Entities\Food\Food;
 use Dungeon\Entities\Locks\Code;
 use Dungeon\Entities\People\Body;
-use Dungeon\Entities\Weapons\Melee\MeleeWeapon;
 use Dungeon\Entity;
 use Dungeon\NPC;
 use Dungeon\Portal;
@@ -93,7 +89,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function makePotato(array $attributes = [], int $healing = 50)
     {
-        $potato = factory(Food::class)
+        $potato = factory(Entity::class)
             ->create(array_merge([
                 'name' => 'Potato',
                 'description' => 'A potato.',

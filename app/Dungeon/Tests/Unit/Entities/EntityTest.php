@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Entities;
 
+use Dungeon\Tests\TestEntity;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -28,10 +29,14 @@ class EntityTest extends TestCase
     /** @test */
     public function when_converted_to_arrays_output_will_include_serializable_attributes()
     {
-        $potato = $this->makePotato([], 50);
+        $item = TestEntity::create([
+            'name' => 'Test Entity',
+            'description' => 'just for testing',
+            'test_value' => 'Banana'
+        ]);
 
-        $array = $potato->toArray();
-
-        $this->assertArrayHasKey('healing', $array);
+        $array = $item->toArray();
+dd($array);
+        $this->assertArrayHasKey('banana', $array);
     }
 }

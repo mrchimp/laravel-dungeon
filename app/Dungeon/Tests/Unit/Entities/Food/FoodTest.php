@@ -3,7 +3,7 @@
 namespace Tests\Unit\Entities\Food;
 
 use Dungeon\Actions\Food\Eat;
-use Dungeon\Entities\Food\Food;
+use Dungeon\Entity;
 use Dungeon\EntityFinder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -28,10 +28,9 @@ class FoodTest extends TestCase
     /** @test */
     public function healing_is_stored_and_retrieved_to_db()
     {
-        $potato = $this->makePotato([], 50);
-        $potato->setHealing(23)->save();
+        $potato = $this->makePotato([], 23);
 
-        $potato = Food::find($potato->id);
+        $potato = Entity::find($potato->id);
 
         $this->assertEquals(23, $potato->healing);
     }
@@ -42,7 +41,7 @@ class FoodTest extends TestCase
         $room = $this->makeRoom();
         $user = $this->makeUser([], 100, $room);
 
-        $potato = $this->makePotato()->setHealing(23)->giveToUser($user);
+        $potato = $this->makePotato([], 23)->giveToUser($user);
         $potato->save();
 
         $finder = new EntityFinder;

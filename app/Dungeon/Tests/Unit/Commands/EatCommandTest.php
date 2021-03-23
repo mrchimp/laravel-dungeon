@@ -33,9 +33,8 @@ class EatCommandTest extends TestCase
         $user = $this->makeUser([], 50, $room);
 
         $potato = $this
-            ->makePotato()
-            ->giveToUser($user)
-            ->setHealing(50);
+            ->makePotato([], 50)
+            ->giveToUser($user);
 
         $potato->save();
 
@@ -65,7 +64,7 @@ class EatCommandTest extends TestCase
     {
         $room = $this->makeRoom();
         $user = $this->makeUser([], 50, $room);
-        $this->makePotato()->setHealing(50)->giveToUser($user)->save();
+        $this->makePotato([], 50)->giveToUser($user)->save();
 
         $command = new EatCommand('eat potato', $user);
         $command->execute();
