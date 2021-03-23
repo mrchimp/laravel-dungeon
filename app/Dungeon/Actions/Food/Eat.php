@@ -39,7 +39,7 @@ class Eat extends Action
             throw new MissingEntityException;
         }
 
-        if (!$this->entity->supportsVerb('eat')) {
+        if (!$this->entity->isConsumable()) {
             throw new UnsupportedVerbException('Eat verb is not supported by ' . static::class);
         }
 
@@ -47,7 +47,7 @@ class Eat extends Action
             throw new UserIsDeadException;
         }
 
-        $this->user->body->heal($this->entity->healing);
+        $this->user->body->heal($this->entity->consumable->hp);
         $this->user->body->save();
         $this->user->save();
 

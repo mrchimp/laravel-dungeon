@@ -47,6 +47,14 @@ class CreateComponentsTables extends Migration
             $table->timestamps();
         });
 
+        Schema::create('consumables', function (Blueprint $table) {
+            $table->id();
+            $table->integer('hp')->default(0);
+            $table->integer('taste')->default(0);
+            $table->bigInteger('entity_id')->index();
+            $table->timestamps();
+        });
+
         Schema::table('entities', function (Blueprint $table) {
             $table->bigInteger('equipable_id')->after('npc_id')->nullable();
             $table->bigInteger('takeable_id')->after('npc_id')->nullable();
@@ -62,10 +70,10 @@ class CreateComponentsTables extends Migration
     public function down()
     {
         Schema::dropIfExists('equipables');
-
         Schema::dropIfExists('takeables');
-
         Schema::dropIfExists('protectors');
+        Schema::dropIfExists('weapons');
+        Schema::dropIfExists('consumables');
 
         Schema::table('entities', function (Blueprint $table) {
             $table->dropColumn([

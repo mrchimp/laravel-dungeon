@@ -3,6 +3,7 @@
 namespace Dungeon;
 
 use Dungeon\Collections\EntityCollection;
+use Dungeon\Components\Consumable;
 use Dungeon\Components\Equipable;
 use Dungeon\Components\Protects;
 use Dungeon\Components\Takeable;
@@ -100,6 +101,11 @@ class Entity extends Model
     public function isAttackable(): bool
     {
         return true; // @todo
+    }
+
+    public function isConsumable(): bool
+    {
+        return !!$this->consumable;
     }
 
     /**
@@ -204,6 +210,11 @@ class Entity extends Model
         return $this->hasOne(Weapon::class, 'entity_id');
     }
 
+    public function consumable(): HasOne
+    {
+        return $this->hasOne(Consumable::class, 'entity_id');
+    }
+
     public function loadComponents()
     {
         $this->load([
@@ -211,6 +222,7 @@ class Entity extends Model
             'takeable',
             'protects',
             'weapon',
+            'consumable',
         ]);
     }
 
@@ -366,6 +378,13 @@ class Entity extends Model
     public function makeWeapon(array $attributes = [])
     {
         $this->weapon()->create($attributes);
+
+        return $this;
+    }
+
+    public function makeConsumable(array $attributes = [])
+    {
+        $this->consumable()->create($attributes);
 
         return $this;
     }

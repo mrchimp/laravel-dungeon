@@ -100,9 +100,10 @@ abstract class TestCase extends BaseTestCase
             ], $attributes))
             ->makeTakeable([
                 'weight' => 1,
+            ])
+            ->makeConsumable([
+                'hp' => $healing,
             ]);
-
-        $potato->setHealing($healing)->save();
 
         return $potato;
     }
