@@ -32,7 +32,7 @@ class FoodTest extends TestCase
 
         $potato = Entity::find($potato->id);
 
-        $this->assertEquals(23, $potato->healing);
+        $this->assertEquals(23, $potato->consumable->hp);
     }
 
     /** @test */
@@ -48,6 +48,6 @@ class FoodTest extends TestCase
 
         $potato = $finder->find('potato', $user);
 
-        $this->assertEquals(23, $potato->healing);
+        $this->assertEquals(23, $potato->consumable->hp);
     }
 }

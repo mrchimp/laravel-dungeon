@@ -25,18 +25,4 @@ class EntityTest extends TestCase
         $this->assertEquals('Potato', $array['name']);
         $this->assertEquals('A potato.', $array['description']);
     }
-
-    /** @test */
-    public function when_converted_to_arrays_output_will_include_serializable_attributes()
-    {
-        $item = TestEntity::create([
-            'name' => 'Test Entity',
-            'description' => 'just for testing',
-            'test_value' => 'Banana'
-        ]);
-
-        $array = $item->toArray();
-dd($array);
-        $this->assertArrayHasKey('banana', $array);
-    }
 }

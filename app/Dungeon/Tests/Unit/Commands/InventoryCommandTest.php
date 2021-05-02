@@ -3,7 +3,7 @@
 namespace Tests\Unit\Commands;
 
 use Dungeon\Commands\InventoryCommand;
-use Dungeon\Entities\Food\Food;
+use Dungeon\Entity;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -21,10 +21,11 @@ class InventoryCommandTest extends TestCase
         $potato = $this->makePotato()->giveToUser($user);
         $potato->save();
 
-        $banana = factory(Food::class)->create([
-            'name' => 'Banana',
-            'description' => 'A banana.',
-        ]);
+        $banana = factory(Entity::class)
+            ->create([
+                'name' => 'Banana',
+                'description' => 'A banana.',
+            ]);
 
         $banana->moveToRoom($room);
         $banana->save();

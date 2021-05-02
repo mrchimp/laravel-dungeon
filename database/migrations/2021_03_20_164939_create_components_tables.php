@@ -55,10 +55,24 @@ class CreateComponentsTables extends Migration
             $table->timestamps();
         });
 
+        Schema::create('attackables', function (Blueprint $table) {
+            $table->id();
+            $table->integer('hp')->default(0);
+            $table->integer('blunt')->default(0);
+            $table->integer('stab')->default(0);
+            $table->integer('projectile')->default(0);
+            $table->integer('fire')->default(0);
+            $table->integer('entity_id')->index();
+            $table->timestamps();
+        });
+
         Schema::table('entities', function (Blueprint $table) {
             $table->bigInteger('equipable_id')->after('npc_id')->nullable();
             $table->bigInteger('takeable_id')->after('npc_id')->nullable();
             $table->bigInteger('protects_id')->after('npc_id')->nullable();
+            $table->bigInteger('weapon_id')->after('npc_id')->nullable();
+            $table->bigInteger('consumable_id')->after('npc_id')->nullable();
+            $table->bigInteger('attackable_id')->after('npc_id')->nullable();
         });
     }
 
@@ -74,12 +88,16 @@ class CreateComponentsTables extends Migration
         Schema::dropIfExists('protectors');
         Schema::dropIfExists('weapons');
         Schema::dropIfExists('consumables');
+        Schema::dropIfExists('attackables');
 
         Schema::table('entities', function (Blueprint $table) {
             $table->dropColumn([
                 'equipable_id',
                 'takeable_id',
                 'protects_id',
+                'weapon_id',
+                'consumable_id',
+                'attackable_id',
             ]);
         });
     }
