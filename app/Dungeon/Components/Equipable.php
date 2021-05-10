@@ -2,6 +2,8 @@
 
 namespace Dungeon\Components;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 class Equipable extends Component
 {
     protected $table = 'equipables';
@@ -9,6 +11,11 @@ class Equipable extends Component
     protected $fillable = [
         'is_equiped',
     ];
+
+    public function entity(): HasOne
+    {
+        return $this->hasOne(Entity::class, 'equipable_id');
+    }
 
     /**
      * Has a user equiped this item

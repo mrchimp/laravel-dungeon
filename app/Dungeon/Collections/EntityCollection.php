@@ -2,8 +2,8 @@
 
 namespace Dungeon\Collections;
 
-use Dungeon\Entity;
 use Dungeon\Entities\People\Body;
+use Dungeon\Entity;
 use Illuminate\Database\Eloquent\Collection;
 
 class EntityCollection extends Collection
@@ -14,18 +14,18 @@ class EntityCollection extends Collection
      * @param  mixed  $items
      * @return void
      */
-    public function __construct($items = [])
-    {
-        $this->items = $this->getArrayableItems($items);
+    // public function __construct($items = [])
+    // {
+        // $this->items = $this->getArrayableItems($items);
 
-        $this->items = array_map(function ($item) {
-            if ($item instanceof Entity) {
-                return Entity::replaceClass($item);
-            } else {
-                return $item;
-            }
-        }, $this->items);
-    }
+        // $this->items = array_map(function ($item) {
+        //     if ($item instanceof Entity) {
+        //         return Entity::replaceClass($item);
+        //     } else {
+        //         return $item;
+        //     }
+        // }, $this->items);
+    // }
 
     public function people(Body $exclude = null)
     {

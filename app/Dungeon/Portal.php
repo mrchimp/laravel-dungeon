@@ -109,12 +109,12 @@ class Portal extends Entity
     /**
      * Get the attributes to be serialized
      */
-    public function getSerializable(): array
-    {
-        return array_merge(parent::getSerializable(), [
-            'locked' => false,
-        ]);
-    }
+    // public function getSerializable(): array
+    // {
+    //     return array_merge(parent::getSerializable(), [
+    //         'locked' => false,
+    //     ]);
+    // }
 
     /**
      * Creates a generic portal between rooms.

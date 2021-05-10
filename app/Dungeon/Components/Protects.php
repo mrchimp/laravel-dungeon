@@ -2,6 +2,8 @@
 
 namespace Dungeon\Components;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 class Protects extends Component
 {
     protected $table = 'protectors';
@@ -12,4 +14,9 @@ class Protects extends Component
         'projectile',
         'fire',
     ];
+
+    public function entity(): HasOne
+    {
+        return $this->hasOne(Entity::class, 'protects_id');
+    }
 }

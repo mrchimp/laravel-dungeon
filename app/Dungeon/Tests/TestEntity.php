@@ -11,10 +11,10 @@ class TestEntity extends Entity
     /**
      * Get the attributes to be serialized
      */
-    public function getSerializable(): array
-    {
-        return [
-            'test_value' => $this->test_value,
-        ];
-    }
+    // public function getSerializable(): array
+    // {
+    //     return [
+    //         'test_value' => $this->test_value,
+    //     ];
+    // }
 }

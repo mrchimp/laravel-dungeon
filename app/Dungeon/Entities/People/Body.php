@@ -20,12 +20,12 @@ class Body extends Entity implements Damageable, ContainsItems
 
     protected $table = 'entities';
 
-    public function getSerializable(): array
-    {
-        return array_merge(parent::getSerializable(), [
-            'health' => 100,
-        ]);
-    }
+    // public function getSerializable(): array
+    // {
+    //     return array_merge(parent::getSerializable(), [
+    //         'health' => 100,
+    //     ]);
+    // }
 
     public function ownerType(): ?string
     {

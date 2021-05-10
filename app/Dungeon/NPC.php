@@ -3,13 +3,13 @@
 namespace Dungeon;
 
 use Dungeon\Entities\People\Body;
-use Dungeon\Observers\SerializableObserver;
+// use Dungeon\Observers\SerializableObserver;
 use Dungeon\Room;
 use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasBody;
 use Dungeon\Traits\HasHealth;
 use Dungeon\Traits\HasInventory;
-use Dungeon\Traits\HasSerializableAttributes;
+// use Dungeon\Traits\HasSerializableAttributes;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,7 +20,7 @@ class NPC extends Model
 {
     use HasBody,
         HasHealth,
-        HasSerializableAttributes,
+        // HasSerializableAttributes,
         HasInventory,
         HasApparel;
 
@@ -31,16 +31,16 @@ class NPC extends Model
         'description',
     ];
 
-    protected $casts = [
-        'serialized_data' => 'array',
-    ];
+    // protected $casts = [
+    //     'serialized_data' => 'array',
+    // ];
 
-    public static function boot()
-    {
-        parent::boot();
+    // public static function boot()
+    // {
+        // parent::boot();
 
-        self::observe(new SerializableObserver);
-    }
+        // self::observe(new SerializableObserver);
+    // }
 
     public function room(): BelongsTo
     {

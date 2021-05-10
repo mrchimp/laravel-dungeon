@@ -38,7 +38,7 @@ class Hurt extends Action
 
     public function perform()
     {
-        $this->entity->hurt($this->amount, $this->type);
+        $this->entity->attackable->attack($this->amount, $this->type);
         $this->entity->save();
 
         $this->damage_dealt = $this->amount;

@@ -17,9 +17,9 @@ class ApparelTest extends TestCase
     {
         $user = $this->makeUser();
         $hat = $this->makeHat()->giveToUser($user);
+        // dd($hat);
         $hat->equipable->equip()->save();
         $hat->save();
-
         $user = User::first();
 
         $hat = $user->getEquiped()->first();

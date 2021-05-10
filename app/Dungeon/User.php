@@ -3,12 +3,12 @@
 namespace Dungeon;
 
 use Dungeon\Entities\People\Body;
-use Dungeon\Observers\SerializableObserver;
+// use Dungeon\Observers\SerializableObserver;
 use Dungeon\Room;
 use Dungeon\Traits\Findable;
 use Dungeon\Traits\HasApparel;
 use Dungeon\Traits\HasBody;
-use Dungeon\Traits\HasSerializableAttributes;
+// use Dungeon\Traits\HasSerializableAttributes;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,15 +18,15 @@ class User extends Authenticatable
 {
     use HasBody,
         Notifiable,
-        HasSerializableAttributes,
+        // HasSerializableAttributes,
         HasApparel,
         Findable;
 
     const DEFAULT_HEALTH = 100;
 
-    protected $casts = [
-        'serialized_data' => 'array',
-    ];
+    // protected $casts = [
+    //     'serialized_data' => 'array',
+    // ];
 
     /**
      * The attributes that are mass assignable.
@@ -51,20 +51,20 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
+    // public static function boot()
+    // {
+    //     parent::boot();
 
-        self::observe(new SerializableObserver);
-    }
+    //     // self::observe(new SerializableObserver);
+    // }
 
-    public function getSerializable(): array
-    {
-        return [
-            'health' => 100,
-            'can_be_taken' => false,
-        ];
-    }
+    // public function getSerializable(): array
+    // {
+    //     return [
+    //         'health' => 100,
+    //         'can_be_taken' => false,
+    //     ];
+    // }
 
     public function body(): HasOne
     {
@@ -109,7 +109,7 @@ class User extends Authenticatable
             return true;
         }
 
-        if ($this->body->isDead()) {
+        if ($this->body->attackable->hp <= 0) {
             return true;
         }
 

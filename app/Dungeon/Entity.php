@@ -3,6 +3,7 @@
 namespace Dungeon;
 
 use Dungeon\Collections\EntityCollection;
+use Dungeon\Components\Attackable;
 use Dungeon\Components\Consumable;
 use Dungeon\Components\Equipable;
 use Dungeon\Components\Protects;
@@ -10,20 +11,20 @@ use Dungeon\Components\Takeable;
 use Dungeon\Components\Weapon;
 use Dungeon\Entities\People\Body;
 use Dungeon\Observers\HasOwnClassObserver;
-use Dungeon\Observers\SerializableObserver;
+// use Dungeon\Observers\SerializableObserver;
 use Dungeon\Observers\UuidObserver;
 use Dungeon\Traits\Findable;
-use Dungeon\Traits\HasSerializableAttributes;
+// use Dungeon\Traits\HasSerializableAttributes;
 use Dungeon\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Entity extends Model
 {
-    use HasSerializableAttributes, Findable;
+    // use HasSerializableAttributes,
+    use Findable;
 
     public $can_be_taken = true;
 
@@ -39,6 +40,9 @@ class Entity extends Model
         'equipable_id',
         'takeable_id',
         'protects_id',
+        'weapon_id',
+        'consumable_id',
+        'attackable_id',
     ];
 
     protected $hidden = [
@@ -60,52 +64,52 @@ class Entity extends Model
         parent::boot();
 
         self::observe(new UuidObserver);
-        self::observe(new SerializableObserver);
+        // self::observe(new SerializableObserver);
         self::observe(new HasOwnClassObserver);
     }
 
     /**
      * Get the attributes to be serialized
      */
-    public function getSerializable(): array
-    {
-        return [
-            'can_be_taken' => $this->can_be_taken,
-            'is_equiped' => $this->is_equiped,
-        ];
-    }
+    // public function getSerializable(): array
+    // {
+    //     return [
+    //         'can_be_taken' => $this->can_be_taken,
+    //         'is_equiped' => $this->is_equiped,
+    //     ];
+    // }
 
     /**
      * Can this entity be equipped as apparel
      */
     public function isEquipable(): bool
     {
-        return !!$this->equipable;
+        return !is_null($this->equipable_id);
     }
 
     public function isTakeable(): bool
     {
-        return !!$this->takeable;
+        return !is_null($this->takeable_id);
     }
 
     public function isProtects(): bool
     {
-        return !!$this->protects;
+        return !is_null($this->protects_id);
     }
 
     public function isWeapon(): bool
     {
-        return !!$this->weapon;
+        return !is_null($this->weapon_id);
     }
 
     public function isAttackable(): bool
     {
-        return true; // @todo
+        return !is_null($this->attackable_id);
     }
 
     public function isConsumable(): bool
     {
-        return !!$this->consumable;
+        return !is_null($this->consumable_id);
     }
 
     /**
@@ -134,28 +138,28 @@ class Entity extends Model
      * class is stored in the `class` attribute with the model's
      * attributes applied to it
      */
-    public static function replaceClass(Model $model): Model
-    {
-        $attributes = $model->getAttributes();
-        $serialized_data = $model->serialized_data;
-        $exists = $model->exists;
+    // public static function replaceClass(Model $model): Model
+    // {
+    //     $attributes = $model->getAttributes();
+    //     $serialized_data = $model->serialized_data;
+    //     $exists = $model->exists;
 
-        $model = new $model->class;
+    //     $model = new $model->class;
 
-        foreach ($attributes as $name => $value) {
-            $model->$name = $value;
-        }
+    //     foreach ($attributes as $name => $value) {
+    //         $model->$name = $value;
+    //     }
 
-        // @todo Not sure why this is being set as a string
-        // and not being cast to an array. Just gonna do it
-        // manually for now.
-        $model->serialized_data = $serialized_data;
-        $model->exists = $exists;
+    //     // @todo Not sure why this is being set as a string
+    //     // and not being cast to an array. Just gonna do it
+    //     // manually for now.
+    //     $model->serialized_data = $serialized_data;
+    //     $model->exists = $exists;
 
-        $model->deserializeAttributes();
+    //     // $model->deserializeAttributes();
 
-        return $model;
-    }
+    //     return $model;
+    // }
 
     /**
      * Create a new Eloquent Collection instance
@@ -190,29 +194,34 @@ class Entity extends Model
         return $this->belongsTo(NPC::class);
     }
 
-    public function equipable(): HasOne
+    public function equipable(): BelongsTo
     {
-        return $this->hasOne(Equipable::class, 'entity_id');
+        return $this->belongsTo(Equipable::class, 'equipable_id');
     }
 
-    public function takeable(): HasOne
+    public function takeable(): BelongsTo
     {
-        return $this->hasOne(Takeable::class, 'entity_id');
+        return $this->belongsTo(Takeable::class, 'takeable_id');
     }
 
-    public function protects(): HasOne
+    public function protects(): BelongsTo
     {
-        return $this->hasOne(Protects::class, 'entity_id');
+        return $this->belongsTo(Protects::class, 'protects_id');
     }
 
-    public function weapon(): HasOne
+    public function weapon(): BelongsTo
     {
-        return $this->hasOne(Weapon::class, 'entity_id');
+        return $this->belongsTo(Weapon::class, 'weapon_id');
     }
 
-    public function consumable(): HasOne
+    public function consumable(): BelongsTo
     {
-        return $this->hasOne(Consumable::class, 'entity_id');
+        return $this->belongsTo(Consumable::class, 'consumable_id');
+    }
+
+    public function attackable(): BelongsTo
+    {
+        return $this->belongsTo(Attackable::class, 'attackable_id');
     }
 
     public function loadComponents()
@@ -223,6 +232,7 @@ class Entity extends Model
             'protects',
             'weapon',
             'consumable',
+            'attackable',
         ]);
     }
 
@@ -322,9 +332,9 @@ class Entity extends Model
     {
         $array = parent::toArray();
 
-        foreach ($this->getSerializable() as $serializable => $value) {
-            $array[$serializable] = $this->$serializable;
-        }
+        // foreach ($this->getSerializable() as $serializable => $value) {
+        //     $array[$serializable] = $this->$serializable;
+        // }
 
         return $array;
     }
@@ -343,11 +353,6 @@ class Entity extends Model
         return $this->can_be_taken;
     }
 
-    public function canBeAttacked(): bool
-    {
-        return false;
-    }
-
     /**
      * Create an Equipable and attach it to $this
      *
@@ -356,35 +361,42 @@ class Entity extends Model
      */
     public function makeEquipable(array $attributes = [])
     {
-        $this->equipable()->create($attributes);
+        $this->equipable()->associate(Equipable::create($attributes));
 
         return $this;
     }
 
     public function makeTakeable(array $attributes = [])
     {
-        $this->takeable()->create($attributes);
+        $this->takeable()->associate(Takeable::create($attributes));
 
         return $this;
     }
 
     public function makeProtects(array $attributes = [])
     {
-        $this->protects()->create($attributes);
+        $this->protects()->associate(Protects::create($attributes));
 
         return $this;
     }
 
     public function makeWeapon(array $attributes = [])
     {
-        $this->weapon()->create($attributes);
+        $this->weapon()->associate(Weapon::create($attributes));
 
         return $this;
     }
 
     public function makeConsumable(array $attributes = [])
     {
-        $this->consumable()->create($attributes);
+        $this->consumable()->associate(Consumable::create($attributes));
+
+        return $this;
+    }
+
+    public function makeAttackable(array $attributes = [])
+    {
+        $this->attackable()->associate(Attackable::create($attributes));
 
         return $this;
     }
@@ -396,19 +408,19 @@ class Entity extends Model
      *
      * @return self
      */
-    public static function createWithSerializable($attributes)
-    {
-        $serializable = (new static)->getSerializable();
+    // public static function createWithSerializable($attributes)
+    // {
+    //     $serializable = (new static)->getSerializable();
 
-        $serializable_attributes = array_intersect_key($attributes, $serializable);
-        $non_serializable_attributes = array_diff_key($attributes, $serializable);
+    //     $serializable_attributes = array_intersect_key($attributes, $serializable);
+    //     $non_serializable_attributes = array_diff_key($attributes, $serializable);
 
-        $model = self::create($non_serializable_attributes);
+    //     $model = self::create($non_serializable_attributes);
 
-        $model->fill($serializable_attributes)->save();
+    //     $model->fill($serializable_attributes)->save();
 
-        return $model;
-    }
+    //     return $model;
+    // }
 
     public function damageTypes()
     {

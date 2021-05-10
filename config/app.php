@@ -177,6 +177,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Dungeon\Providers\DungeonServiceProvider::class,
+        Dungeon\Providers\EventServiceProvider::class,
     ],
 
     /*

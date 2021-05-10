@@ -4,8 +4,6 @@ namespace Dungeon\Actions\Weapons;
 
 use Dungeon\Actions\Action;
 use Dungeon\Actions\Entities\Hurt;
-use Dungeon\Contracts\Damageable;
-use Dungeon\Contracts\WeaponInterface;
 use Dungeon\Entity;
 use Dungeon\Exceptions\EntityCannotBeDamagedException;
 use Dungeon\Exceptions\InvalidEntityException;
@@ -42,7 +40,7 @@ class Attack extends Action
      */
     public $total_damage = 0;
 
-    public function __construct(User $attacker, Entity $weapon, Damageable $target)
+    public function __construct(User $attacker, Entity $weapon, Entity $target)
     {
         $this->attacker = $attacker;
         $this->weapon = $weapon;

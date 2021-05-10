@@ -35,7 +35,9 @@ abstract class TestCase extends BaseTestCase
         ], $attributes));
 
         $body = factory(Body::class)->create();
-        $body->setHealth($health)
+        $body->makeAttackable([
+                'hp' => $health
+            ])
             ->giveToUser($user)
             ->save();
 
@@ -106,7 +108,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function makeHat(array $attributes = [])
     {
-        return factory(Entity::class)
+        $hat = factory(Entity::class)
             ->create(array_merge([
                 'name' => 'Hat',
                 'description' => 'Headwear',
@@ -121,6 +123,10 @@ abstract class TestCase extends BaseTestCase
                 'projectile' => 0,
                 'fire' => 10,
             ]);
+
+        $hat->save();
+
+        return $hat;
     }
 
     protected function makeBox(array $attributes = [])
@@ -129,7 +135,7 @@ abstract class TestCase extends BaseTestCase
             'name' => 'Box',
             'description' => 'You can put things in it.',
             'class' => Entity::class,
-            'serialized_data' => [],
+            // 'serialized_data' => [],
         ], $attributes));
     }
 
@@ -161,7 +167,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function makePortal(array $attributes = [])
     {
-        return Portal::createWithSerializable(
+        return Portal::create(
             array_merge([
                 'name' => 'Test door',
                 'description' => 'A simple door for testing purposes.',

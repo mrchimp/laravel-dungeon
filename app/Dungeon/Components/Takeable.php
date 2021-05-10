@@ -2,6 +2,8 @@
 
 namespace Dungeon\Components;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 class Takeable extends Component
 {
     protected $table = 'takeables';
@@ -9,4 +11,9 @@ class Takeable extends Component
     protected $fillable = [
         'weight',
     ];
+
+    public function entity(): HasOne
+    {
+        return $this->hasOne(Entity::class, 'takeable_id');
+    }
 }

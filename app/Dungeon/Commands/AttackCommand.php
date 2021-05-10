@@ -43,7 +43,7 @@ class AttackCommand extends Command
             return $this->fail('Don\'t know who to attack.');
         }
 
-        if (!$target->canBeAttacked()) {
+        if (!$target->isAttackable()) {
             return $this->fail('User cannot be attacked.');
         }
 

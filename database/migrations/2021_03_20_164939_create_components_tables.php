@@ -15,21 +15,18 @@ class CreateComponentsTables extends Migration
     {
         Schema::create('equipables', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('entity_id')->index();
             $table->boolean('is_equiped')->default(0);
             $table->timestamps();
         });
 
         Schema::create('takeables', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('entity_id')->index();
             $table->integer('weight')->default(0);
             $table->timestamps();
         });
 
         Schema::create('protectors', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('entity_id')->index();
             $table->integer('blunt')->default(0);
             $table->integer('stab')->default(0);
             $table->integer('projectile')->default(0);
@@ -43,7 +40,6 @@ class CreateComponentsTables extends Migration
             $table->integer('stab')->default(0);
             $table->integer('projectile')->default(0);
             $table->integer('fire')->default(0);
-            $table->bigInteger('entity_id')->index();
             $table->timestamps();
         });
 
@@ -51,7 +47,6 @@ class CreateComponentsTables extends Migration
             $table->id();
             $table->integer('hp')->default(0);
             $table->integer('taste')->default(0);
-            $table->bigInteger('entity_id')->index();
             $table->timestamps();
         });
 
@@ -62,7 +57,6 @@ class CreateComponentsTables extends Migration
             $table->integer('stab')->default(0);
             $table->integer('projectile')->default(0);
             $table->integer('fire')->default(0);
-            $table->integer('entity_id')->index();
             $table->timestamps();
         });
 

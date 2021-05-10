@@ -18,13 +18,13 @@ class Code extends Entity implements KeyInterface
      *
      * @return array
      */
-    public function getSerializable(): array
-    {
-        return array_merge(
-            parent::getSerializable(),
-            [
-                'code' => '0000'
-            ]
-        );
-    }
+    // public function getSerializable(): array
+    // {
+    //     return array_merge(
+    //         parent::getSerializable(),
+    //         [
+    //             'code' => '0000'
+    //         ]
+    //     );
+    // }
 }

@@ -68,7 +68,7 @@ class EntityFinder
             return null;
         }
 
-        return $user->body->inventory()->whereHas('weapon')->get()->first(function ($entity) use ($query) {
+        return $user->body->inventory()->whereNotNull('weapon_id')->get()->first(function ($entity) use ($query) {
             return $entity->nameMatchesQuery($query);
         });
     }
@@ -112,9 +112,9 @@ class EntityFinder
     }
 
     /**
-     * Find users in the current room
+     * Find a user in the current room by name
      */
-    public function findUsers(string $query, ?Room $room = null): ?Body
+    public function findUsers(string $query, ?Room $room = null): ?Entity
     {
         if (!$room) {
             return null;

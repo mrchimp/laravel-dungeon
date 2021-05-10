@@ -40,7 +40,7 @@ class AfterAttack
      *
      * @return void
      */
-    public function __construct(User $attacker, Body $target, Entity $weapon)
+    public function __construct(User $attacker, Entity $target, Entity $weapon)
     {
         $this->attacker = $attacker;
         $this->target = $target;

@@ -2,9 +2,9 @@
 
 namespace Dungeon\Contracts;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 interface ComponentInterface
 {
-    public function entity(): BelongsTo;
+    public function entity(): HasOne;
 }
